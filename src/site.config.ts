@@ -9,9 +9,9 @@ import type { CardListData, Config, IntegrationUserConfig, ThemeUserConfig } fro
 export const theme: ThemeUserConfig = {
   // [基础配置]
   /** 网站标题，将用于元数据和浏览器标签页标题 */
-  title: 'Khalil Cosmos',
+  title: 'Weather Cosmos',
   /** 作者名称，将用于首页和版权声明 */
-  author: 'Khalil',
+  author: 'Weather',
   /** 网站描述元数据，可用于页面元数据 */
   description: 'Stay hungry, stay foolish, be water.',
   /** 网站默认图标，应为 `public/` 目录中图片的路径 */
