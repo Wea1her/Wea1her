@@ -19,7 +19,7 @@ const socialImageURL = new URL(ogImage ? ogImage : config.socialCard, Astro.url)
 <meta content='IE=edge' http-equiv='X-UA-Compatible' />
 <title>{siteTitle}</title>
 
-{/* Icons / Favicon */}
+{/* 网站图标配置 */}
 <link rel='icon' type={config.favicon.type} href={config.favicon.href} />
 <link rel='shortcut icon' type={config.favicon.type} href={config.favicon.href} />
 <link rel='icon' type='image/png' sizes='32x32' href='/favicon/favicon-32x32.png' />
@@ -27,7 +27,7 @@ const socialImageURL = new URL(ogImage ? ogImage : config.socialCard, Astro.url)
 <link rel='apple-touch-icon' sizes='180x180' href='/favicon/apple-touch-icon.png' />
 <link rel='manifest' href='/favicon/site.webmanifest' />
 
-{/* Font preloads */}
+{/* 字体预加载:提升页面加载性能 */}
 <Font cssVariable='--font-satoshi' preload={[{ subset: 'latin', style: 'normal' }]} />
 <style>
   body {
@@ -35,19 +35,19 @@ const socialImageURL = new URL(ogImage ? ogImage : config.socialCard, Astro.url)
   }
 </style>
 
-{/* Canonical URL */}
+{/* 规范化 URL:用于 SEO */}
 <link rel='canonical' href={canonicalURL} />
 
-{/* Primary Meta Tags */}
+{/* 主要元标签:页面基本信息 */}
 <meta content={siteTitle} name='title' />
 <meta content={description} name='description' />
 <meta content={config.author} name='author' />
 
-{/* Theme Color */}
+{/* 主题颜色配置 */}
 {/* <meta content='' name='theme-color' /> */}
 <meta name='color-scheme' content='light dark' />
 
-{/* Open Graph / Facebook */}
+{/* Open Graph / Facebook 元标签:用于社交媒体分享 */}
 <meta content={articleDate ? 'article' : 'website'} property='og:type' />
 <meta content={title} property='og:title' />
 <meta content={description} property='og:description' />
@@ -58,6 +58,7 @@ const socialImageURL = new URL(ogImage ? ogImage : config.socialCard, Astro.url)
 <meta content='1200' property='og:image:width' />
 <meta content='630' property='og:image:height' />
 {
+  // 如果是文章页面,添加文章相关元信息
   articleDate && (
     <>
       <meta content={config.author} property='article:author' />
@@ -66,17 +67,17 @@ const socialImageURL = new URL(ogImage ? ogImage : config.socialCard, Astro.url)
   )
 }
 
-{/* Twitter */}
+{/* Twitter 卡片元标签:用于 Twitter 分享 */}
 <meta content='summary_large_image' property='twitter:card' />
 <meta content={canonicalURL} property='twitter:url' />
 <meta content={title} property='twitter:title' />
 <meta content={description} property='twitter:description' />
 <meta content={socialImageURL} property='twitter:image' />
 
-{/* Sitemap */}
+{/* 网站地图 */}
 <link href='/sitemap-index.xml' rel='sitemap' />
 
-{/* RSS auto-discovery */}
+{/* RSS 订阅自动发现 */}
 <link
   rel='alternate'
   type='application/rss+xml'
@@ -84,10 +85,11 @@ const socialImageURL = new URL(ogImage ? ogImage : config.socialCard, Astro.url)
   href={`${Astro.site}rss.xml`}
 />
 
+{/* Astro 生成器标识 */}
 <meta content={Astro.generator} name='generator' />
 
 {
-  /* User script*/
+  /* 生产环境控制台输出主题信息 */
   prod && (
     <script>
       console.log( '%c Astro Theme Pure %c https://github.com/cworld1/astro-theme-pure/',
