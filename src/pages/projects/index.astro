@@ -12,8 +12,8 @@ import wechat from '@/assets/wechat-qrcode.jpg'
 
 // 页面目录结构
 const headings = [
-  { depth: 2, slug: 'programs', text: 'Programs' },
-  { depth: 2, slug: 'learnings', text: 'Learnings' },
+  { depth: 2, slug: 'opensource', text: 'OpenSource' },
+  { depth: 2, slug: 'website', text: 'WebSite' },
   { depth: 2, slug: 'others', text: 'Others' },
 
 ]
@@ -29,16 +29,13 @@ const headings = [
       loading='lazy'
     />
   </p>
-  <p>
-    如果你认为合作项目会很有用或有趣，你可以或者联系我讨论一个项目。
-  </p>
+ 
+
+
+  <!-- 开源项目展示区 -->
   
-
-
-  <!-- 程序项目展示区 -->
-  
-  <h2 id='programs'>Programs</h2>
-
+  <h2 id='opensource'>OpenSource</h2>
+<!-- 
   <ProjectSection
     projects={[
       {
@@ -62,9 +59,9 @@ const headings = [
       }
     ]}
   />
-  
+   -->
   <!-- 旧项目列表（可折叠） -->
-  <Collapse title='Some old projects'>
+  <!-- <Collapse title='Some old projects'>
     <ProjectSection
       projects={[
         {
@@ -86,11 +83,11 @@ const headings = [
         }
       ]}
     />
-  </Collapse>
+  </Collapse> -->
 
-  <!-- 学习笔记项目展示区 -->
-  <h2 id='learnings'>Learnings</h2>
-
+  <!-- 网站项目展示区 -->
+  <h2 id='website'>WebSite</h2>
+<!-- 
   <ProjectSection
     class='my-2'
     projects={[
@@ -98,26 +95,24 @@ const headings = [
         name: '',
         description: '',
         links: [
-          { type: 'github', href: '' },
-          { type: 'site', href: '' }
+          { type: 'site', href: '' },
+          
         ]
       },
       {
-        name: 'CS 213 Learning',
-        description: 'Notes, code and experiences for Introduction to Computer Systems course',
+        name: '',
+        description: '',
         links: [
-          {
-            type: 'github',
-            href: ''
-          }
+          { type: 'site',href: '' }
         ]
       }
     ]}
-  />
+  /> -->
 
   <!-- 其他项目展示区 -->
-  <h2 id='others'>Others</h2>
-  <ProjectSection
+   <h2 id='others'>Others</h2> 
+
+  <!-- <ProjectSection
     projects={[
       {
         name: 'CWorld',
@@ -132,7 +127,7 @@ const headings = [
     ]}
   />
 
-  
+   -->
 
   
  
