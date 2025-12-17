@@ -15,7 +15,10 @@ const docs = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string().optional(),
-    order: z.number().default(0)
+    order: z.number().default(0),
+    // 加密字段
+    encrypted: z.boolean().optional().default(false),
+    password: z.string().optional().default('')
   })
 })
 
@@ -47,7 +50,10 @@ const blog = defineCollection({
       language: z.string().optional(),
       draft: z.boolean().default(false),
       // Special fields
-      comment: z.boolean().default(true)
+      comment: z.boolean().default(true),
+      // 加密字段
+      encrypted: z.boolean().optional().default(false),
+      password: z.string().optional().default('')
     })
 })
 
