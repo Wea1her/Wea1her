@@ -11,9 +11,10 @@ import Section from '@/components/home/Section.astro'
 import SkillLayout from '@/components/home/SkillLayout.astro'
 import config from '@/site-config'
 
-const languages = ['Html', 'JavaScript', 'CSS', 'Rust', 'Python', 'Solidity', ]
-const frontend = ['TypeScript', 'Vite', 'Webpack', 'Astro']
-const backend = ['Vercel', 'Waline']
+const languages = ['Html', 'JavaScript', 'CSS', 'Python', 'Rust', 'Golang' , 'Solidity']
+const frontend = ['TypeScript', 'Vue', 'Astro']
+const backend = ['NextJS','Flask']
+const web3 = ['ethers.js','Hardhat','Anchor']
 const others = ['Unity','Latex']
 
 const MAX_POSTS = 10
@@ -128,13 +129,16 @@ if (!images[imagePath])
       />
     </Section> */
       }
-    </div>
-    <Section title='Skills'>
+
+      <Section title='Skills'>
       <SkillLayout title='Languages' skills={languages} />
       <SkillLayout title='Frontend' skills={frontend} />
       <SkillLayout title='Backend' skills={backend} />
+      <SkillLayout title='Web3' skills={web3} />
       <SkillLayout title='Others' skills={others} />
     </Section>
+    </div>
+    
 
     {/* 引用组件 */}
     <Quote class='mt-12' />
