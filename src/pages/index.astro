@@ -11,10 +11,10 @@ import Section from '@/components/home/Section.astro'
 import SkillLayout from '@/components/home/SkillLayout.astro'
 import config from '@/site-config'
 
-const languages = ['Html', 'JavaScript', 'CSS', 'Rust', 'Python', 'Solidity', 'Latex']
+const languages = ['Html', 'JavaScript', 'CSS', 'Rust', 'Python', 'Solidity', ]
 const frontend = ['TypeScript', 'Vite', 'Webpack', 'Astro']
 const backend = ['Vercel', 'Waline']
-const others = ['Qt', 'PyQt', 'Qml', 'Android', 'Unity', 'Jinja']
+const others = ['Unity','Latex']
 
 const MAX_POSTS = 10
 const allPosts = await getBlogCollection()
@@ -128,15 +128,13 @@ if (!images[imagePath])
       />
     </Section> */
       }
-
-      {/* 技能部分 */}
-      <Section title='Skills'>
-        <SkillLayout title='Languages' skills={languages} />
-        <SkillLayout title='Frontend' skills={frontend} />
-        <SkillLayout title='Backend' skills={backend} />
-        <SkillLayout title='Others' skills={others} />
-      </Section>
     </div>
+    <Section title='Skills'>
+      <SkillLayout title='Languages' skills={languages} />
+      <SkillLayout title='Frontend' skills={frontend} />
+      <SkillLayout title='Backend' skills={backend} />
+      <SkillLayout title='Others' skills={others} />
+    </Section>
 
     {/* 引用组件 */}
     <Quote class='mt-12' />
