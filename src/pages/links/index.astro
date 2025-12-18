@@ -2,7 +2,7 @@
 import links from 'public/links.json'
 import config from 'virtual:config'
 
-import { Collapse, Timeline } from 'astro-pure/user'
+import { Collapse } from 'astro-pure/user'
 import PageLayout from '@/layouts/CommonPage.astro'
 import FriendList from '@/components/links/FriendList.astro'
 
@@ -27,11 +27,6 @@ const linkEditPage = 'https://github.com/cworld1/astro-theme-pure/blob/main/publ
   <!-- 状态异常的链接（可折叠） -->
   <Collapse title='Links with Bad Status'>
     <FriendList list={friends[1]} />
-  </Collapse>
-  
-  <!-- 友链历史记录（可折叠） -->
-  <Collapse title='Link History Book'>
-    <Timeline events={linksConf.logbook} />
   </Collapse>
 
   <!-- 特殊友情链接 -->
