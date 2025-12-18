@@ -121,7 +121,7 @@ export const integ: IntegrationUserConfig = {
       { name: 'Name', val: theme.title },
       { name: 'Desc', val: theme.description || 'Null' },
       { name: 'Link', val: 'https://www.0xweather.com/' },
-      { name: 'Avatar', val: 'https://cn.cravatar.com/avatar/8c75e73e81e63a2c8c88d4e4ec0bb0a2=200' }
+      { name: 'Avatar', val: 'https://cn.cravatar.com/avatar/b20010075075b17d14bec69ce479a743?s=400&r=G&d=mp&ver=1766068429' }
     ],
     // 在 `public/avatars/` 中缓存头像以改善用户体验
     cacheAvatar: false
