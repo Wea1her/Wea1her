@@ -28,10 +28,10 @@
       "desc": "Other special links",
       "link_list": [
         {
-          "name": "Astro",
-          "intro": "The web framework for content-driven websites",
-          "link": "https://astro.build/",
-          "avatar": "https://avatars.githubusercontent.com/u/44914786?s=200&v=4"
+          "name": "Khalil Fong",
+          "intro": "This website is dedicated to Khalil. Good night, May the world be one.",
+          "link": "https://www.miss-someone.com/",
+          "avatar": "https://r2.khalil-fong.com/assets/about/img1.jpg"
         }
       ]
     }
