@@ -167,7 +167,7 @@ export const integ: IntegrationUserConfig = {
   waline: {
     enable: true, // 启用 Waline 评论
     // 服务端链接
-    server: 'https://waline-sandy-five.vercel.app/',
+    server: 'https://waline.0xweather.com/',
     // 参考 https://waline.js.org/en/guide/features/emoji.html
     emoji: ['bmoji', 'weibo'],
     // 参考 https://waline.js.org/en/reference/client/props.html
