@@ -90,11 +90,11 @@ export default defineConfig({
         transformerNotationHighlight(), // 支持高亮标记
         transformerRemoveNotationEscape(), // 移除转义标记
         // 自定义转换器
-        updateStyle() as any, // 更新样式
-        addTitle() as any, // 添加标题
-        addLanguage() as any, // 添加语言标签
-        addCopyButton(2000) as any, // 添加复制按钮（超时 2000ms）
-        addCollapse(15) as any // 添加折叠功能（超过 15 行折叠）
+        updateStyle(), // 更新样式
+        addTitle(), // 添加标题
+        addLanguage(), // 添加语言标签
+        addCopyButton(2000), // 添加复制按钮（超时 2000ms）
+        addCollapse(15) // 添加折叠功能（超过 15 行折叠）
       ]
     }
   },
