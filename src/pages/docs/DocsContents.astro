@@ -19,7 +19,8 @@ const docsByCate = docsCollection.reduce((acc: { [key: string]: typeof docsColle
 
 const docCategories = {
 
-  vibecoding: 'VibeCoding'
+  vibecoding: 'VibeCoding',
+  web3: 'Web3开发笔记'
 }
 
 type Props = {
@@ -35,19 +36,35 @@ const { title = true, class: className, ...props } = Astro.props
   <ul class='mt-4 flex flex-col gap-y-5'>
     {
       Object.entries(docCategories).map(([id, title]: [string, string]) => (
-        <li>
-          <h3 class='text-muted-foreground text-xs tracking-widest uppercase'>{title}</h3>
-          <ul class='mt-2 flex flex-col'>
-            {docsByCate[id]
-              .sort((a, b) => a.data.order - b.data.order)
-              .map((doc) => (
-                <li class='docs-item flex relative ms-2 px-3 py-1 text-foreground/75 transition-all rounded-2xl'>
-                  <a class='flex-1 hover:text-foreground' href={`/docs/${doc.id}`}>
-                    {doc.data.title}
-                  </a>
-                </li>
-              ))}
-          </ul>
+        <li class='docs-category' data-category={id}>
+          <button
+            class='docs-toggle w-full flex items-center justify-between text-muted-foreground text-xs tracking-widest uppercase hover:text-foreground transition-colors'
+            aria-expanded='true'
+          >
+            <span>{title}</span>
+            <svg
+              class='docs-toggle-icon w-4 h-4 transition-transform duration-200'
+              viewBox='0 0 24 24'
+              fill='none'
+              stroke='currentColor'
+              stroke-width='2'
+            >
+              <polyline points='6 9 12 15 18 9'></polyline>
+            </svg>
+          </button>
+          <div class='docs-list-wrapper mt-2'>
+            <ul class='docs-list flex flex-col'>
+              {docsByCate[id]
+                .sort((a, b) => a.data.order - b.data.order)
+                .map((doc) => (
+                  <li class='docs-item flex relative ms-2 px-3 py-1 text-foreground/75 transition-all rounded-2xl'>
+                    <a class='flex-1 hover:text-foreground' href={`/docs/${doc.id}`}>
+                      {doc.data.title}
+                    </a>
+                  </li>
+                ))}
+            </ul>
+          </div>
         </li>
       ))
     }
@@ -77,11 +94,39 @@ const { title = true, class: className, ...props } = Astro.props
       background-color: hsl(var(--primary) / var(--un-bg-opacity));
     }
   }
+
+  /* 折叠按钮样式 */
+  docs-toc .docs-toggle {
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+  }
+
+  docs-toc .docs-toggle[aria-expanded='false'] .docs-toggle-icon {
+    transform: rotate(-90deg);
+  }
+
+  /* 使用 grid 实现流畅折叠动画 */
+  docs-toc .docs-list-wrapper {
+    display: grid;
+    grid-template-rows: 1fr;
+    transition: grid-template-rows 0.25s ease-out;
+  }
+
+  docs-toc .docs-category.collapsed .docs-list-wrapper {
+    grid-template-rows: 0fr;
+  }
+
+  docs-toc .docs-list {
+    overflow: hidden;
+  }
 </style>
 
 <script>
   class DocsTOC extends HTMLElement {
     link: string = ''
+    storageKey: string = 'docs-toc-collapsed'
 
     constructor() {
       super()
@@ -89,12 +134,80 @@ const { title = true, class: className, ...props } = Astro.props
     }
 
     connectedCallback() {
+      // 高亮当前页面链接
       const links = this.querySelectorAll('a')
       links.forEach((link) => {
         if (link.getAttribute('href') === this.link) {
           link.parentElement?.classList.add('docs-hl')
         }
       })
+
+      // 初始化折叠状态
+      this.initCollapseState()
+
+      // 绑定折叠按钮事件
+      const toggleButtons = this.querySelectorAll('.docs-toggle')
+      toggleButtons.forEach((button) => {
+        button.addEventListener('click', (e) => this.handleToggle(e))
+      })
+    }
+
+    initCollapseState() {
+      const collapsed = this.getCollapsedCategories()
+      const categories = this.querySelectorAll('.docs-category')
+
+      categories.forEach((category) => {
+        const categoryId = category.getAttribute('data-category')
+        if (categoryId && collapsed.includes(categoryId)) {
+          category.classList.add('collapsed')
+          const button = category.querySelector('.docs-toggle')
+          button?.setAttribute('aria-expanded', 'false')
+        }
+      })
+    }
+
+    handleToggle(e: Event) {
+      const button = e.currentTarget as HTMLButtonElement
+      const category = button.closest('.docs-category')
+      if (!category) return
+
+      const isExpanded = button.getAttribute('aria-expanded') === 'true'
+      button.setAttribute('aria-expanded', isExpanded ? 'false' : 'true')
+      category.classList.toggle('collapsed', isExpanded)
+
+      // 保存折叠状态
+      const categoryId = category.getAttribute('data-category')
+      if (categoryId) {
+        this.saveCollapseState(categoryId, isExpanded)
+      }
+    }
+
+    getCollapsedCategories(): string[] {
+      try {
+        const stored = localStorage.getItem(this.storageKey)
+        return stored ? JSON.parse(stored) : []
+      } catch {
+        return []
+      }
+    }
+
+    saveCollapseState(categoryId: string, collapsed: boolean) {
+      try {
+        const current = this.getCollapsedCategories()
+        if (collapsed) {
+          if (!current.includes(categoryId)) {
+            current.push(categoryId)
+          }
+        } else {
+          const index = current.indexOf(categoryId)
+          if (index > -1) {
+            current.splice(index, 1)
+          }
+        }
+        localStorage.setItem(this.storageKey, JSON.stringify(current))
+      } catch {
+        // localStorage 不可用时静默失败
+      }
     }
   }
 
