@@ -1,0 +1,214 @@
+{
+  "main": {
+    "id": "5d27653a0c6cf59a",
+    "type": "split",
+    "children": [
+      {
+        "id": "9c584e2784d3d168",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "1ae6a716c25ed111",
+            "type": "leaf",
+            "state": {
+              "type": "image",
+              "state": {
+                "file": "web3/images/0314e7b77578774b66f4746f6e6ed584_MD5.jpg"
+              },
+              "icon": "lucide-image",
+              "title": "0314e7b77578774b66f4746f6e6ed584_MD5"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "6f04287755298d10",
+    "type": "split",
+    "children": [
+      {
+        "id": "cd297ac38750fe69",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "2bbca53211a6cd08",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "文件列表"
+            }
+          },
+          {
+            "id": "7e6a12eb57c0601b",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "搜索"
+            }
+          },
+          {
+            "id": "d03f6905f86cc891",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "书签"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "bc61588e4f660137",
+    "type": "split",
+    "children": [
+      {
+        "id": "b4cf4d199bd95dcc",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "9c37e3a8b2ce744d",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "web3/images/0314e7b77578774b66f4746f6e6ed584_MD5.jpg",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "0314e7b77578774b66f4746f6e6ed584_MD5 的反向链接列表"
+            }
+          },
+          {
+            "id": "c78ecb54051ae044",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "web3/images/0314e7b77578774b66f4746f6e6ed584_MD5.jpg",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "0314e7b77578774b66f4746f6e6ed584_MD5 的出链列表"
+            }
+          },
+          {
+            "id": "9302e076dc951644",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "标签"
+            }
+          },
+          {
+            "id": "74031e3f31af0684",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "添加笔记属性"
+            }
+          },
+          {
+            "id": "9418505e64b0c818",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "web3/images/0314e7b77578774b66f4746f6e6ed584_MD5.jpg",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "0314e7b77578774b66f4746f6e6ed584_MD5 的大纲"
+            }
+          },
+          {
+            "id": "bbc4a677dcab318e",
+            "type": "leaf",
+            "state": {
+              "type": "git-view",
+              "state": {},
+              "icon": "git-pull-request",
+              "title": "Source Control"
+            }
+          }
+        ],
+        "currentTab": 5
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:打开快速切换": false,
+      "graph:查看关系图谱": false,
+      "canvas:新建白板": false,
+      "daily-notes:打开/创建今天的日记": false,
+      "templates:插入模板": false,
+      "command-palette:打开命令面板": false,
+      "bases:创建新数据库": false,
+      "obsidian-git:Open Git source control": false,
+      "obsidian-local-images-plus:Local Images Plus  0.16.4\r\nLocalize attachments (plugin folder)": false
+    }
+  },
+  "active": "1ae6a716c25ed111",
+  "lastOpenFiles": [
+    "web3/images/109248e434a80bd2f3763eb3d153e881_MD5.jpg",
+    "web3/03.md",
+    "web3/images/fd73118118508432e586bfb47877bc51_MD5.jpg",
+    "web3/images/80e4b2b4450b2467c4deb79b32200269_MD5.jpg",
+    "web3/images/3a7fcc14d6530e2a2a202ee318e4847e_MD5.jpg",
+    "web3/images/ce9e17f114589d3755c9a61d726f822f_MD5.jpg",
+    "web3/images/a2e79d8bdbf43bda076fd614c95124c3_MD5.jpg",
+    "web3/images/ce91b19a8bb690a21176ec04ce0e946f_MD5.jpg",
+    "web3/images/6cb649d71d0b4c5a40f5291673c0739b_MD5.jpg",
+    "web3/images/7211bd6e318a9d8f11571fa94c4e8a1c_MD5.jpg",
+    "web3/images/e041379147ab2675511749086542d1ae_MD5.jpg",
+    "web3/images/d7bbc1ab63d4288c8aebe0a1e7c8e663_MD5.jpg",
+    "web3/02.md",
+    "web3/images",
+    "web3/01.md"
+  ]
+}
