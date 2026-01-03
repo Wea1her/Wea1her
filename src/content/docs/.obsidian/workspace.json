@@ -4,19 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "9c584e2784d3d168",
+        "id": "602b1f262f239a56",
         "type": "tabs",
         "children": [
           {
-            "id": "1ae6a716c25ed111",
+            "id": "d50db11e1513a2b6",
             "type": "leaf",
             "state": {
-              "type": "image",
-              "state": {
-                "file": "web3/images/0314e7b77578774b66f4746f6e6ed584_MD5.jpg"
-              },
-              "icon": "lucide-image",
-              "title": "0314e7b77578774b66f4746f6e6ed584_MD5"
+              "type": "empty",
+              "state": {},
+              "icon": "lucide-file",
+              "title": "新标签页"
             }
           }
         ]
@@ -92,7 +90,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "web3/images/0314e7b77578774b66f4746f6e6ed584_MD5.jpg",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +99,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "0314e7b77578774b66f4746f6e6ed584_MD5 的反向链接列表"
+              "title": "反向链接"
             }
           },
           {
@@ -111,12 +108,11 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "web3/images/0314e7b77578774b66f4746f6e6ed584_MD5.jpg",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "0314e7b77578774b66f4746f6e6ed584_MD5 的出链列表"
+              "title": "出链"
             }
           },
           {
@@ -154,13 +150,12 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "web3/images/0314e7b77578774b66f4746f6e6ed584_MD5.jpg",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "0314e7b77578774b66f4746f6e6ed584_MD5 的大纲"
+              "title": "大纲"
             }
           },
           {
@@ -193,8 +188,9 @@
       "obsidian-local-images-plus:Local Images Plus  0.16.4\r\nLocalize attachments (plugin folder)": false
     }
   },
-  "active": "1ae6a716c25ed111",
+  "active": "bbc4a677dcab318e",
   "lastOpenFiles": [
+    "web3/images/0314e7b77578774b66f4746f6e6ed584_MD5.jpg",
     "web3/images/109248e434a80bd2f3763eb3d153e881_MD5.jpg",
     "web3/03.md",
     "web3/images/fd73118118508432e586bfb47877bc51_MD5.jpg",
@@ -206,7 +202,6 @@
     "web3/images/6cb649d71d0b4c5a40f5291673c0739b_MD5.jpg",
     "web3/images/7211bd6e318a9d8f11571fa94c4e8a1c_MD5.jpg",
     "web3/images/e041379147ab2675511749086542d1ae_MD5.jpg",
-    "web3/images/d7bbc1ab63d4288c8aebe0a1e7c8e663_MD5.jpg",
     "web3/02.md",
     "web3/images",
     "web3/01.md"
