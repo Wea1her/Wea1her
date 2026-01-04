@@ -8,7 +8,7 @@
   "saveAttE": "obsFolder",
   "realTimeUpdate": true,
   "filesizeLimit": 0,
-  "tryCount": 2,
+  "tryCount": 6,
   "realTimeUpdateInterval": 5,
   "addNameOfFile": true,
   "showNotifications": true,
