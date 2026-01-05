@@ -174,7 +174,7 @@
             }
           }
         ],
-        "currentTab": 5
+        "currentTab": 4
       }
     ],
     "direction": "horizontal",
@@ -193,22 +193,23 @@
       "obsidian-local-images-plus:Local Images Plus  0.16.4\r\nLocalize attachments (plugin folder)": false
     }
   },
-  "active": "d50db11e1513a2b6",
+  "active": "9418505e64b0c818",
   "lastOpenFiles": [
+    "ad362471e84ae356990eddc1079f4fab_MD5.jpg",
+    "fddd06aa6b6533d5a872d196b919f147_MD5.jpg",
+    "74e0a7b6819ee8a7101cf9e07a21926a_MD5.jpg",
+    "26e0cbc44b5c260a0483b08ba9c6b19b_MD5.jpg",
+    "fe46faee5b6e06c5c7bd3beadf4e74af_MD5.jpg",
+    "56ce2edcd2a16274548fd49fe69fdf51_MD5.jpg",
+    "31f561d74002f34768bc0fd60fda2540_MD5.jpg",
+    "7521bdb182c75d54eaf8b3402ba81e7f_MD5.jpg",
+    "c9c5531ee0b832b04dd3c84e28fd5539_MD5.jpg",
+    "b77578c7cf7f27396d75b3bdf6e2b7a8_MD5.jpg",
     "web3/04.md",
     "web3/05.md",
     "web3/03.md",
     "web3/02.md",
     "web3/images/1e50a2b68e1e69c54892e643c6ab519a_MD5.jpg",
-    "web3/images/fbd0555c928633c45c9b85a56044dfe6_MD5.jpg",
-    "web3/images/f92f44dc7b668b2b70248bf21c8fdab6_MD5.jpg",
-    "web3/images/13d77f87270c77f895aeb88a62e81ae9_MD5.jpg",
-    "web3/images/c6417ad6ea2710a2e912eeaea61377f0_MD5.jpg",
-    "web3/images/72399d55430ba3c5a23097b56902c502_MD5.jpg",
-    "web3/images/7b6da2016620b749e19a6fbbce12ca54_MD5.jpg",
-    "web3/images/799e214090e39adfaefc73a9c9522c76_MD5.jpg",
-    "web3/images/5fbde8cd162609952054e38eadcc2847_MD5.jpg",
-    "web3/images/4439d2cc163016c412b1f88348769d36_MD5.jpg",
     "web3/images",
     "web3/01.md"
   ]
