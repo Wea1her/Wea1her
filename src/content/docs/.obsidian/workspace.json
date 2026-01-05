@@ -13,20 +13,6 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "web3/06.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "06"
-            }
-          },
-          {
-            "id": "3908e513077b8ab5",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
                 "file": "web3/07.md",
                 "mode": "source",
                 "source": false
@@ -35,8 +21,7 @@
               "title": "07"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -208,22 +193,22 @@
       "obsidian-local-images-plus:Local Images Plus  0.16.4\r\nLocalize attachments (plugin folder)": false
     }
   },
-  "active": "3908e513077b8ab5",
+  "active": "d50db11e1513a2b6",
   "lastOpenFiles": [
-    "8cf6e19588d31509a153dae78dd31e6a_MD5.jpg",
+    "ad41716237e171e2aa1e818768fc3413_MD5.jpg",
+    "49b23fc5a00e008e7f3e42d6e1fc29dd_MD5.jpg",
+    "36d2eb2d139d549c94cd31d41f86aafb_MD5.jpg",
+    "7dcd27f6db82f98098bf7b0de6da0b16_MD5.jpg",
+    "b6b9bcb84c4f642b0163f04b683ecbc2_MD5.jpg",
+    "29487228a265ad49f2ce183a5ac648c1_MD5.jpg",
+    "5d81e18e9c9b4bd32e744d454b4c49dd_MD5.jpg",
+    "83c1981383538bf7d835bfa7c353f2b5_MD5.jpg",
     "web3/06.md",
     "web3/07.md",
+    "3fec0a8bfc2d354fa34bfe02a0c45b58_MD5.jpg",
+    "8cf6e19588d31509a153dae78dd31e6a_MD5.jpg",
+    "d0a777986b947e0953bda8fab6412d58_MD5.jpg",
     "web3/03.md",
-    "web3/images/0c3e2d5301046385decfc4fb1b7611ff_MD5.jpg",
-    "web3/images/2c01fcff0fc9ad2beb04174497e006a7_MD5.jpg",
-    "web3/images/56403a14fb30d3b8c10971f85983c549_MD5.jpg",
-    "web3/images/c1870a2a31c025d428ea040861e06aa1_MD5.jpg",
-    "web3/images/3a81f0a7a8f853cf4467675f2f038631_MD5.jpg",
-    "web3/images/ccba813b93a079bd7e2b336ab68a889b_MD5.jpg",
-    "web3/images/ac5497cc04fc870d609459912607d2b0_MD5.jpg",
-    "web3/images/d9375292052728dd09c330fd1a04e9c2_MD5.jpg",
-    "web3/images/696b3468b486bc9da7601783638b04f9_MD5.jpg",
-    "web3/images/06cff177e22c7b2878b7f1033c5da9ff_MD5.jpg",
     "web3/05.md",
     "web3/04.md",
     "web3/02.md",
