@@ -174,7 +174,7 @@
             }
           }
         ],
-        "currentTab": 4
+        "currentTab": 5
       }
     ],
     "direction": "horizontal",
@@ -193,7 +193,7 @@
       "obsidian-local-images-plus:Local Images Plus  0.16.4\r\nLocalize attachments (plugin folder)": false
     }
   },
-  "active": "d50db11e1513a2b6",
+  "active": "bbc4a677dcab318e",
   "lastOpenFiles": [
     "web3/03.md",
     "web3/06.md",
