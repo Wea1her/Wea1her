@@ -11,7 +11,7 @@
 - OpenBuild 就是是很不错的Web3学习社区和平台。Solana技术训练营也是一个可以很好学习区块链知识和了解web3生态，认识同频的人，找到行业机会。
 
 **学好英语很重要**
-## 一些入行Web3实用建议
+### 一些入行Web3实用建议
 
 1. 不要幻想速成
 2. 先选一个生态，再选岗位AII In Solana技术训练营是非常好的起点
@@ -25,8 +25,35 @@
 8. 找偶像找搭档，而不是单刷
 	技术+表达/Build + Growth/产品+社区/Web3是一个协作密度决定上限的行业。
 
+给想找 Web3 全职、远程、实习的新朋友整一下这份求职大合集，希望你不要入行即失业 。想求职想通过任务赏金积累经验，这份清单都能帮你快速找到方向。
 
-[[650926f8c5975f6ce804fcad3a89d064_MD5.jpg|Open: Pasted image 20260106221809.png]]
-![[650926f8c5975f6ce804fcad3a89d064_MD5.jpg]]
+🔐 Crypto 通用求职网站
+CryptoJobsList → cryptojobslist.com
+Web3Careers → web3.career
+CryptoJobs → cryptojobs.com
+Web3Jobs → web3jobs.com
+Remote3 → remote3.co
+
+🌐 生态专门岗位入口
+Near Jobs → careers.near.org
+Solana Jobs → jobs.solana.com
+Ethereum / EthJobs → ethjobs.com
+Polygon Careers → polygon.technology/careers
+Base / Coinbase Careers → coinbase.com/careers
+
+🎓 实习 / Fellowship 项目
+Binance Careers → careers.binance.com
+a16z Crypto Fellowship → a16zcrypto.com/accelerator
+Encode Club → encode.club
+Solana Foundation Grants → solana.org/grants
+
+💰赏金任务 / Bounty 平台
+Layer3 → layer3.xyz
+Zealy → zealy.io
+Galxe → galxe.com
+QuestN → questn.com
+Dework → dework.xyz
+Wonderverse → wonderverse.xyz
+Station → station.express
 
 
