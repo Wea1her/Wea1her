@@ -11,15 +11,32 @@
             "id": "55ab8702e4cb6962",
             "type": "leaf",
             "state": {
-              "type": "image",
+              "type": "markdown",
               "state": {
-                "file": "3fec0a8bfc2d354fa34bfe02a0c45b58_MD5.jpg"
+                "file": "web3/07.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "lucide-image",
-              "title": "3fec0a8bfc2d354fa34bfe02a0c45b58_MD5"
+              "icon": "lucide-file",
+              "title": "07"
+            }
+          },
+          {
+            "id": "16ce70b34192d480",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "未命名.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "未命名"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -152,13 +169,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "3fec0a8bfc2d354fa34bfe02a0c45b58_MD5.jpg",
+                "file": "未命名.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "3fec0a8bfc2d354fa34bfe02a0c45b58_MD5 的大纲"
+              "title": "未命名 的大纲"
             }
           },
           {
@@ -194,17 +211,18 @@
   "active": "2bbca53211a6cd08",
   "lastOpenFiles": [
     "web3/07.md",
-    "36d2eb2d139d549c94cd31d41f86aafb_MD5.jpg",
-    "3fec0a8bfc2d354fa34bfe02a0c45b58_MD5.jpg",
-    "844d32013190010430a66052ac7b1790_MD5.jpg",
-    "49b23fc5a00e008e7f3e42d6e1fc29dd_MD5.jpg",
-    "b6b9bcb84c4f642b0163f04b683ecbc2_MD5.jpg",
-    "29487228a265ad49f2ce183a5ac648c1_MD5.jpg",
-    "8d415511af975b7349fb59887e21dbcb_MD5.jpg",
-    "9b291c103b7859361739e3dcd2bd8641_MD5.jpg",
-    "7828850f21650b2581f2d870541214eb_MD5.jpg",
-    "5d81e18e9c9b4bd32e744d454b4c49dd_MD5.jpg",
+    "未命名.md",
     "web3/06.md",
+    "web3/images/3fec0a8bfc2d354fa34bfe02a0c45b58_MD5 1.jpg",
+    "web3/images/36d2eb2d139d549c94cd31d41f86aafb_MD5 1.jpg",
+    "web3/images/844d32013190010430a66052ac7b1790_MD5 1.jpg",
+    "web3/images/49b23fc5a00e008e7f3e42d6e1fc29dd_MD5 1.jpg",
+    "web3/images/b6b9bcb84c4f642b0163f04b683ecbc2_MD5 1.jpg",
+    "web3/images/29487228a265ad49f2ce183a5ac648c1_MD5 1.jpg",
+    "web3/images/8d415511af975b7349fb59887e21dbcb_MD5 1.jpg",
+    "web3/images/9b291c103b7859361739e3dcd2bd8641_MD5 1.jpg",
+    "web3/images/7828850f21650b2581f2d870541214eb_MD5 1.jpg",
+    "web3/images/5d81e18e9c9b4bd32e744d454b4c49dd_MD5 1.jpg",
     "web3/03.md",
     "web3/05.md",
     "web3/04.md",
