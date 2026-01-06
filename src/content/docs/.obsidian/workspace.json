@@ -93,7 +93,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 200
   },
   "right": {
     "id": "bc61588e4f660137",
@@ -193,7 +193,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 200
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -208,7 +208,7 @@
       "obsidian-local-images-plus:Local Images Plus  0.16.4\r\nLocalize attachments (plugin folder)": false
     }
   },
-  "active": "2bbca53211a6cd08",
+  "active": "16ce70b34192d480",
   "lastOpenFiles": [
     "web3/07.md",
     "未命名.md",
