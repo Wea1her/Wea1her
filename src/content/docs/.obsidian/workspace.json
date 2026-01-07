@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "2026 Solana训练营 keynote.md",
+                "file": "web3/07.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "2026 Solana训练营 keynote"
+              "title": "07"
             }
           }
         ]
@@ -154,13 +154,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "2026 Solana训练营 keynote.md",
+                "file": "web3/07.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "2026 Solana训练营 keynote 的大纲"
+              "title": "07 的大纲"
             }
           },
           {
@@ -174,7 +174,7 @@
             }
           }
         ],
-        "currentTab": 5
+        "currentTab": 4
       }
     ],
     "direction": "horizontal",
@@ -193,12 +193,12 @@
       "obsidian-local-images-plus:Local Images Plus  0.16.4\r\nLocalize attachments (plugin folder)": false
     }
   },
-  "active": "2bbca53211a6cd08",
+  "active": "9418505e64b0c818",
   "lastOpenFiles": [
+    "2026 Solana训练营 keynote.md",
     "web3/07.md",
     "solanabootcamp/1.md",
     "solanabootcamp",
-    "2026 Solana训练营 keynote.md",
     "6c83c909d7c5e2607152e8c8e2148841_MD5.jpg",
     "650926f8c5975f6ce804fcad3a89d064_MD5.jpg",
     "Pasted image 20260106221809.png",
