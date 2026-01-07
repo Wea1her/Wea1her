@@ -13,20 +13,6 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "web3/07.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "07"
-            }
-          },
-          {
-            "id": "16ce70b34192d480",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
                 "file": "2026 Solana训练营 keynote.md",
                 "mode": "source",
                 "source": false
@@ -35,8 +21,7 @@
               "title": "2026 Solana训练营 keynote"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -93,7 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 267.5026054382324
   },
   "right": {
     "id": "bc61588e4f660137",
@@ -189,7 +174,7 @@
             }
           }
         ],
-        "currentTab": 4
+        "currentTab": 5
       }
     ],
     "direction": "horizontal",
@@ -211,6 +196,8 @@
   "active": "2bbca53211a6cd08",
   "lastOpenFiles": [
     "web3/07.md",
+    "solanabootcamp/1.md",
+    "solanabootcamp",
     "2026 Solana训练营 keynote.md",
     "6c83c909d7c5e2607152e8c8e2148841_MD5.jpg",
     "650926f8c5975f6ce804fcad3a89d064_MD5.jpg",
