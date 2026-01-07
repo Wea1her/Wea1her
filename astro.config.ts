@@ -38,7 +38,7 @@ import config from './src/site.config.ts'
 // https://astro.build/config
 export default defineConfig({
   // [基础配置]
-  site: 'https://astro-pure.js.org', // 站点 URL
+  site: 'https://www.0xweather.com', // 站点 URL
   // 部署到子路径
   // https://astro-pure.js.org/docs/setup/deployment#platform-with-base-path
   // base: '/astro-pure/',
