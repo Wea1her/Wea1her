@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "未命名.md",
+                "file": "web3/08.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "未命名"
+              "title": "08"
             }
           }
         ],
@@ -169,13 +169,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "未命名.md",
+                "file": "web3/08.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "未命名 的大纲"
+              "title": "08 的大纲"
             }
           },
           {
@@ -211,7 +211,7 @@
   "active": "188a6afadb29fb83",
   "lastOpenFiles": [
     "web3/07.md",
-    "未命名.md",
+    "web3/08.md",
     "web3/06.md",
     "web3/images/1c50b0ccf685c4126488f47148ffa2c0_MD5.jpg",
     "web3/images/f38958f8006ba0474fc7490692783412_MD5.jpg",
