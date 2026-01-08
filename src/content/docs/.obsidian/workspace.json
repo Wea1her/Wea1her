@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "01533459ad059cd3",
+        "id": "d22d133ca410b84e",
         "type": "tabs",
         "children": [
           {
-            "id": "bac041d0a61a41a8",
+            "id": "9a8f0ed90a972973",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "web3/10.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "新标签页"
+              "title": "10"
             }
           }
         ]
@@ -150,13 +154,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "web3/images/56ce2edcd2a16274548fd49fe69fdf51_MD5.jpg",
+                "file": "web3/10.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "56ce2edcd2a16274548fd49fe69fdf51_MD5 的大纲"
+              "title": "10 的大纲"
             }
           },
           {
@@ -170,7 +174,7 @@
             }
           }
         ],
-        "currentTab": 4
+        "currentTab": 5
       }
     ],
     "direction": "horizontal",
@@ -189,8 +193,11 @@
       "obsidian-local-images-plus:Local Images Plus  0.16.4\r\nLocalize attachments (plugin folder)": false
     }
   },
-  "active": "2bbca53211a6cd08",
+  "active": "9a8f0ed90a972973",
   "lastOpenFiles": [
+    "images/cbf7a91425d4c39681240c295d46b59a_MD5.md",
+    "web3/10.md",
+    "web3/images/56ce2edcd2a16274548fd49fe69fdf51_MD5.jpg",
     "web3/images/9c8120c89043d3d7be9080f18ae32f07_MD5.jpg",
     "web3/images/6f7155ba7e22c3b8aa7e30bc292a4b97_MD5.jpg",
     "web3/images/1eaa55d2ca8ff0342bd5c3e345be2075_MD5 1.jpg",
@@ -199,14 +206,11 @@
     "web3/images/0d5fb556b6450d44c48fefb25bb60f19_MD5.jpg",
     "web3/images/00b8b8f7c371eda9c14999e62e81acab_MD5.jpg",
     "web3/images/0c3e2d5301046385decfc4fb1b7611ff_MD5.jpg",
-    "web3/10.md",
     "images/18ea8d0e3620c31fa6113a862b093859_MD5.md",
     "images/fe463503d3285da2434040531eb672ec_MD5.md",
     "web3/images/fb582549ba54478aaaf6e5462d94dc61_MD5 1.jpg",
     "images",
-    "web3/images/81954c416c399ecb38ed4ebf0db38765_MD5 1.jpg",
     "web3/08.md",
-    "web3/images/cbf7a91425d4c39681240c295d46b59a_MD5 1.jpg",
     "web3/09.md",
     "web3/process_cleanup.py",
     "web3/process_md.py",
