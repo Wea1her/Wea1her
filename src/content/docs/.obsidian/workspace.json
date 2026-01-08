@@ -53,7 +53,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "80e4b2b4450b2467c4deb79b32200269_MD5",
+                "query": "",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -193,10 +193,11 @@
       "obsidian-local-images-plus:Local Images Plus  0.16.4\r\nLocalize attachments (plugin folder)": false
     }
   },
-  "active": "71a198819278dcfd",
+  "active": "2bbca53211a6cd08",
   "lastOpenFiles": [
-    "80e4b2b4450b2467c4deb79b32200269_MD5.jpg",
+    "web3/images/58e66d56fe56a3c1987b63df557afbfc_MD5.jpg",
     "web3/03.md",
+    "80e4b2b4450b2467c4deb79b32200269_MD5.jpg",
     "web3/images/d199c4a907d75aee600824c25af60cb2_MD5.jpg",
     "images",
     "web3/images/5f439347e138837c156cc1da0615c653_MD5.jpg",
