@@ -193,11 +193,18 @@
       "obsidian-local-images-plus:Local Images Plus  0.16.4\r\nLocalize attachments (plugin folder)": false
     }
   },
-  "active": "9418505e64b0c818",
+  "active": "6fca89508686b4fb",
   "lastOpenFiles": [
+    "web3/10.md",
+    "web3/09.md",
+    "web3/06.md",
+    "web3/05.md",
+    "web3/04.md",
+    "web3/03.md",
+    "web3/01.md",
+    "web3/02.md",
     "images/cbf7a91425d4c39681240c295d46b59a_MD5.md",
     "images/18ea8d0e3620c31fa6113a862b093859_MD5.md",
-    "web3/10.md",
     "web3/images/18ea8d0e3620c31fa6113a862b093859_MD5.jpg",
     "web3/images/053d2a817b8f9b40d03db58c53fb2d86_MD5.jpg",
     "web3/images/4a84bbb19e70c833b1ce4e1fcefe84be_MD5.jpg",
@@ -209,7 +216,6 @@
     "web3/images/fb582549ba54478aaaf6e5462d94dc61_MD5.jpg",
     "web3/images/b6d6c8c93315bc1039663303807272f9_MD5.jpg",
     "web3/find_unused_images.py",
-    "web3/09.md",
     "images/fe463503d3285da2434040531eb672ec_MD5.md",
     "images",
     "web3/08.md",
@@ -218,13 +224,7 @@
     "solanabootcamp/1.md",
     "2026 Solana训练营 keynote.md",
     "web3/07.md",
-    "web3/06.md",
     "solanabootcamp",
-    "web3/03.md",
-    "web3/05.md",
-    "web3/04.md",
-    "web3/02.md",
-    "web3/images",
-    "web3/01.md"
+    "web3/images"
   ]
 }
