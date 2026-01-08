@@ -11,14 +11,10 @@
             "id": "71a198819278dcfd",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "web3/03.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "03"
+              "title": "新标签页"
             }
           }
         ]
@@ -154,13 +150,12 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "web3/03.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "03 的大纲"
+              "title": "大纲"
             }
           },
           {
@@ -193,10 +188,19 @@
       "obsidian-local-images-plus:Local Images Plus  0.16.4\r\nLocalize attachments (plugin folder)": false
     }
   },
-  "active": "2bbca53211a6cd08",
+  "active": "71a198819278dcfd",
   "lastOpenFiles": [
-    "web3/images/58e66d56fe56a3c1987b63df557afbfc_MD5.jpg",
+    "web3/09.md",
+    "web3/10.md",
+    "web3/01.md",
     "web3/03.md",
+    "web3/07.md",
+    "web3/08.md",
+    "web3/images/00b8b8f7c371eda9c14999e62e81acab_MD5.jpg",
+    "web3/images/0d84333c027b4bd2f8849186bda517f0_MD5.jpg",
+    "web3/images/0c3e2d5301046385decfc4fb1b7611ff_MD5.jpg",
+    "web3/06.md",
+    "web3/images/58e66d56fe56a3c1987b63df557afbfc_MD5.jpg",
     "80e4b2b4450b2467c4deb79b32200269_MD5.jpg",
     "web3/images/d199c4a907d75aee600824c25af60cb2_MD5.jpg",
     "images",
@@ -204,27 +208,17 @@
     "web3/images/5f439347e138837c156cc1da0615c653_MD5 3.jpg",
     "web3/images/5f439347e138837c156cc1da0615c653_MD5 2.jpg",
     "web3/images/c861e2b4a099b9e08b9e83b9136112c4_MD5.jpg",
-    "web3/10.md",
-    "web3/images/0edef11241a2eb53d3a413dea5874b67_MD5.jpg",
-    "web3/images/b73c804d5dd4979ed8a718aa427de157_MD5.jpg",
-    "web3/images/11e58dbf43839d7d7c4af2ff7dbb9231_MD5.jpg",
-    "web3/images/8466046e84064c9965ecdd8f0f2d91c1_MD5.jpg",
-    "web3/09.md",
-    "web3/06.md",
     "web3/05.md",
     "web3/04.md",
-    "web3/01.md",
     "web3/02.md",
     "images/cbf7a91425d4c39681240c295d46b59a_MD5.md",
     "images/18ea8d0e3620c31fa6113a862b093859_MD5.md",
     "web3/find_unused_images.py",
     "images/fe463503d3285da2434040531eb672ec_MD5.md",
-    "web3/08.md",
     "web3/process_cleanup.py",
     "web3/process_md.py",
     "solanabootcamp/1.md",
     "2026 Solana训练营 keynote.md",
-    "web3/07.md",
     "solanabootcamp",
     "web3/images"
   ]
