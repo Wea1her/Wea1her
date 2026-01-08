@@ -189,7 +189,7 @@
             }
           }
         ],
-        "currentTab": 4
+        "currentTab": 5
       }
     ],
     "direction": "horizontal",
@@ -208,12 +208,13 @@
       "obsidian-local-images-plus:Local Images Plus  0.16.4\r\nLocalize attachments (plugin folder)": false
     }
   },
-  "active": "9418505e64b0c818",
+  "active": "3ba512cac48d1b73",
   "lastOpenFiles": [
+    "web3/08.md",
+    "web3/09.md",
     "web3/process_cleanup.py",
     "web3/process_md.py",
     "web3/images/0dcc0aa5981738aae74e1a81eb5aa123_MD5.jpg",
-    "web3/09.md",
     "web3/images/66baae2456925cf53773dce90f3f85ee_MD5.jpg",
     "web3/images/ced890882d7af4a31dfd03ef60792d64_MD5.jpg",
     "web3/images/7a9eb18e74b40f89b02b452f814c4678_MD5.jpg",
@@ -223,7 +224,6 @@
     "web3/images/e30af9815915a9f27664e59cbdc6f540_MD5.jpg",
     "web3/images/cd72be5551bc7df3a080550fb62f9550_MD5.jpg",
     "web3/images/05416ada4ec0574615e33499aeb898a6_MD5.jpg",
-    "web3/08.md",
     "solanabootcamp/1.md",
     "2026 Solana训练营 keynote.md",
     "web3/07.md",
