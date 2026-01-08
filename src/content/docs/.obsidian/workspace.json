@@ -4,39 +4,20 @@
     "type": "split",
     "children": [
       {
-        "id": "34f3a1e3c18427d9",
+        "id": "01533459ad059cd3",
         "type": "tabs",
         "children": [
           {
-            "id": "55ab8702e4cb6962",
+            "id": "bac041d0a61a41a8",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "web3/08.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "08"
-            }
-          },
-          {
-            "id": "3ba512cac48d1b73",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "web3/10.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "10"
+              "title": "新标签页"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -169,13 +150,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "web3/10.md",
+                "file": "web3/images/56ce2edcd2a16274548fd49fe69fdf51_MD5.jpg",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "10 的大纲"
+              "title": "56ce2edcd2a16274548fd49fe69fdf51_MD5 的大纲"
             }
           },
           {
@@ -208,21 +189,25 @@
       "obsidian-local-images-plus:Local Images Plus  0.16.4\r\nLocalize attachments (plugin folder)": false
     }
   },
-  "active": "3ba512cac48d1b73",
+  "active": "2bbca53211a6cd08",
   "lastOpenFiles": [
-    "web3/09.md",
+    "web3/images/9c8120c89043d3d7be9080f18ae32f07_MD5.jpg",
+    "web3/images/6f7155ba7e22c3b8aa7e30bc292a4b97_MD5.jpg",
+    "web3/images/1eaa55d2ca8ff0342bd5c3e345be2075_MD5 1.jpg",
+    "web3/images/1c50b0ccf685c4126488f47148ffa2c0_MD5.jpg",
+    "web3/images/1bfc9d241bfc128068d4cff74db3b6ad_MD5.jpg",
+    "web3/images/0d5fb556b6450d44c48fefb25bb60f19_MD5.jpg",
+    "web3/images/00b8b8f7c371eda9c14999e62e81acab_MD5.jpg",
+    "web3/images/0c3e2d5301046385decfc4fb1b7611ff_MD5.jpg",
     "web3/10.md",
-    "web3/images/1eaa55d2ca8ff0342bd5c3e345be2075_MD5.jpg",
-    "web3/images/81954c416c399ecb38ed4ebf0db38765_MD5.jpg",
-    "web3/images/053d2a817b8f9b40d03db58c53fb2d86_MD5.jpg",
-    "web3/images/4a84bbb19e70c833b1ce4e1fcefe84be_MD5.jpg",
-    "web3/images/799af2119163b3071a7fbf2b8c7ac1e2_MD5.jpg",
-    "web3/images/7d0b258b9f829ef71e3362b3820c6cf7_MD5.jpg",
-    "web3/images/3adce9309a1fb528a1d89122f8944c87_MD5.jpg",
-    "web3/images/f429d8ff18a93f7a31a0034409d3079c_MD5.jpg",
-    "web3/images/fb582549ba54478aaaf6e5462d94dc61_MD5.jpg",
-    "web3/images/b6d6c8c93315bc1039663303807272f9_MD5.jpg",
+    "images/18ea8d0e3620c31fa6113a862b093859_MD5.md",
+    "images/fe463503d3285da2434040531eb672ec_MD5.md",
+    "web3/images/fb582549ba54478aaaf6e5462d94dc61_MD5 1.jpg",
+    "images",
+    "web3/images/81954c416c399ecb38ed4ebf0db38765_MD5 1.jpg",
     "web3/08.md",
+    "web3/images/cbf7a91425d4c39681240c295d46b59a_MD5 1.jpg",
+    "web3/09.md",
     "web3/process_cleanup.py",
     "web3/process_md.py",
     "solanabootcamp/1.md",
