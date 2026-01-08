@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "e9903e95df411e7f",
+        "id": "b8a5a612e2b76e9b",
         "type": "tabs",
         "children": [
           {
-            "id": "6fca89508686b4fb",
+            "id": "71a198819278dcfd",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -53,7 +53,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "18ea8d0e3620c31fa6113a862b093859_MD5.md",
+                "query": "",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -193,20 +193,21 @@
       "obsidian-local-images-plus:Local Images Plus  0.16.4\r\nLocalize attachments (plugin folder)": false
     }
   },
-  "active": "6fca89508686b4fb",
+  "active": "71a198819278dcfd",
   "lastOpenFiles": [
-    "web3/10.md",
+    "images",
+    "web3/images/5f439347e138837c156cc1da0615c653_MD5.jpg",
     "web3/03.md",
+    "web3/images/5f439347e138837c156cc1da0615c653_MD5 3.jpg",
+    "web3/images/5f439347e138837c156cc1da0615c653_MD5 2.jpg",
+    "web3/images/c861e2b4a099b9e08b9e83b9136112c4_MD5.jpg",
+    "web3/10.md",
     "web3/images/0edef11241a2eb53d3a413dea5874b67_MD5.jpg",
     "web3/images/b73c804d5dd4979ed8a718aa427de157_MD5.jpg",
     "web3/images/11e58dbf43839d7d7c4af2ff7dbb9231_MD5.jpg",
     "web3/images/8466046e84064c9965ecdd8f0f2d91c1_MD5.jpg",
     "web3/images/28dea0c5d53e2bb63659f1b288bd4e9d_MD5.jpg",
     "web3/images/1bfc9d241bfc128068d4cff74db3b6ad_MD5 1.jpg",
-    "web3/images/d199c4a907d75aee600824c25af60cb2_MD5.jpg",
-    "web3/images/9f4544e19c2eda9402b18c0405ffe4ab_MD5.jpg",
-    "web3/images/4abf0c498d877d7d95a4f87e553c4a8e_MD5.jpg",
-    "web3/images/d7bbc1ab63d4288c8aebe0a1e7c8e663_MD5.jpg",
     "web3/09.md",
     "web3/06.md",
     "web3/05.md",
@@ -217,7 +218,6 @@
     "images/18ea8d0e3620c31fa6113a862b093859_MD5.md",
     "web3/find_unused_images.py",
     "images/fe463503d3285da2434040531eb672ec_MD5.md",
-    "images",
     "web3/08.md",
     "web3/process_cleanup.py",
     "web3/process_md.py",
