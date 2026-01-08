@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "d22d133ca410b84e",
+        "id": "4ae9a5da27f5896f",
         "type": "tabs",
         "children": [
           {
-            "id": "9a8f0ed90a972973",
+            "id": "029f550bbf097a67",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -193,12 +193,13 @@
       "obsidian-local-images-plus:Local Images Plus  0.16.4\r\nLocalize attachments (plugin folder)": false
     }
   },
-  "active": "9a8f0ed90a972973",
+  "active": "2bbca53211a6cd08",
   "lastOpenFiles": [
-    "web3/images/ab42cea288f29363b8e50c4079fe2bf5_MD5.jpg",
-    "web3/10.md",
-    "web3/images/ab42cea288f29363b8e50c4079fe2bf5_MD5 2.jpg",
+    "web3/find_unused_images.py",
     "images/18ea8d0e3620c31fa6113a862b093859_MD5.md",
+    "web3/10.md",
+    "web3/images/ab42cea288f29363b8e50c4079fe2bf5_MD5.jpg",
+    "web3/images/ab42cea288f29363b8e50c4079fe2bf5_MD5 2.jpg",
     "web3/09.md",
     "images/cbf7a91425d4c39681240c295d46b59a_MD5.md",
     "web3/images/56ce2edcd2a16274548fd49fe69fdf51_MD5.jpg",
@@ -209,7 +210,6 @@
     "web3/images/1bfc9d241bfc128068d4cff74db3b6ad_MD5.jpg",
     "web3/images/0d5fb556b6450d44c48fefb25bb60f19_MD5.jpg",
     "web3/images/00b8b8f7c371eda9c14999e62e81acab_MD5.jpg",
-    "web3/images/0c3e2d5301046385decfc4fb1b7611ff_MD5.jpg",
     "images/fe463503d3285da2434040531eb672ec_MD5.md",
     "images",
     "web3/08.md",
