@@ -55,7 +55,7 @@ export const theme: ThemeUserConfig = {
   header: {
     menu: [
       { title: 'Blog', link: '/blog' },
-      { title: 'Docs', link: '/docs' },
+      { title: 'Docs', link: 'https://docs.0xweather.com/vibe-coding/01' },
       { title: 'Projects', link: '/projects' },
       { title: 'Links', link: '/links' },
       { title: 'About', link: '/about' }
