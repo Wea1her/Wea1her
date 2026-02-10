@@ -42,3 +42,6 @@ bunfig.toml
 
 # claude
 .claude/
+
+# docs
+docs/
