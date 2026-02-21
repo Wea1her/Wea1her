@@ -94,6 +94,11 @@ const { class: className } = Astro.props
     --waline-box-shadow: none;
   }
 
+  /* Hide RSS subscription */
+  #waline :global(.wl-rss) {
+    display: none;
+  }
+
   /* Fix long text and links overflow */
   #waline :global(.wl-content, .wl-text, .wl-comment-text, .wl-item, .wl-card-item, a) {
     max-width: 100%;
