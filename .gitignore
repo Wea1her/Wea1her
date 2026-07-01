@@ -42,6 +42,7 @@ bunfig.toml
 
 # claude
 .claude/
+.superpowers/
 
 # docs
 docs/
