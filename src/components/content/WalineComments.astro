@@ -1,5 +1,6 @@
 ---
 import "@waline/client/waline.css";
+import { normalizeWalinePath } from "../../utils/waline-path";
 import { WALINE_SERVER_URL_ENV_LABEL } from "../../utils/waline-server-url";
 
 interface Props {
@@ -10,17 +11,6 @@ interface Props {
 const { articleRoutePath: rawArticleRoutePath, walineServerURL = "" } =
   Astro.props as Props;
 const hasWalineServerURL = Boolean(walineServerURL.trim());
-
-const normalizeWalinePath = (pathname: string) => {
-  const trimmedPathname = pathname.trim();
-
-  if (!trimmedPathname || trimmedPathname === "/") {
-    return "/";
-  }
-
-  return `/${trimmedPathname.replace(/^\/+|\/+$/g, "")}/`;
-};
-
 const articleRoutePath = normalizeWalinePath(
   rawArticleRoutePath || Astro.url.pathname,
 );
