@@ -1,0 +1,116 @@
+.snow-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  contain: strict;
+  background-color: #ffffff;
+  --fg: #7d7d7d;
+  --snow-strength: 38%;
+  --snow-ink: color-mix(
+    in srgb,
+    var(--fg) var(--snow-strength, 28%),
+    transparent
+  );
+}
+
+.snow-flake {
+  position: absolute;
+  top: var(--snow-y);
+  left: var(--snow-x);
+  width: var(--snow-size);
+  height: var(--snow-size);
+  display: block;
+  color: var(--snow-ink);
+  opacity: var(--snow-opacity);
+  transform: translate3d(0, 0, 0) rotate(var(--snow-rotate));
+  transform-origin: 50% 50%;
+}
+
+.snow-flake::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: currentColor;
+  mask-image: url("/snowflake-crystal.svg");
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-image: url("/snowflake-crystal.svg");
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+}
+
+.snow-flake--rounded::before {
+  mask-image: url("/snowflake-rounded.svg");
+  -webkit-mask-image: url("/snowflake-rounded.svg");
+}
+
+:root[data-theme="light"] .snow-bg {
+  background-color: #ffffff;
+  --fg: #7d7d7d;
+  --snow-strength: 38%;
+}
+
+.snow-bg[data-mode="dark"],
+:root[data-theme="dark"] .snow-bg {
+  background-color: #000000;
+  --fg: #ffffff;
+  --snow-strength: 26%;
+}
+
+@keyframes snow-flake-spin-fall {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(var(--snow-rotate));
+  }
+
+  100% {
+    transform: translate3d(var(--snow-drift-x), 136vh, 0)
+      rotate(calc(var(--snow-rotate) + var(--snow-spin)));
+  }
+}
+
+@keyframes snow-flake-drift-fall {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(var(--snow-rotate));
+  }
+
+  100% {
+    transform: translate3d(var(--snow-drift-x), 136vh, 0)
+      rotate(var(--snow-rotate));
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .snow-bg[data-animated="true"] .snow-flake {
+    top: -18vh;
+    animation-duration: var(--snow-duration);
+    animation-delay: var(--snow-delay);
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+  }
+
+  .snow-bg[data-animated="true"] :is(.snow-flake--near, .snow-flake--mid) {
+    animation-name: snow-flake-spin-fall;
+    will-change: transform;
+  }
+
+  .snow-bg[data-animated="true"] .snow-flake--far {
+    animation-name: snow-flake-drift-fall;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .snow-flake {
+    animation: none;
+    will-change: auto;
+  }
+}
+
+@media (forced-colors: active) {
+  .snow-flake {
+    display: none !important;
+  }
+}

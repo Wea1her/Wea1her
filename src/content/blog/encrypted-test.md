@@ -22,9 +22,7 @@ If you have existing content authored in MDX, this integration will hopefully ma
 Here is how you import and use a UI component inside of MDX.  
 When you open this page in the browser, you should see the clickable button below.
 
-import { Button } from 'astro-pure/user'
-
-<Button>Click Me</Button>
+Button example removed during the Astro-star theme migration.
 
 ## More Links
 

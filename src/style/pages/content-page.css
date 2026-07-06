@@ -1,0 +1,51 @@
+﻿@import "../components/content/content-prose.css";
+@import "../components/content/toc-panel.css";
+@import "../components/content/article-detail-page.css";
+@import "../components/content/collection-page.css";
+@import "../components/content/section-listing-page.css";
+@import "../components/content/section-archive-page.css";
+@import "../components/content/not-found-page.css";
+@import "../components/content/app-panel-card.css";
+@import "../components/content/social-links.css";
+@import "../components/links/friend-feed.css";
+@import "../components/links/lost-links-panel.css";
+
+.content-page {
+  width: 100%;
+  display: block;
+  align-self: stretch;
+}
+
+html[data-js="true"]
+  .content-page[data-content-entrance-enabled="true"][data-page-entrance="ready"] {
+  opacity: 0;
+  transform: translateY(0.9rem);
+}
+
+html[data-js="true"]
+  .content-page[data-content-entrance-enabled="true"][data-page-entrance="entered"] {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 0.68s ease,
+    transform 0.76s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (min-width: 56.25rem) {
+  .home-shell--article .content-page--article {
+    height: auto;
+    min-height: 0;
+  }
+
+  .home-shell--article .content-page--article .content-page-body {
+    height: auto;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: visible;
+  }
+}
+
+.content-page--links .content-page-body {
+  min-width: 0;
+  overflow-x: hidden;
+}

@@ -1,0 +1,21 @@
+---
+import { linkApplyOwner } from "../../config/links";
+
+const ownerInfoItems = [
+  { label: "Name", value: linkApplyOwner.name },
+  { label: "Desc", value: linkApplyOwner.description },
+  { label: "Link", value: linkApplyOwner.href },
+  { label: "Avatar", value: linkApplyOwner.avatarSrc },
+];
+---
+
+<dl class="link-owner-info" aria-label="Link application format">
+  {
+    ownerInfoItems.map((item) => (
+      <div class="link-owner-info-row">
+        <dt>{item.label}</dt>
+        <dd>{item.value}</dd>
+      </div>
+    ))
+  }
+</dl>

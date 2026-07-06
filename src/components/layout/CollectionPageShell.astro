@@ -1,0 +1,80 @@
+---
+import TocPanel from "../content/TocPanel.astro";
+import ContentShell from "./ContentShell.astro";
+
+interface TocItem {
+  href: string;
+  label: string;
+  depth?: 1 | 2 | 3 | 4 | 5 | 6;
+}
+
+interface Props {
+  backAriaLabel?: string;
+  backHref?: string;
+  backLabel?: string;
+  title?: string;
+  description?: string;
+  canonicalUrl?: string;
+  imageUrl?: string;
+  ogTitle?: string;
+  ogType?: "article" | "website";
+  twitterCard?: "summary" | "summary_large_image";
+  contentClass?: string;
+  tocClass?: string;
+  contentAriaLabel: string;
+  tocAriaLabel: string;
+  tocItems: TocItem[];
+  tocEmptyText?: string;
+  enableDocumentNavigation?: boolean;
+  showTocProgress?: boolean;
+}
+
+const {
+  backAriaLabel,
+  backHref,
+  backLabel,
+  title,
+  description,
+  canonicalUrl,
+  imageUrl,
+  ogTitle,
+  ogType,
+  twitterCard,
+  contentClass = "content-page content-page--collection content-page--listing",
+  tocClass = "content-toc",
+  contentAriaLabel,
+  tocAriaLabel,
+  tocItems,
+  tocEmptyText,
+  enableDocumentNavigation = false,
+  showTocProgress = true,
+} = Astro.props as Props;
+---
+
+<ContentShell
+  backAriaLabel={backAriaLabel}
+  backHref={backHref}
+  backLabel={backLabel}
+  variant="default"
+  title={title}
+  description={description}
+  canonicalUrl={canonicalUrl}
+  imageUrl={imageUrl}
+  ogTitle={ogTitle}
+  ogType={ogType}
+  twitterCard={twitterCard}
+  contentClass={contentClass}
+  tocClass={tocClass}
+  contentAriaLabel={contentAriaLabel}
+  tocAriaLabel={tocAriaLabel}
+  enableDocumentNavigation={enableDocumentNavigation}
+>
+  <slot />
+
+  <TocPanel
+    slot="toc"
+    items={tocItems}
+    emptyText={tocEmptyText}
+    showProgress={showTocProgress}
+  />
+</ContentShell>

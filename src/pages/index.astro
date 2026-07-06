@@ -1,146 +1,120 @@
 ---
-import { Image } from 'astro:assets'
+import { getCollection } from "astro:content";
+import HomePageContent from "../components/home/HomePageContent.astro";
+import { site } from "../config/site";
+import { socialDisplay } from "../config/social";
+import { getSocialLinks } from "../utils/social";
+import { resolveContentDates } from "../utils/content-dates";
+import { resolveContentSlug } from "../utils/content-slug";
+import {
+  getContentMonthDay,
+  getContentYear,
+  toContentIsoString,
+} from "../utils/content-time-zone";
+import { resolveContentTitle } from "../utils/content-title";
+import { isPublishedContentEntry } from "../utils/content-visibility";
+import { getGitTimestamps } from "../utils/git-timestamps";
 
-import { Quote } from 'astro-pure/advanced'
-import { PostPreview } from 'astro-pure/components/pages'
-import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
-import { Button, Card, Icon, Label } from 'astro-pure/user'
-import PageLayout from '@/layouts/BaseLayout.astro'
-import ProjectCard from '@/components/home/ProjectCard.astro'
-import Section from '@/components/home/Section.astro'
-import SkillLayout from '@/components/home/SkillLayout.astro'
-import config from '@/site-config'
+export const prerender = true;
 
-const languages = ['Html', 'JavaScript', 'CSS', 'Python', 'Rust', 'Golang' , 'Solidity']
-const frontend = ['TypeScript', 'Vue', 'Astro']
-const backend = ['NextJS','Flask']
-const web3 = ['ethers.js','Hardhat','Anchor']
-const others = ['Unity','Latex']
+const { profile } = site;
 
-const MAX_POSTS = 10
-const allPosts = await getBlogCollection()
-const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
+const latestBlogEntries = (await getCollection("blog")).filter(
+  isPublishedContentEntry,
+);
+const latestNoteEntries = (await getCollection("note")).filter(
+  isPublishedContentEntry,
+);
 
-const imagePath = config.logo.src
-const images = import.meta.glob<{ default: ImageMetadata }>(
-  '/src/assets/*.{jpeg,jpg,png,gif,avif,webp}'
-)
-if (!images[imagePath])
-  throw new Error(
-    `"${imagePath}" does not exist in glob: "src/assets/*.{jpeg,jpg,png,gif,avif,webp}"`
-  )
+interface LatestArticleItem {
+  title: string;
+  href: string;
+  pubDateIso: string;
+  createdAtIso: string;
+  updatedAtIso: string;
+  displayDate: string;
+  year: string;
+  timestamp: number;
+}
+
+interface LatestTimelineGroup {
+  year: string;
+  articles: LatestArticleItem[];
+}
+
+function buildLatestArticles(
+  entries:
+    | Awaited<typeof latestBlogEntries>
+    | Awaited<typeof latestNoteEntries>,
+  section: "blog" | "note",
+) {
+  const articles: LatestArticleItem[] = [];
+
+  for (const entry of entries) {
+    const title = resolveContentTitle(entry.id, entry.data.title);
+    const slug = resolveContentSlug(entry.id, entry.data.routeSlug);
+    const contentPath =
+      entry.filePath ?? `src/content/${section}/${entry.id}.mdx`;
+    const { createdAt: gitCreatedAt, updatedAt: gitUpdatedAt } =
+      getGitTimestamps(contentPath);
+    const { createdAt, updatedAt } = resolveContentDates(entry.data, {
+      createdAt: gitCreatedAt,
+      updatedAt: gitUpdatedAt,
+    });
+    const pubDate = createdAt ?? updatedAt;
+
+    if (!slug || !pubDate || Number.isNaN(pubDate.getTime())) continue;
+
+    articles.push({
+      title,
+      href: `/${section}/${slug}/`,
+      pubDateIso: toContentIsoString(pubDate),
+      createdAtIso: createdAt
+        ? toContentIsoString(createdAt)
+        : toContentIsoString(pubDate),
+      updatedAtIso: updatedAt
+        ? toContentIsoString(updatedAt)
+        : toContentIsoString(pubDate),
+      displayDate: getContentMonthDay(pubDate),
+      year: getContentYear(pubDate),
+      timestamp: pubDate.getTime(),
+    });
+  }
+
+  return articles.sort((a, b) => b.timestamp - a.timestamp);
+}
+
+function buildLatestTimelineGroups(latestArticles: LatestArticleItem[]) {
+  return latestArticles.reduce<LatestTimelineGroup[]>((groups, article) => {
+    const currentGroup = groups[groups.length - 1];
+
+    if (currentGroup?.year === article.year) {
+      currentGroup.articles.push(article);
+      return groups;
+    }
+
+    groups.push({ year: article.year, articles: [article] });
+    return groups;
+  }, []);
+}
+
+const latestBlogArticles = buildLatestArticles(latestBlogEntries, "blog").slice(
+  0,
+  4,
+);
+const latestNoteArticles = buildLatestArticles(latestNoteEntries, "note").slice(
+  0,
+  4,
+);
+const latestBlogTimelineGroups = buildLatestTimelineGroups(latestBlogArticles);
+const latestNoteTimelineGroups = buildLatestTimelineGroups(latestNoteArticles);
+const profileLinks = getSocialLinks(socialDisplay.home).slice(0, 4);
 ---
-<!-- 
-  功能说明：首页
-  展示个人信息、最新博客文章、关于我等内容
-  包含头像、地理位置、社交链接、文章预览和引用等模块
--->
 
-<PageLayout meta={{ title: 'Home' }} highlightColor='#659EB9'>
-  <main class='flex w-full flex-col items-center'>
-    {/* 头部区域：头像和个人信息 */}
-    <section class='animate mb-10 flex flex-col items-center gap-y-7' id='content-header'>
-      {/* 头像图片 */}
-      <Image
-        src={images[imagePath]()}
-        alt={config.logo.alt || 'Profile'}
-        class='h-28 w-auto rounded-full border p-1'
-        loading='eager'
-        fetchpriority='high'
-      />
-
-      {/* 个人信息：姓名和社交链接 */}
-      <div class='flex flex-col items-center gap-y-4'>
-        <h1 class='text-3xl font-medium'>{config.author}</h1>
-        <div class='flex flex-wrap justify-center gap-x-7 gap-y-3'>
-          {/* 地理位置标签 */}
-          <Label title='Tianjin, China'>
-            <Icon name='location' class='size-5' slot='icon' />
-          </Label>
-          {/* GitHub 链接 */}
-          <Label
-            title='Github'
-            as='a'
-            href='https://github.com/Wea1her'
-            target='_blank'
-          >
-            <Icon name='github' class='size-5' slot='icon' />
-          </Label>
-        </div>
-      </div>
-    </section>
-
-    {/* 主内容区域 */}
-    <div id='content' class='animate flex flex-col gap-y-10 md:w-4/5 lg:w-5/6'>
-
-      {/* 关于我部分 */}
-      <Section title='About'>
-        <p class='text-muted-foreground'>Hey 👋, I'm Weather ，天津研究生在读</p>
-        <p class='text-muted-foreground'>一枚热爱编程、音乐、读书的Vibe Coder，希望能成为更好的自己。</p>
-        <p class='text-muted-foreground'>"愿在未来的日子里，继续怀抱梦想，持续努力，成长进化，在人生的每个阶段充分发挥自己的潜能。"</p>
-        {/* 查看更多按钮 */}
-        <Button title='More about me' class='w-fit self-end' href='/about' variant='ahead' />
-      </Section>
-
-      {/* 最新文章列表 */}
-      {
-        allPostsByDate.length > 0 && (
-          <Section title='Posts'>
-            <ul class='flex flex-col gap-y-1.5 sm:gap-y-2'>
-              {allPostsByDate.map((p) => (
-                <li class='flex flex-col gap-x-2 sm:flex-row'>
-                  <PostPreview post={p} />
-                </li>
-              ))}
-            </ul>
-            {/* 查看更多文章按钮 */}
-            <Button title='More posts' class='w-fit self-end' href='/blog' variant='ahead' />
-          </Section>
-        )
-      }
-
-      {/* 工作经验部分（已注释） */}
-      {
-        /* <Section title='Experience'>
-      <Card
-        heading='Lorem Ipsum'
-        subheading='Sit amet consectetur'
-        date='Dec 2022 - Nov 2023'
-        imagePath='/src/assets/about-astro.png'
-        altText='Lorem, ipsum dolor sit'
-        imageClass='h-12 w-auto md:-start-16'
-      >
-        <ul class='ms-4 list-disc text-muted-foreground'>
-          <li>
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolore debitis recusandae, ut
-            molestiae laboriosam pariatur!
-
-            <li>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae, pariatur!</li>
-          </li>
-        </ul>
-      </Card>
-      <Card
-        heading='Lorem Ipsum'
-        subheading='Sit amet consectetur'
-        date='Dec 2022 - Nov 2023'
-        imagePath='/src/assets/about-astro.png'
-        altText='Lorem, ipsum dolor sit'
-        imageClass='h-12 w-auto md:-start-16'
-      />
-    </Section> */
-      }
-
-      <Section title='Skills'>
-      <SkillLayout title='Languages' skills={languages} />
-      <SkillLayout title='Frontend' skills={frontend} />
-      <SkillLayout title='Backend' skills={backend} />
-      <SkillLayout title='Web3' skills={web3} />
-      <SkillLayout title='Others' skills={others} />
-    </Section>
-    </div>
-    
-
-    {/* 引用组件 */}
-    <Quote class='mt-12' />
-  </main>
-</PageLayout>
+<HomePageContent
+  profile={profile}
+  ownerName={profile.name}
+  profileLinks={profileLinks}
+  latestBlogTimelineGroups={latestBlogTimelineGroups}
+  latestNoteTimelineGroups={latestNoteTimelineGroups}
+/>

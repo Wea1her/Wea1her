@@ -1,0 +1,62 @@
+html[data-js="true"] .home-profile-sequence.home-profile--entered {
+  animation: home-section-fade-in 0.76s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+html[data-js="true"][data-route-swapping="true"]
+  .home-profile-sequence.home-profile--entered {
+  animation: none;
+}
+
+html[data-js="true"]
+  .home-latest-sequence[data-home-entrance-enabled="true"].latest-articles--entered
+  .latest-articles-panel {
+  animation: home-section-fade-in 0.76s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+html[data-js="true"]
+  .home-latest-sequence[data-home-entrance-enabled="true"].latest-articles--entered
+  .latest-articles-panel:nth-of-type(2) {
+  animation-delay: 0.06s;
+}
+
+html[data-js="true"][data-route-swapping="true"]
+  .home-latest-sequence[data-home-entrance-enabled="true"].latest-articles--entered
+  .latest-articles-panel {
+  animation: none;
+}
+
+.home-profile-metrics {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(1rem, 0.9rem + 0.4vw, 1.45rem);
+}
+
+.home-profile-metric {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+@keyframes home-section-fade-in {
+  from {
+    opacity: 0.001;
+    transform: scale(0.994);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-latest-sequence .latest-articles-panel,
+  .home-profile-sequence.home-profile--entered {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    animation: none;
+    transition: none;
+  }
+}

@@ -1,0 +1,69 @@
+---
+import { getCollection, render } from "astro:content";
+import DocumentDetailPage from "../../components/content/DocumentDetailPage.astro";
+import { site } from "../../config/site";
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const termEntries = (await getCollection("page")).filter((entry) =>
+    entry.id.startsWith("terms/"),
+  );
+
+  return termEntries.map((entry) => ({
+    params: {
+      slug: entry.id.replace(/^terms\//, ""),
+    },
+  }));
+}
+
+const slug = Astro.params.slug;
+const pageEntry = (await getCollection("page")).find(
+  (entry) => entry.id === `terms/${slug}`,
+);
+
+if (!pageEntry) {
+  return new Response(null, {
+    status: 404,
+    statusText: "Not found",
+  });
+}
+
+const { Content, headings } = await render(pageEntry);
+const title = pageEntry.data.title;
+const description = pageEntry.data.description || site.site.description;
+const contentTitle = pageEntry.data.heading || title;
+const contentTitleId = pageEntry.id.replace(/\//g, "-");
+const pageRoutePath = `/terms/${slug}/`;
+const canonicalUrl = new URL(pageRoutePath, site.site.url).toString();
+const tocHeadings = [
+  {
+    depth: 1 as const,
+    slug: contentTitleId,
+    text: contentTitle,
+  },
+  ...headings.filter((heading) => heading.depth >= 2 && heading.depth <= 5),
+].map((heading) => ({
+  depth: heading.depth as 1 | 2 | 3 | 4 | 5,
+  slug: heading.slug,
+  text: heading.text,
+}));
+---
+
+<DocumentDetailPage
+  background={pageEntry.data.background ?? "content"}
+  title={`${title} - ${site.site.name}`}
+  contentTitle={contentTitle}
+  contentTitleId={contentTitleId}
+  contentDescription={pageEntry.data.description}
+  description={description}
+  canonicalUrl={canonicalUrl}
+  ogTitle={title}
+  ogType="website"
+  contentClass="content-page content-page--article"
+  contentAriaLabel="Terms content"
+  tocAriaLabel="Terms table of contents"
+  tocTitle={pageEntry.data.tocTitle}
+  tocHeadings={tocHeadings}
+  DocumentContent={Content}
+/>

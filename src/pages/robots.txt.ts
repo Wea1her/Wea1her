@@ -1,19 +1,19 @@
-import type { APIRoute } from 'astro'
+import type { APIRoute } from "astro";
+import { algoliaCrawlerVerification } from "../config/search";
 
-const robotsTxt = `
-User-agent: GPTBot
-User-agent: ClaudeBot
-User-agent: Claude-Web
-
-User-agent: *
+const getRobotsTxt = (sitemapURL: URL) =>
+  `${algoliaCrawlerVerification ? `# Algolia-Crawler-Verif: ${algoliaCrawlerVerification}\n` : ""}User-agent: *
 Allow: /
 
-Sitemap: ${new URL('sitemap-index.xml', import.meta.env.SITE).href}
-`.trim()
+Sitemap: ${sitemapURL.href}
+`;
 
-export const GET: APIRoute = () =>
-  new Response(robotsTxt, {
+export const GET: APIRoute = ({ site }) => {
+  const sitemapURL = new URL("sitemap-index.xml", site);
+  return new Response(getRobotsTxt(sitemapURL), {
     headers: {
-      'Content-Type': 'text/plain; charset=utf-8'
-    }
-  })
+      "cache-control": "public, max-age=3600, s-maxage=86400",
+      "content-type": "text/plain; charset=utf-8",
+    },
+  });
+};

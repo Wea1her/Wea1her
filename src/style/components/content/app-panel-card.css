@@ -1,0 +1,437 @@
+﻿.app-panel-card {
+  margin: 0 0 1rem;
+  padding: clamp(0.5rem, 0.85rem, 1.35rem);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  background: transparent;
+}
+
+.app-panel-card-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.85rem;
+}
+
+.friend-links-grid {
+  --friend-links-gap: 0.9rem;
+  --friend-link-card-min: 15rem;
+  --friend-link-card-max: 19rem;
+  --friend-link-card-radius: var(--radius-md);
+  --friend-link-card-border: linear-gradient(
+    115deg,
+    rgba(255, 255, 255, 0.64) 0%,
+    rgba(255, 255, 255, 0.34) 46%,
+    rgba(255, 255, 255, 0.12) 100%
+  );
+  --friend-link-card-glass: rgba(255, 255, 255, 0.22);
+  --friend-link-card-tint: rgba(255, 255, 255, 0.08);
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(100%, var(--friend-link-card-min)), 1fr)
+  );
+  grid-auto-rows: 1fr;
+  gap: var(--friend-links-gap);
+  width: 100%;
+  max-width: calc(
+    (var(--friend-link-card-max) * 3) + (var(--friend-links-gap) * 2)
+  );
+  min-width: 0;
+  margin: 0 auto clamp(1.25rem, 1rem + 0.65vw, 1.75rem);
+}
+
+html[data-js="true"] .friend-links-grid[data-friend-links-state="loading"] {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+html[data-js="true"] .friend-links-grid[data-friend-links-state="ready"] {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 0.22s ease;
+}
+
+.friend-links-grid .app-panel-item,
+.friend-links-grid .app-panel-item--link {
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  min-width: 0;
+  align-items: center;
+  align-self: stretch;
+  padding: 0.1rem 0.8rem;
+  position: relative;
+  isolation: isolate;
+  border-color: transparent;
+  border-radius: var(--friend-link-card-radius);
+  background: var(--friend-link-card-glass);
+  box-shadow:
+    0 1px 24px -1px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(20px) saturate(1.25);
+  -webkit-backdrop-filter: blur(20px) saturate(1.25);
+  min-height: 4.45rem;
+  content-visibility: auto;
+  contain-intrinsic-size: 4.45rem;
+  overflow: hidden;
+  transition:
+    background-color 0.2s ease,
+    box-shadow 0.22s ease,
+    transform 0.22s ease;
+}
+
+.friend-links-grid .app-panel-item--link::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  padding: 1px;
+  border-radius: inherit;
+  background: var(--friend-link-card-border);
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  opacity: 0.92;
+  pointer-events: none;
+}
+
+.friend-links-grid .app-panel-item--link::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  z-index: 1;
+  border-radius: calc(var(--friend-link-card-radius) - 1px);
+  background: var(--friend-link-card-tint);
+  opacity: 0.78;
+  pointer-events: none;
+}
+
+html[data-route-transitioning="true"]
+  .content-page--links
+  .friend-links-grid
+  .app-panel-item--link {
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  transform: none;
+  transition: none;
+}
+
+html[data-route-transitioning="true"]
+  .content-page--links
+  .friend-links-grid
+  .app-panel-item--link::before,
+html[data-route-transitioning="true"]
+  .content-page--links
+  .friend-links-grid
+  .app-panel-item--link::after {
+  opacity: 0;
+}
+
+.friend-link-card-bg {
+  position: absolute;
+  z-index: 0;
+  inset-block: 50%;
+  inset-inline-start: clamp(-2.2rem, -9%, -0.55rem);
+  width: clamp(8.8rem, 66%, 13.6rem);
+  height: auto;
+  aspect-ratio: 1;
+  border-radius: 999px;
+  object-fit: cover;
+  opacity: 0.28;
+  filter: saturate(1.08) brightness(0.88);
+  mask-image: linear-gradient(90deg, #000 0%, #000 34%, transparent 82%);
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    #000 0%,
+    #000 34%,
+    transparent 82%
+  );
+  pointer-events: none;
+  transform: translateY(-50%);
+  transition:
+    filter 0.22s ease,
+    opacity 0.24s ease;
+}
+
+.friend-links-grid .app-panel-item-icon {
+  position: relative;
+  z-index: 2;
+  width: clamp(2.7rem, 2.58rem + 0.5vw, 3.05rem);
+  height: clamp(2.7rem, 2.58rem + 0.5vw, 3.05rem);
+  border-radius: 999px;
+  object-fit: cover;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.friend-links-grid .friend-link-avatar-frame {
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(
+      110deg,
+      transparent 0%,
+      color-mix(in srgb, var(--line) 6%, transparent) 38%,
+      transparent 68%
+    ),
+    color-mix(in srgb, var(--line) 5%, transparent);
+  background-size: 220% 100%;
+  line-height: 0;
+  animation: friend-link-avatar-placeholder-sheen 1.6s ease-in-out infinite;
+}
+
+.friend-links-grid .friend-link-avatar-frame[data-avatar-state="loaded"] {
+  background: transparent;
+  animation: none;
+}
+
+.friend-links-grid .friend-link-avatar {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  object-fit: cover;
+  filter: saturate(0.96);
+  transition: filter 0.22s ease;
+}
+
+html[data-js="true"] .friend-links-grid .friend-link-avatar {
+  opacity: 0;
+  transition:
+    opacity 0.18s ease,
+    filter 0.22s ease;
+}
+
+html[data-js="true"]
+  .friend-links-grid
+  .friend-link-avatar-frame[data-avatar-state="loaded"]
+  .friend-link-avatar {
+  opacity: 1;
+}
+
+html[data-js="true"]
+  .friend-links-grid
+  .friend-link-avatar-frame[data-avatar-state="error"]
+  .friend-link-avatar {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.friend-link-avatar-mask {
+  position: absolute;
+  inset: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: inherit;
+  background: rgba(118, 118, 128, 0.76);
+  color: #ffffff;
+  opacity: 0;
+  transition: opacity 0.18s ease;
+}
+
+.friend-link-avatar-mask svg {
+  display: block;
+  width: 1.05rem;
+  height: 1.05rem;
+  stroke-width: 1.8;
+}
+
+@keyframes friend-link-avatar-placeholder-sheen {
+  from {
+    background-position: 160% 0;
+  }
+
+  to {
+    background-position: -60% 0;
+  }
+}
+
+.friend-links-grid .app-panel-item-copy {
+  position: relative;
+  z-index: 2;
+  flex: 1 1 auto;
+  justify-content: center;
+  gap: 0.18rem;
+  min-height: 100%;
+}
+
+.friend-links-grid .app-panel-item-name {
+  white-space: nowrap;
+  font-size: var(--type-sm);
+  line-height: 1.28;
+}
+
+.friend-links-grid .app-panel-item-description {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  font-size: var(--type-xs);
+  font-weight: 400;
+  line-height: 1.35;
+}
+
+.friend-links-grid .app-panel-item--link:hover {
+  background-color: color-mix(in srgb, #fff 8%, transparent);
+  box-shadow:
+    0 1px 28px -1px rgba(0, 0, 0, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.friend-links-grid .app-panel-item--link:hover::before {
+  opacity: 1;
+}
+
+.friend-links-grid .app-panel-item--link:hover::after {
+  opacity: 0.86;
+}
+
+.friend-links-grid .app-panel-item--link:hover .friend-link-card-bg {
+  opacity: 0.34;
+  filter: saturate(1.14) brightness(0.82);
+}
+
+.friend-links-grid .app-panel-item--link:hover .friend-link-avatar {
+  filter: saturate(0.72) contrast(0.96);
+}
+
+.friend-links-grid .app-panel-item--link:hover .friend-link-avatar-mask {
+  opacity: 0.9;
+}
+
+.friend-links-grid .app-panel-item--link:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--line) 28%, transparent);
+  outline-offset: 0.2rem;
+  background-color: color-mix(in srgb, #fff 8%, transparent);
+  box-shadow:
+    0 1px 28px -1px rgba(0, 0, 0, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.friend-links-grid .app-panel-item--link:focus-visible::before {
+  opacity: 1;
+}
+
+.friend-links-grid .app-panel-item--link:focus-visible::after {
+  opacity: 0.86;
+}
+
+.friend-links-grid .app-panel-item--link:focus-visible .friend-link-card-bg {
+  opacity: 0.34;
+  filter: saturate(1.14) brightness(0.82);
+}
+
+.friend-links-grid
+  .app-panel-item--link:focus-visible
+  .friend-link-avatar-mask {
+  opacity: 0.9;
+}
+
+.friend-links-grid .app-panel-item--link:focus-visible .friend-link-avatar {
+  filter: saturate(0.72) contrast(0.96);
+}
+
+.app-panel-item,
+.app-panel-item--link {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  min-width: 0;
+  padding: 0 0.95rem;
+  border: 1px solid transparent;
+  border-radius: 0.95rem;
+  background: transparent;
+  transition: none;
+}
+
+.app-panel-item--link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.content-page-body .app-panel-item--link,
+.content-page-body .app-panel-item--link:hover,
+.content-page-body .app-panel-item--link:focus-visible,
+.content-page-body .app-panel-item--link .app-panel-item-name,
+.content-page-body .app-panel-item--link .app-panel-item-description {
+  text-decoration: none;
+}
+
+.app-panel-item-icon {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(2.95rem, 2.7rem + 0.95vw, 3.55rem);
+  height: clamp(2.95rem, 2.7rem + 0.95vw, 3.55rem);
+  border-radius: 0.85rem;
+  background: transparent;
+  color: var(--line);
+  font-size: clamp(1.38rem, 1.22rem + 0.48vw, 1.7rem);
+  line-height: 1;
+}
+
+.app-panel-item-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+  min-width: 0;
+}
+
+.app-panel-item-name {
+  overflow: hidden;
+  color: var(--line);
+  font-size: var(--type-md);
+  font-weight: 500;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.app-panel-item-description {
+  overflow: hidden;
+  color: color-mix(in srgb, var(--line) 72%, transparent);
+  font-size: var(--type-sm);
+  line-height: 1.5;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+@media (min-width: 48rem) {
+  .app-panel-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .friend-links-grid {
+    --friend-links-gap: 1rem;
+  }
+}
+
+:root[data-theme="dark"] .friend-links-grid {
+  --friend-link-card-glass: rgba(255, 255, 255, 0.09);
+  --friend-link-card-tint: rgba(255, 255, 255, 0.04);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .friend-links-grid .app-panel-item,
+  .friend-links-grid .app-panel-item--link,
+  .friend-link-card-bg,
+  .friend-links-grid .friend-link-avatar,
+  html[data-js="true"] .friend-links-grid .friend-link-avatar,
+  .friend-link-avatar-mask {
+    transition: none;
+  }
+
+  .friend-links-grid .friend-link-avatar-frame {
+    animation: none;
+  }
+}

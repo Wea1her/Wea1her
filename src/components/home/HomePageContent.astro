@@ -1,0 +1,284 @@
+---
+import HomeLayout from "../../layouts/HomeLayout.astro";
+import CodeTime from "./CodeTime.astro";
+import GitHeatmap from "./githeatmap.astro";
+import Signature from "./signature.astro";
+import FooterMeta from "../common/FooterMeta.astro";
+import AppPanelIcon from "../ui/icons/AppPanelIcon.astro";
+import type { SocialLinkItem } from "../../types/social";
+import { CODETIME_TOKEN } from "astro:env/server";
+import "../../style/components/home/profile.css";
+import "../../style/components/home/latest-articles.css";
+import "../../style/components/home/home-page-content.css";
+import "../../style/pages/home-page-entrance.css";
+
+interface ProfileData {
+  avatarSrc: string;
+  bio: string;
+  intro: string;
+}
+
+interface LatestArticleItem {
+  title: string;
+  href: string;
+  pubDateIso: string;
+  createdAtIso: string;
+  updatedAtIso: string;
+  displayDate: string;
+  year: string;
+  timestamp: number;
+}
+
+interface LatestTimelineGroup {
+  year: string;
+  articles: LatestArticleItem[];
+}
+
+interface Props {
+  profile: ProfileData;
+  ownerName: string;
+  profileLinks: SocialLinkItem[];
+  latestBlogTimelineGroups: LatestTimelineGroup[];
+  latestNoteTimelineGroups: LatestTimelineGroup[];
+}
+
+const {
+  profile,
+  ownerName,
+  profileLinks,
+  latestBlogTimelineGroups,
+  latestNoteTimelineGroups,
+} = Astro.props as Props;
+const homeDescription = profile.intro.trim() || profile.bio.trim();
+const hasCodeTime = Boolean(CODETIME_TOKEN?.trim());
+
+function isExternalLink(href: string) {
+  return /^https?:\/\//.test(href);
+}
+---
+
+<HomeLayout
+  title={ownerName}
+  description={homeDescription || undefined}
+  ogTitle={ownerName}
+>
+  <Signature slot="signature" />
+  <section
+    slot="profile"
+    class="profile-card home-profile-sequence"
+    aria-label="Profile section"
+  >
+    <span
+      class="profile-avatar-wrap home-enter-item"
+      data-codetime-status-root={hasCodeTime ? true : undefined}
+    >
+      <img
+        class="profile-avatar"
+        src={profile.avatarSrc}
+        alt={ownerName}
+        width="1080"
+        height="1080"
+        loading="lazy"
+        decoding="async"
+        fetchpriority="low"
+      />
+      {
+        hasCodeTime && (
+          <span
+            class="profile-codetime-popover"
+            aria-hidden="true"
+            data-codetime-status-popover
+          >
+            <img
+              class="profile-codetime-status"
+              src="/api/codetime-status.svg"
+              alt=""
+              width="380"
+              height="116"
+              loading="lazy"
+              decoding="async"
+              fetchpriority="low"
+              referrerpolicy="no-referrer"
+              data-codetime-status
+            />
+          </span>
+        )
+      }
+    </span>
+    <h1 class="profile-name home-enter-item">{ownerName}</h1>
+    {
+      profileLinks.length > 0 && (
+        <nav class="profile-links" aria-label="Profile quick links">
+          {profileLinks.map((item) => (
+            <a
+              class="profile-link home-enter-item"
+              href={item.href}
+              target={isExternalLink(item.href) ? "_blank" : undefined}
+              rel={isExternalLink(item.href) ? "noreferrer" : undefined}
+              aria-label={item.name}
+            >
+              <AppPanelIcon name={item.icon} label={item.name} />
+            </a>
+          ))}
+        </nav>
+      )
+    }
+    <p class="profile-one-word home-enter-item">{profile.bio}</p>
+    <p class="profile-bio home-enter-item">{profile.intro}</p>
+    <div class="home-profile-metrics">
+      {
+        hasCodeTime && (
+          <div class="home-enter-item home-profile-metric" data-codetime-metric>
+            <CodeTime />
+          </div>
+        )
+      }
+      <div class="home-enter-item home-profile-metric">
+        <GitHeatmap />
+      </div>
+    </div>
+  </section>
+  <section
+    slot="latest"
+    class="latest-articles home-latest-sequence"
+    aria-label="Latest content section"
+  >
+    {
+      [
+        {
+          key: "blogs",
+          title: "Latest Blogs",
+          archiveHref: "/blog/",
+          archiveLabel: "View all blogs",
+          archiveHint: "View all blogs",
+          groups: latestBlogTimelineGroups,
+        },
+        {
+          key: "notes",
+          title: "Latest Notes",
+          archiveHref: "/note/",
+          archiveLabel: "View all notes",
+          archiveHint: "View all notes",
+          groups: latestNoteTimelineGroups,
+        },
+      ].map((block) => (
+        <section
+          class="latest-articles-panel"
+          aria-label={block.title}
+          data-latest-key={block.key}
+        >
+          <header class="latest-articles-heading">
+            <h2 class="latest-articles-title">
+              <a
+                class="latest-articles-title-link"
+                href={block.archiveHref}
+                aria-label={block.archiveLabel}
+                title={block.archiveLabel}
+              >
+                <span class="latest-articles-title-text">{block.title}</span>
+                <span class="latest-articles-title-hint">
+                  {block.archiveHint}
+                </span>
+              </a>
+            </h2>
+          </header>
+          {block.groups.length > 0 ? (
+            <div
+              class="latest-articles-groups"
+              aria-label={`${block.title} timeline`}
+            >
+              {block.groups.map((group) => (
+                <section
+                  class="latest-articles-group"
+                  aria-label={`${group.year} articles`}
+                >
+                  <h3 class="latest-articles-year-label">{group.year}</h3>
+                  <ol
+                    class="latest-articles-list"
+                    aria-label={`${group.year} timeline`}
+                  >
+                    {group.articles.map((article, index) => (
+                      <li
+                        class:list={[
+                          "latest-articles-item",
+                          index === 0 && "latest-articles-item--year-start",
+                          index === group.articles.length - 1 &&
+                            "latest-articles-item--year-end",
+                        ]}
+                      >
+                        <div class="latest-articles-item-content">
+                          <time
+                            class="latest-articles-time"
+                            datetime={article.pubDateIso}
+                          >
+                            {article.displayDate}
+                          </time>
+                          <a class="latest-articles-link" href={article.href}>
+                            <span class="latest-articles-link-text">
+                              {article.title}
+                            </span>
+                            <span
+                              class="latest-articles-link-arrow"
+                              aria-hidden="true"
+                            />
+                          </a>
+                        </div>
+                      </li>
+                    ))}
+                  </ol>
+                </section>
+              ))}
+            </div>
+          ) : (
+            <p class="latest-articles-empty">No {block.key} published yet.</p>
+          )}
+        </section>
+      ))
+    }
+
+    <script is:inline>
+      (() => {
+        const getCurrentPageKey = () =>
+          `${window.location.pathname}${window.location.search}`;
+
+        const runHomeEntrance = () => {
+          const profileRoot = document.querySelector(".home-profile-sequence");
+          const latestRoot = document.querySelector(".home-latest-sequence");
+          if (
+            !(profileRoot instanceof HTMLElement) ||
+            !(latestRoot instanceof HTMLElement)
+          )
+            return;
+
+          const currentPageKey = getCurrentPageKey();
+          const isSamePageReplay =
+            window.__homeEntranceLastPath === currentPageKey &&
+            profileRoot.dataset.homeEntranceCompleted === "true" &&
+            latestRoot.classList.contains("latest-articles--entered");
+
+          if (isSamePageReplay) return;
+
+          window.__homeEntranceLastPath = currentPageKey;
+          profileRoot.dataset.homeEntranceEnabled = "true";
+          latestRoot.dataset.homeEntranceEnabled = "true";
+          profileRoot.classList.add("home-profile--entered");
+          latestRoot.classList.add("latest-articles--entered");
+          profileRoot.dataset.homeEntranceCompleted = "true";
+        };
+
+        if (!window.__homeEntrancePageLoadBound) {
+          document.addEventListener("astro:page-load", () => {
+            if (typeof window.__runHomeEntrance === "function") {
+              window.__runHomeEntrance();
+            }
+          });
+          window.__homeEntrancePageLoadBound = true;
+        }
+
+        window.__runHomeEntrance = runHomeEntrance;
+        runHomeEntrance();
+      })();
+    </script>
+  </section>
+  <FooterMeta slot="footer-info" />
+</HomeLayout>

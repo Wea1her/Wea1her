@@ -1,0 +1,53 @@
+---
+import "@waline/client/waline.css";
+import { WALINE_SERVER_URL_ENV_LABEL } from "../../utils/waline-server-url";
+
+interface Props {
+  articleRoutePath?: string;
+  walineServerURL?: string;
+}
+
+const { articleRoutePath: rawArticleRoutePath, walineServerURL = "" } =
+  Astro.props as Props;
+const hasWalineServerURL = Boolean(walineServerURL.trim());
+
+const normalizeWalinePath = (pathname: string) => {
+  const trimmedPathname = pathname.trim();
+
+  if (!trimmedPathname || trimmedPathname === "/") {
+    return "/";
+  }
+
+  return `/${trimmedPathname.replace(/^\/+|\/+$/g, "")}/`;
+};
+
+const articleRoutePath = normalizeWalinePath(
+  rawArticleRoutePath || Astro.url.pathname,
+);
+---
+
+<section
+  class="article-comments"
+  aria-label="Comments"
+  data-article-waline={hasWalineServerURL || undefined}
+  data-waline-server-url={hasWalineServerURL ? walineServerURL : undefined}
+  data-waline-path={hasWalineServerURL ? articleRoutePath : undefined}
+>
+  <header class="article-comments-header">
+    <h2 class="article-comments-title">Comments</h2>
+    <p class="article-comments-description">
+      Notes, questions, and follow-ups are welcome here.
+    </p>
+  </header>
+
+  {
+    hasWalineServerURL ? (
+      <div class="article-comments-thread" data-waline-thread />
+    ) : (
+      <p class="article-comments-empty">
+        Comments are temporarily unavailable because{" "}
+        <code>{WALINE_SERVER_URL_ENV_LABEL}</code> is not configured.
+      </p>
+    )
+  }
+</section>

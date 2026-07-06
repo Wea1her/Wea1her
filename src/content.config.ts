@@ -1,60 +1,133 @@
-import { defineCollection, z } from 'astro:content'
-import { glob } from 'astro/loaders'
+import { defineCollection } from "astro:content";
+import { glob } from "astro/loaders";
+import { z } from "astro/zod";
 
-function removeDupsAndLowerCase(array: string[]) {
-  if (!array.length) return array
-  const lowercaseItems = array.map((str) => str.toLowerCase())
-  const distinctItems = new Set(lowercaseItems)
-  return Array.from(distinctItems)
+interface CompatContentData {
+  routeSlug?: string | number;
+  title?: string;
+  description?: string;
+  image?: string;
+  heroImage?: string | { src?: string; alt?: string; color?: string };
+  createdAt?: string | Date;
+  publishDate?: string | Date;
+  updatedAt?: string | Date;
+  updatedDate?: string | Date;
+  published?: boolean;
+  draft?: boolean;
+  type?: string;
+  tags?: string[];
+  language?: string;
+  comment?: boolean;
+  encrypted?: boolean;
+  password?: string;
+  projectUrl?: string;
+  docUrl?: string;
+  [key: string]: unknown;
 }
 
-// 定义 docs 文档集合
-const docs = defineCollection({
-  // 加载 src/content/docs/ 目录下的 Markdown 和 MDX 文件
-  loader: glob({ base: './src/content/docs', pattern: '**/*.{md,mdx}' }),
-  schema: z.object({
-    title: z.string(),
-    description: z.string().optional(),
-    order: z.number().default(0),
-    // 加密字段
-    encrypted: z.boolean().optional().default(false),
-    password: z.string().optional().default('')
-  })
-})
+function normalizePublicImageSrc(value?: string) {
+  const src = value?.trim();
+  if (!src) return undefined;
+  if (/^(?:https?:)?\/\//u.test(src) || src.startsWith("/")) return src;
 
-// Define blog collection
+  const fileName = src.split("/").filter(Boolean).pop();
+  if (src.startsWith("../images/") && fileName) return `/images/${fileName}`;
+
+  return src;
+}
+
+const baseContentShape = {
+  routeSlug: z.union([z.string(), z.number()]).optional(),
+  title: z.string().optional(),
+  description: z.string().optional(),
+  image: z.string().optional(),
+  heroImage: z
+    .union([
+      z.string(),
+      z.object({
+        src: z.string().optional(),
+        alt: z.string().optional(),
+        color: z.string().optional(),
+      }),
+    ])
+    .optional(),
+  createdAt: z.union([z.string(), z.date()]).optional(),
+  publishDate: z.union([z.string(), z.date()]).optional(),
+  updatedAt: z.union([z.string(), z.date()]).optional(),
+  updatedDate: z.union([z.string(), z.date()]).optional(),
+  published: z.boolean().optional(),
+  draft: z.boolean().optional(),
+  type: z.string().optional(),
+  tags: z.array(z.string()).optional(),
+  language: z.string().optional(),
+  comment: z.boolean().optional(),
+  encrypted: z.boolean().optional(),
+  password: z.string().optional(),
+};
+
+function withPureFrontmatterCompat(schema: z.ZodTypeAny) {
+  return schema.transform((rawData) => {
+    const data = rawData as CompatContentData;
+    const heroImageSrc =
+      typeof data.heroImage === "string" ? data.heroImage : data.heroImage?.src;
+    const tags = Array.isArray(data.tags) ? data.tags : [];
+
+    return {
+      ...data,
+      image: normalizePublicImageSrc(data.image ?? heroImageSrc),
+      createdAt: data.createdAt ?? data.publishDate,
+      updatedAt: data.updatedAt ?? data.updatedDate,
+      published: data.published ?? data.draft !== true,
+      type: data.type ?? tags[0] ?? data.language,
+    } satisfies CompatContentData;
+  });
+}
+
+const baseContentSchema = withPureFrontmatterCompat(
+  z.looseObject(baseContentShape),
+);
+
+const projectSchema = withPureFrontmatterCompat(
+  z.looseObject({
+    ...baseContentShape,
+    projectUrl: z.string().optional(),
+    docUrl: z.string().optional(),
+  }),
+);
+
+const pageSchema = z.object({
+  title: z.string().min(1),
+  heading: z.string().optional(),
+  description: z.string().optional(),
+  background: z
+    .enum(["home", "code-rain", "constellation", "content"])
+    .optional(),
+  tocTitle: z.string().optional(),
+});
+
 const blog = defineCollection({
-  // Load Markdown and MDX files in the `src/content/blog/` directory.
-  loader: glob({ base: './src/content/blog', pattern: '**/*.{md,mdx}' }),
-  // Required
-  schema: ({ image }) =>
-    z.object({
-      // Required
-      title: z.string().max(60),
-      description: z.string().max(160),
-      publishDate: z.coerce.date(),
-      // Optional
-      updatedDate: z.coerce.date().optional(),
-      heroImage: z
-        .object({
-          src: image(),
-          alt: z.string().optional(),
-          inferSize: z.boolean().optional(),
-          width: z.number().optional(),
-          height: z.number().optional(),
+  loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/blog" }),
+  schema: baseContentSchema,
+});
 
-          color: z.string().optional()
-        })
-        .optional(),
-      tags: z.array(z.string()).default([]).transform(removeDupsAndLowerCase),
-      language: z.string().optional(),
-      draft: z.boolean().default(false),
-      // Special fields
-      comment: z.boolean().default(true),
-      // 加密字段
-      encrypted: z.boolean().optional().default(false),
-      password: z.string().optional().default('')
-    })
-})
+const note = defineCollection({
+  loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/note" }),
+  schema: baseContentSchema,
+});
 
-export const collections = { blog, docs }
+const project = defineCollection({
+  loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/project" }),
+  schema: projectSchema,
+});
+
+const page = defineCollection({
+  loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/page" }),
+  schema: pageSchema,
+});
+
+export const collections = {
+  blog,
+  note,
+  project,
+  page,
+};

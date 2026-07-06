@@ -1,83 +1,86 @@
-import type { AstroGlobal, ImageMetadata } from 'astro'
-import { getImage } from 'astro:assets'
-import type { CollectionEntry } from 'astro:content'
-import rss from '@astrojs/rss'
-import type { Root } from 'mdast'
-import rehypeStringify from 'rehype-stringify'
-import remarkParse from 'remark-parse'
-import remarkRehype from 'remark-rehype'
-import { unified } from 'unified'
-import { visit } from 'unist-util-visit'
-import config from 'virtual:config'
+import type { APIRoute } from "astro";
+import rss from "@astrojs/rss";
+import { getCollection } from "astro:content";
+import { site as siteConfig } from "../config/site";
+import { resolveContentDescription } from "../utils/content-description";
+import { resolveContentDates } from "../utils/content-dates";
+import { resolveContentSlug } from "../utils/content-slug";
+import { resolveContentTitle } from "../utils/content-title";
+import { isPublishedContentEntry } from "../utils/content-visibility";
+import { getGitTimestamps } from "../utils/git-timestamps";
 
-import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
+interface RssItem {
+  title: string;
+  description?: string;
+  pubDate: Date;
+  link: string;
+}
 
-// Get dynamic import of images as a map collection
-const imagesGlob = import.meta.glob<{ default: ImageMetadata }>(
-  '/src/content/blog/**/*.{jpeg,jpg,png,gif,avif,webp}' // add more image formats if needed
-)
+function buildRssItems(
+  entries: {
+    id: string;
+    body?: string;
+    data: Record<string, any>;
+    filePath?: string;
+  }[],
+  section: string,
+): RssItem[] {
+  const items: RssItem[] = [];
 
-const renderContent = async (post: CollectionEntry<'blog'>, site: URL) => {
-  // Replace image links with the correct path
-  function remarkReplaceImageLink() {
-    /**
-     * @param {Root} tree
-     */
-    return async function (tree: Root) {
-      const promises: Promise<void>[] = []
-      visit(tree, 'image', (node) => {
-        if (node.url.startsWith('/images')) {
-          node.url = `${site}${node.url.replace('/', '')}`
-        } else {
-          const imagePathPrefix = `/src/content/blog/${post.id}/${node.url.replace('./', '')}`
-          const promise = imagesGlob[imagePathPrefix]?.().then(async (res) => {
-            const imagePath = res?.default
-            if (imagePath) {
-              node.url = `${site}${(await getImage({ src: imagePath })).src.replace('/', '')}`
-            }
-          })
-          if (promise) promises.push(promise)
-        }
-      })
-      await Promise.all(promises)
-    }
+  for (const entry of entries) {
+    const title = resolveContentTitle(entry.id, entry.data.title);
+    const slug = resolveContentSlug(entry.id, entry.data.routeSlug);
+    const contentPath =
+      entry.filePath ?? `src/content/${section}/${entry.id}.mdx`;
+    const { createdAt: gitCreatedAt, updatedAt: gitUpdatedAt } =
+      getGitTimestamps(contentPath);
+    const { createdAt, updatedAt } = resolveContentDates(entry.data, {
+      createdAt: gitCreatedAt,
+      updatedAt: gitUpdatedAt,
+    });
+    const pubDate = createdAt ?? updatedAt;
+
+    if (!slug || !pubDate || Number.isNaN(pubDate.getTime())) continue;
+
+    items.push({
+      title,
+      description: resolveContentDescription(
+        entry.body ?? "",
+        entry.data.description,
+        siteConfig.site.description,
+      ),
+      pubDate,
+      link: `/${section}/${slug}/`,
+    });
   }
 
-  const file = await unified()
-    .use(remarkParse)
-    .use(remarkReplaceImageLink)
-    .use(remarkRehype)
-    .use(rehypeStringify)
-    .process(post.body)
-
-  return String(file)
+  return items;
 }
 
-const GET = async (context: AstroGlobal) => {
-  const allPostsByDate = sortMDByDate(await getBlogCollection()) as CollectionEntry<'blog'>[]
-  const siteUrl = context.site ?? new URL(import.meta.env.SITE)
+const blogEntries = (await getCollection("blog")).filter(
+  isPublishedContentEntry,
+);
+const noteEntries = (await getCollection("note")).filter(
+  isPublishedContentEntry,
+);
+const projectEntries = (await getCollection("project")).filter(
+  isPublishedContentEntry,
+);
 
-  return rss({
-    // Basic configs
-    trailingSlash: false,
-    xmlns: { h: 'http://www.w3.org/TR/html4/' },
-    stylesheet: '/scripts/pretty-feed-v3.xsl',
+const rssItems = [
+  ...buildRssItems(blogEntries, "blog"),
+  ...buildRssItems(noteEntries, "note"),
+  ...buildRssItems(projectEntries, "project"),
+].sort((a, b) => b.pubDate.getTime() - a.pubDate.getTime());
 
-    // Contents
-    title: config.title,
-    description: config.description,
-    site: import.meta.env.SITE,
-    items: await Promise.all(
-      allPostsByDate.map(async (post) => ({
-        pubDate: post.data.publishDate,
-        link: `/blog/${post.id}`,
-        customData: `<h:img src="${typeof post.data.heroImage?.src === 'string' ? post.data.heroImage?.src : post.data.heroImage?.src.src}" />
-          <enclosure url="${typeof post.data.heroImage?.src === 'string' ? post.data.heroImage?.src : post.data.heroImage?.src.src}" />`,
-        content: await renderContent(post, siteUrl),
-        ...post.data
-      }))
-    )
-  })
-}
-
-export { GET }
+export const GET: APIRoute = async ({ site }) => {
+  const response = await rss({
+    title: `${siteConfig.site.name} Feed`,
+    description: siteConfig.profile.bio,
+    site: site ?? siteConfig.site.url,
+    items: rssItems,
+    customData: "<language>zh-cn</language>",
+  });
+  response.headers.set("cache-control", "public, max-age=300, s-maxage=3600");
+  return response;
+};

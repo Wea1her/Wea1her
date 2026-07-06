@@ -1,0 +1,106 @@
+﻿---
+import FooterMeta from "../common/FooterMeta.astro";
+import BackLinkCard from "../content/BackLinkCard.astro";
+import Signature from "../home/signature.astro";
+import HomeLayout from "../../layouts/HomeLayout.astro";
+
+interface Props {
+  backAriaLabel?: string;
+  backHref?: string;
+  backLabel?: string;
+  mainCol2Fr?: string;
+  mainCol3Fr?: string;
+  variant?: "default" | "article";
+  background?: "home" | "code-rain" | "constellation" | "content";
+  title?: string;
+  description?: string;
+  canonicalUrl?: string;
+  imageUrl?: string;
+  ogTitle?: string;
+  ogType?: "article" | "website";
+  twitterCard?: "summary" | "summary_large_image";
+  includeKatexStyles?: boolean;
+  contentClass?: string;
+  tocClass?: string;
+  contentAriaLabel: string;
+  tocAriaLabel: string;
+  enableDocumentNavigation?: boolean;
+}
+
+const {
+  backAriaLabel,
+  backHref,
+  backLabel,
+  mainCol2Fr = "4fr",
+  mainCol3Fr = "1.5fr",
+  variant = "default",
+  background,
+  title,
+  description,
+  canonicalUrl,
+  imageUrl,
+  ogTitle,
+  ogType,
+  twitterCard,
+  includeKatexStyles,
+  contentClass = "content-page",
+  tocClass = "content-toc",
+  contentAriaLabel,
+  tocAriaLabel,
+  enableDocumentNavigation = false,
+} = Astro.props as Props;
+---
+
+<HomeLayout
+  mainCol2Fr={mainCol2Fr}
+  mainCol3Fr={mainCol3Fr}
+  variant={variant}
+  background={background}
+  title={title}
+  description={description}
+  canonicalUrl={canonicalUrl}
+  imageUrl={imageUrl}
+  ogTitle={ogTitle}
+  ogType={ogType}
+  twitterCard={twitterCard}
+  includeKatexStyles={includeKatexStyles}
+>
+  <slot name="head" slot="head" />
+  <Signature slot="signature" />
+
+  <section
+    slot="profile"
+    class={contentClass}
+    aria-label={contentAriaLabel}
+    data-home-shell-content-page
+    data-document-navigation={enableDocumentNavigation ? "true" : undefined}
+    data-content-entrance-enabled="true"
+    data-page-entrance="entered"
+  >
+    <div class="content-page-body">
+      {
+        backHref && backLabel && (
+          <BackLinkCard
+            href={backHref}
+            label={backLabel}
+            ariaLabel={backAriaLabel}
+          />
+        )
+      }
+      <slot />
+    </div>
+  </section>
+
+  <aside
+    slot="latest"
+    class={tocClass}
+    aria-label={tocAriaLabel}
+    data-home-shell-content-toc
+    data-content-entrance-enabled="true"
+    data-toc-entrance="entered"
+  >
+    <slot name="toc" />
+  </aside>
+
+  <FooterMeta slot="footer-info" />
+</HomeLayout>

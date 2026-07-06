@@ -1,0 +1,231 @@
+﻿---
+import Icon from "../../components/ui/Icon.astro";
+import GithubIcon from "../../components/ui/icons/GithubIcon.astro";
+import RssIcon from "../../components/ui/icons/RssIcon.astro";
+import FloatingActionButton from "../../components/ui/FloatingActionButton.astro";
+import { isAlgoliaSiteSearchConfigured } from "../../config/search";
+import {
+  AlignLeft,
+  ArrowUp,
+  Monitor,
+  Moon,
+  Search,
+  Sun,
+  TableOfContents,
+} from "lucide-static";
+
+interface NavItem {
+  label: string;
+  href: string;
+}
+
+interface Props {
+  foldedNavItems: readonly NavItem[];
+  githubHref?: string;
+  initialThemeMode?: "light" | "dark" | "system";
+  shellStyle?: string;
+  shellVariant?: "default" | "article";
+}
+
+const {
+  foldedNavItems,
+  githubHref = "",
+  initialThemeMode = "system",
+  shellStyle = "",
+  shellVariant = "default",
+} = Astro.props as Props;
+---
+
+<div
+  class:list={[
+    "home-shell",
+    shellVariant !== "default" && `home-shell--${shellVariant}`,
+  ]}
+  style={shellStyle || undefined}
+  data-home-shell-root
+>
+  <header class="home-header">
+    <div class="wire-box signature-area" aria-label="Signature area">
+      <div class="signature-stack">
+        <slot name="signature" />
+      </div>
+    </div>
+
+    <div class="wire-box header-actions" aria-label="Actions area">
+      <div class="theme-switcher" role="group" aria-label="Theme switcher">
+        <button
+          type="button"
+          id="theme-toggle"
+          class="theme-btn"
+          aria-label="Theme switcher"
+        >
+          <span data-theme-icon="light" hidden={initialThemeMode !== "light"}
+            ><Icon svg={Sun} /></span
+          >
+          <span data-theme-icon="dark" hidden={initialThemeMode !== "dark"}
+            ><Icon svg={Moon} /></span
+          >
+          <span data-theme-icon="system" hidden={initialThemeMode !== "system"}
+            ><Icon svg={Monitor} /></span
+          >
+        </button>
+      </div>
+      {
+        isAlgoliaSiteSearchConfigured && (
+          <button
+            type="button"
+            class="search-btn"
+            aria-label="Search"
+            aria-controls="home-shell-search"
+            aria-haspopup="dialog"
+            data-home-shell-search-trigger
+          >
+            <Icon svg={Search} />
+          </button>
+        )
+      }
+      <details class="nav-drawer mobile-nav-drawer" data-home-shell-mobile-nav>
+        <summary class="hamburger" aria-label="Toggle navigation">
+          <Icon svg={AlignLeft} />
+        </summary>
+
+        <nav class="wire-box nav-panel" aria-label="Mobile navigation area">
+          <ul class="signature-collapse-links">
+            {
+              foldedNavItems.map((item) => (
+                <li>
+                  <a href={item.href} aria-label={item.label}>
+                    {item.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </details>
+    </div>
+  </header>
+
+  <main class="home-main">
+    <aside class="wire-box side-nav-area" aria-label="Side navigation area">
+      <div class="side-nav-stack">
+        <details
+          class="signature-collapse"
+          aria-label="Signature navigation toggle"
+          data-home-shell-signature-nav
+        >
+          <summary
+            class="signature-collapse-trigger"
+            aria-label="Toggle signature navigation"
+          >
+            <Icon svg={AlignLeft} />
+          </summary>
+          <nav
+            class="wire-box signature-collapse-panel"
+            aria-label="Signature navigation area"
+          >
+            <ul class="signature-collapse-links">
+              {
+                foldedNavItems.map((item) => (
+                  <li>
+                    <a href={item.href} aria-label={item.label}>
+                      {item.label}
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </nav>
+        </details>
+        <slot name="side-nav" />
+      </div>
+    </aside>
+
+    <section class="wire-box profile-area" aria-label="Profile area">
+      <slot name="profile" />
+    </section>
+
+    <section
+      class="wire-box latest-area"
+      aria-label="Latest area"
+      data-home-shell-latest
+    >
+      <slot name="latest" />
+    </section>
+  </main>
+
+  <div
+    class="floating-action-stack"
+    aria-label="Page controls"
+    data-home-shell-fab
+  >
+    <FloatingActionButton
+      id="toc-fab"
+      label="Toggle table of contents"
+      iconSvg={TableOfContents}
+      className="floating-action-button--toc"
+    />
+    <FloatingActionButton
+      id="document-progress-fab"
+      label="Back to top"
+      className="floating-action-button--document-progress"
+    >
+      <span
+        class="document-progress-fab-percent"
+        data-document-progress-percent
+      >
+        0%
+      </span>
+      <span
+        class="document-progress-fab-icon"
+        data-document-progress-icon
+        hidden
+      >
+        <Icon svg={ArrowUp} />
+      </span>
+    </FloatingActionButton>
+  </div>
+
+  {
+    isAlgoliaSiteSearchConfigured && (
+      <div
+        id="home-shell-search"
+        class="home-shell-search-root"
+        aria-hidden="true"
+        data-home-shell-search-container
+      />
+    )
+  }
+
+  <footer class="home-footer">
+    <div class="wire-box footer-info" aria-label="Footer info area">
+      <slot name="footer-info" />
+    </div>
+
+    <nav class="wire-box footer-icons" aria-label="Footer icon navigation">
+      <a
+        class="footer-rss-btn"
+        href="/rss.xml"
+        aria-label="Subscribe via RSS"
+        title="RSS Feed"
+      >
+        <RssIcon />
+      </a>
+      {
+        githubHref && (
+          <a
+            class="footer-rss-btn"
+            href={githubHref}
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Visit GitHub profile"
+            title="GitHub"
+          >
+            <GithubIcon />
+          </a>
+        )
+      }
+      <slot name="footer-icons" />
+    </nav>
+  </footer>
+</div>

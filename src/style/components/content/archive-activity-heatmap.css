@@ -1,0 +1,336 @@
+.archive-activity-heatmap {
+  --archive-activity-line: color-mix(in srgb, var(--line) 78%, transparent);
+  --archive-activity-line-soft: color-mix(
+    in srgb,
+    var(--line) 34%,
+    transparent
+  );
+  --archive-activity-axis-y: 50px;
+  --archive-activity-dot-size: 7px;
+  --archive-activity-bar-width: 2px;
+  --archive-activity-timeline-height: 116px;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 0;
+}
+
+.archive-activity-timeline-scroll {
+  max-width: 100%;
+  overflow: visible;
+}
+
+.archive-activity-timeline {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  height: var(--archive-activity-timeline-height);
+  padding: 0;
+}
+
+.archive-activity-timeline-line {
+  position: absolute;
+  left: 22px;
+  right: 0;
+  top: var(--archive-activity-axis-y);
+  height: 1px;
+  background: var(--archive-activity-line-soft);
+  transform: translateY(-50%);
+}
+
+.archive-activity-timeline-leading {
+  position: absolute;
+  left: 0;
+  top: var(--archive-activity-axis-y);
+  width: 16px;
+  height: 2px;
+  background: radial-gradient(
+      circle,
+      var(--archive-activity-line) 0 1px,
+      transparent 1.2px
+    )
+    0 50% / 6px 2px repeat-x;
+  transform: translateY(-50%);
+}
+
+.archive-activity-timeline-bucket {
+  position: absolute;
+  left: var(--archive-activity-x);
+  top: var(--archive-activity-axis-y);
+  width: 0;
+  height: 0;
+  outline: none;
+}
+
+.archive-activity-timeline-bucket::before {
+  content: "";
+  position: absolute;
+  left: -0.5rem;
+  top: calc(-1 * var(--archive-activity-bar-height, 1rem) - 0.35rem);
+  width: 1rem;
+  height: calc(var(--archive-activity-bar-height, 1rem) + 0.7rem);
+}
+
+.archive-activity-timeline-bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--archive-activity-bar-width);
+  height: var(--archive-activity-bar-height, 1rem);
+  border-radius: 999px;
+  background: var(--archive-activity-line);
+  transform: translate(-50%, -100%);
+  transform-origin: center bottom;
+  transition:
+    opacity 0.16s ease,
+    transform 0.16s ease;
+}
+
+.archive-activity-timeline-bucket[data-level="1"] {
+  --archive-activity-bar-height: 12px;
+}
+
+.archive-activity-timeline-bucket[data-level="2"] {
+  --archive-activity-bar-height: 18px;
+}
+
+.archive-activity-timeline-bucket[data-level="3"] {
+  --archive-activity-bar-height: 25px;
+}
+
+.archive-activity-timeline-bucket[data-level="4"] {
+  --archive-activity-bar-height: 34px;
+}
+
+.archive-activity-timeline-month {
+  position: absolute;
+  left: var(--archive-activity-x);
+  top: var(--archive-activity-axis-y);
+  width: 0;
+  height: 0;
+  color: var(--archive-activity-line);
+  outline: none;
+}
+
+.archive-activity-timeline-month::before {
+  content: "";
+  position: absolute;
+  left: -0.5rem;
+  top: calc(-1 * var(--archive-activity-month-bar-height, 10px) - 0.35rem);
+  width: 1rem;
+  height: calc(var(--archive-activity-month-bar-height, 10px) + 1.2rem);
+}
+
+.archive-activity-timeline-month-bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--archive-activity-bar-width);
+  height: var(--archive-activity-month-bar-height, 10px);
+  border-radius: 999px;
+  background: var(--archive-activity-line);
+  transform: translate(-50%, -100%);
+  transform-origin: center bottom;
+  transition:
+    opacity 0.16s ease,
+    transform 0.16s ease;
+}
+
+.archive-activity-timeline-month[data-level="1"] {
+  --archive-activity-month-bar-height: 12px;
+}
+
+.archive-activity-timeline-month[data-level="2"] {
+  --archive-activity-month-bar-height: 19px;
+}
+
+.archive-activity-timeline-month[data-level="3"] {
+  --archive-activity-month-bar-height: 28px;
+}
+
+.archive-activity-timeline-month[data-level="4"] {
+  --archive-activity-month-bar-height: 36px;
+}
+
+.archive-activity-timeline-dot {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--archive-activity-dot-size);
+  height: var(--archive-activity-dot-size);
+  border-radius: 999px;
+  background: var(--archive-activity-line);
+  box-shadow: 0 0 0 1px
+    color-mix(in srgb, var(--archive-activity-line) 40%, transparent);
+  transform: translate(-50%, -50%);
+}
+
+.archive-activity-timeline-label {
+  position: absolute;
+  left: 0;
+  top: calc(var(--archive-activity-dot-size) + 8px);
+  color: var(--line);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0;
+  white-space: nowrap;
+  transform: translateX(-50%);
+}
+
+.archive-activity-timeline-year {
+  position: absolute;
+  left: var(--archive-activity-x);
+  top: calc(var(--archive-activity-axis-y) + 37px);
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0;
+  white-space: nowrap;
+  transform: translateX(-50%);
+}
+
+.archive-activity-tooltip {
+  --archive-activity-tooltip-offset-x: -50%;
+  position: absolute;
+  z-index: 20;
+  left: 0;
+  bottom: calc(var(--archive-activity-bar-height, 1rem) + 0.72rem);
+  width: min(18rem, calc(100vw - 2rem));
+  max-height: min(18rem, 70vh);
+  padding: 0.56rem 0.68rem 0.52rem;
+  border: 1px solid color-mix(in srgb, var(--line) 13%, transparent);
+  border-radius: 0.5rem;
+  color: color-mix(in srgb, var(--line) 76%, transparent);
+  font-size: 0;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 0.9rem 2rem rgba(17, 17, 17, 0.12);
+  opacity: 0;
+  overflow: auto;
+  pointer-events: none;
+  transform: translate(var(--archive-activity-tooltip-offset-x), 0.24rem);
+  transition:
+    opacity 0.18s ease,
+    transform 0.2s ease,
+    visibility 0s linear 0.2s;
+  visibility: hidden;
+}
+
+[data-tooltip-align="start"] > .archive-activity-tooltip {
+  --archive-activity-tooltip-offset-x: 0;
+}
+
+[data-tooltip-align="end"] > .archive-activity-tooltip {
+  --archive-activity-tooltip-offset-x: -100%;
+}
+
+.archive-activity-timeline-month .archive-activity-tooltip {
+  bottom: calc(var(--archive-activity-month-bar-height, 10px) + 0.72rem);
+}
+
+.archive-activity-tooltip-title {
+  display: block;
+  margin-bottom: 0.34rem;
+  color: var(--line);
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.archive-activity-tooltip-list {
+  display: grid;
+  gap: 0.24rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.content-page-body .archive-activity-tooltip-list {
+  margin: 0;
+  padding: 0;
+}
+
+.content-page-body .archive-activity-tooltip-item {
+  margin: 0;
+}
+
+.archive-activity-tooltip-link {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.44rem;
+  align-items: center;
+  color: inherit;
+  font-size: 0.82rem;
+  line-height: 1.28;
+  text-decoration: none;
+  text-decoration-line: none;
+}
+
+.archive-activity-tooltip-link:hover,
+.archive-activity-tooltip-link:focus-visible,
+.archive-activity-tooltip-link * {
+  text-decoration: none;
+  text-decoration-line: none;
+}
+
+.archive-activity-tooltip-date {
+  color: var(--text-muted);
+  font-family:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.archive-activity-tooltip-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:root[data-theme="dark"] .archive-activity-tooltip {
+  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(16, 18, 24, 0.96);
+  box-shadow: 0 1rem 2.4rem rgba(0, 0, 0, 0.35);
+}
+
+@media (hover: hover) {
+  .archive-activity-timeline-bucket:hover .archive-activity-timeline-bar,
+  .archive-activity-timeline-month:hover .archive-activity-timeline-month-bar {
+    opacity: 0.82;
+    transform: translate(-50%, -100%) scaleY(1.12);
+  }
+
+  .archive-activity-timeline-bucket:hover .archive-activity-tooltip,
+  .archive-activity-timeline-month:hover .archive-activity-tooltip {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translate(var(--archive-activity-tooltip-offset-x), 0);
+    transition-delay: 0s;
+    visibility: visible;
+  }
+}
+
+.archive-activity-timeline-bucket:focus-within .archive-activity-tooltip,
+.archive-activity-timeline-month:focus-within .archive-activity-tooltip {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(var(--archive-activity-tooltip-offset-x), 0);
+  transition-delay: 0s;
+  visibility: visible;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .archive-activity-timeline-bar,
+  .archive-activity-timeline-month-bar {
+    transition: none;
+  }
+
+  .archive-activity-timeline-bucket:hover .archive-activity-timeline-bar,
+  .archive-activity-timeline-month:hover .archive-activity-timeline-month-bar {
+    transform: translate(-50%, -100%);
+  }
+}

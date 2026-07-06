@@ -1,0 +1,159 @@
+﻿---
+
+---
+
+<script>
+  import { initHomeShellTheme } from "../../scripts/home-shell-theme";
+  import { initHomeShellSignature } from "../../scripts/home-shell-signature";
+  import { initHomeShellDesktopSignatureNav } from "../../scripts/home-shell-desktop-signature-nav";
+  import { initHomeShellMobileNav } from "../../scripts/home-shell-mobile-nav";
+  import { initHomeShellContentToc } from "../../scripts/home-shell-content-toc";
+  import { initHomeShellMobileToc } from "../../scripts/home-shell-mobile-toc";
+  import { initHomeShellContentPageEntrance } from "../../scripts/home-shell-content-page-entrance";
+  import { initHomeShellRouteTransitionLock } from "../../scripts/home-shell-route-transition-lock";
+  import { initHomeShellSearch } from "../../scripts/home-shell-search";
+  import { initHomeShellDocumentProgress } from "../../scripts/home-shell-document-progress";
+  import { initHomeShellCodeCopy } from "../../scripts/home-shell-code-copy";
+  import { initHomeShellContentFold } from "../../scripts/home-shell-content-fold";
+  import {
+    cleanupHomeShellArticleActions,
+    initHomeShellArticleActions,
+  } from "../../scripts/home-shell-article-actions";
+  import {
+    cleanupHomeShellConstellationBackground,
+    initHomeShellConstellationBackground,
+  } from "../../scripts/home-shell-constellation-background";
+  import {
+    cleanupHomeShellWalineComments,
+    cleanupHomeShellWalinePageviews,
+    initHomeShellWalineComments,
+    initHomeShellWalinePageviews,
+  } from "../../scripts/home-shell-waline";
+  import { initHomeShellGitHubRepoCards } from "../../scripts/home-shell-github-repo-cards";
+  import { initHomeShellFriendLinkAvatars } from "../../scripts/home-shell-friend-link-avatars";
+  import { initHomeShellFriendFeed } from "../../scripts/home-shell-friend-feed";
+  import { initHomeShellCodeTime } from "../../scripts/home-shell-codetime";
+  import {
+    cleanupHomeShellContentImageLightbox,
+    initHomeShellContentImageLightbox,
+  } from "../../scripts/home-shell-content-image-lightbox";
+
+  const HOME_SHELL_BEFORE_SWAP_CLEANUP_KEYS = [
+    "__homeShellGitHubRepoCardsCleanup",
+    "__homeShellSignatureCleanup",
+    "__homeShellContentTocCleanup",
+    "__homeShellMobileTocCleanup",
+    "__homeShellMobileNavCleanup",
+    "__homeShellDesktopSignatureNavCleanup",
+    "__homeShellDocumentProgressCleanup",
+    "__homeShellCodeCopyCleanup",
+    "__homeShellContentFoldCleanup",
+    "__homeShellFriendLinkAvatarsCleanup",
+    "__homeShellFriendFeedCleanup",
+    "__homeShellCodeTimeCleanup",
+  ] as const;
+
+  type HomeShellBeforeSwapCleanupKey =
+    (typeof HOME_SHELL_BEFORE_SWAP_CLEANUP_KEYS)[number];
+
+  type HomeShellWindow = Window & {
+    __homeShellPageLoadBound?: boolean;
+  } & Partial<Record<HomeShellBeforeSwapCleanupKey, () => void>>;
+
+  const browserWindow = window as HomeShellWindow;
+
+  const runHomeShellCleanup = (name: string, cleanup: () => void) => {
+    try {
+      cleanup();
+    } catch (error) {
+      console.warn("[HomeShell] Failed to cleanup.", name, error);
+    }
+  };
+
+  const runHomeShellInitializer = (name: string, initialize: () => unknown) => {
+    try {
+      const result = initialize();
+
+      if (result instanceof Promise) {
+        void result.catch((error) => {
+          console.warn("[HomeShell] Failed to initialize.", name, error);
+        });
+      }
+    } catch (error) {
+      console.warn("[HomeShell] Failed to initialize.", name, error);
+    }
+  };
+
+  const cleanupHomeShellBeforeSwap = () => {
+    runHomeShellCleanup("waline-comments", cleanupHomeShellWalineComments);
+    runHomeShellCleanup("waline-pageviews", cleanupHomeShellWalinePageviews);
+    runHomeShellCleanup("article-actions", cleanupHomeShellArticleActions);
+    runHomeShellCleanup(
+      "content-image-lightbox",
+      cleanupHomeShellContentImageLightbox,
+    );
+    runHomeShellCleanup(
+      "constellation-background",
+      cleanupHomeShellConstellationBackground,
+    );
+
+    HOME_SHELL_BEFORE_SWAP_CLEANUP_KEYS.forEach((cleanupKey) => {
+      const cleanup = browserWindow[cleanupKey];
+      browserWindow[cleanupKey] = undefined;
+
+      if (cleanup) {
+        runHomeShellCleanup(cleanupKey, cleanup);
+      }
+    });
+  };
+
+  const initHomeShell = () => {
+    runHomeShellInitializer("theme", initHomeShellTheme);
+    runHomeShellInitializer("signature", initHomeShellSignature);
+    runHomeShellInitializer(
+      "desktop-signature-nav",
+      initHomeShellDesktopSignatureNav,
+    );
+    runHomeShellInitializer("mobile-nav", initHomeShellMobileNav);
+    runHomeShellInitializer("content-toc", initHomeShellContentToc);
+    runHomeShellInitializer("mobile-toc", initHomeShellMobileToc);
+    runHomeShellInitializer(
+      "content-page-entrance",
+      initHomeShellContentPageEntrance,
+    );
+    runHomeShellInitializer(
+      "route-transition-lock",
+      initHomeShellRouteTransitionLock,
+    );
+    runHomeShellInitializer("search", initHomeShellSearch);
+    runHomeShellInitializer("document-progress", initHomeShellDocumentProgress);
+    runHomeShellInitializer("code-copy", initHomeShellCodeCopy);
+    runHomeShellInitializer("content-fold", initHomeShellContentFold);
+    runHomeShellInitializer(
+      "constellation-background",
+      initHomeShellConstellationBackground,
+    );
+    runHomeShellInitializer("waline-comments", initHomeShellWalineComments);
+    runHomeShellInitializer("waline-pageviews", initHomeShellWalinePageviews);
+    runHomeShellInitializer("article-actions", initHomeShellArticleActions);
+    runHomeShellInitializer("github-repo-cards", initHomeShellGitHubRepoCards);
+    runHomeShellInitializer(
+      "friend-link-avatars",
+      initHomeShellFriendLinkAvatars,
+    );
+    runHomeShellInitializer("friend-feed", initHomeShellFriendFeed);
+    runHomeShellInitializer("codetime", initHomeShellCodeTime);
+    runHomeShellInitializer(
+      "content-image-lightbox",
+      initHomeShellContentImageLightbox,
+    );
+  };
+
+  if (!browserWindow.__homeShellPageLoadBound) {
+    document.addEventListener("astro:page-load", initHomeShell);
+    document.addEventListener("astro:before-swap", cleanupHomeShellBeforeSwap);
+    browserWindow.__homeShellPageLoadBound = true;
+  }
+
+  initHomeShell();
+</script>

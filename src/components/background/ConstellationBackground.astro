@@ -1,0 +1,23 @@
+---
+import "../../style/components/background/constellation-background.css";
+
+type Props = {
+  density?: number;
+  maxDistance?: number;
+  speed?: number;
+};
+
+const {
+  density = 1,
+  maxDistance = 140,
+  speed = 0.22,
+} = Astro.props satisfies Props;
+---
+
+<div class="constellation-bg" aria-hidden="true">
+  <canvas
+    class="constellation-bg__canvas"
+    data-density={density}
+    data-max-distance={maxDistance}
+    data-speed={speed}></canvas>
+</div>

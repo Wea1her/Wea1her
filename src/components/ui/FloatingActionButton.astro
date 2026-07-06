@@ -1,0 +1,37 @@
+---
+import Icon from "./Icon.astro";
+import "../../style/components/ui/floating-action-button.css";
+
+interface Props {
+  id?: string;
+  label: string;
+  iconSvg?: string;
+  text?: string;
+  className?: string;
+}
+
+const { id, label, iconSvg = "", text = "", className = "" } = Astro.props;
+---
+
+<button
+  id={id}
+  type="button"
+  class:list={["floating-action-button", className]}
+  aria-label={label}
+  hidden
+>
+  {
+    iconSvg ? (
+      <span class="floating-action-button-icon" aria-hidden="true">
+        <Icon svg={iconSvg} />
+      </span>
+    ) : null
+  }
+  {
+    text ? (
+      <span class="floating-action-button-text">{text}</span>
+    ) : (
+      <slot />
+    )
+  }
+</button>

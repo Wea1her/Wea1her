@@ -1,0 +1,25 @@
+---
+import FriendLinkCard from "./FriendLinkCard.astro";
+import type { FriendLinkItem } from "../../config/links";
+
+interface Props {
+  items?: readonly FriendLinkItem[];
+}
+
+const { items = [] } = Astro.props as Props;
+---
+
+{
+  items.length > 0 && (
+    <div
+      class="friend-links-grid"
+      data-friend-links-grid="true"
+      data-friend-links-state="loading"
+      aria-label="Friend links"
+    >
+      {items.map((item) => (
+        <FriendLinkCard {...item} />
+      ))}
+    </div>
+  )
+}

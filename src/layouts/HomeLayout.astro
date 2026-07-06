@@ -1,0 +1,87 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import HomeShellBackground from "../components/layout/HomeShellBackground.astro";
+import HomeShellFrame from "../components/layout/HomeShellFrame.astro";
+import HomeShellScripts from "../components/layout/HomeShellScripts.astro";
+import "../style/base/tokens.css";
+import "../style/pages/content-page.css";
+import "../style/layouts/home-layout.css";
+import { site } from "../config/site";
+import { getSocialLink } from "../utils/social";
+
+interface Props {
+  mainCol2Fr?: string;
+  mainCol3Fr?: string;
+  variant?: "default" | "article";
+  background?: "home" | "code-rain" | "constellation" | "content";
+  title?: string;
+  description?: string;
+  canonicalUrl?: string;
+  imageUrl?: string;
+  ogTitle?: string;
+  ogType?: "article" | "website";
+  twitterCard?: "summary" | "summary_large_image";
+  includeKatexStyles?: boolean;
+}
+
+const {
+  mainCol2Fr,
+  mainCol3Fr,
+  variant,
+  background,
+  title,
+  description,
+  canonicalUrl,
+  imageUrl,
+  ogTitle,
+  ogType,
+  twitterCard,
+  includeKatexStyles,
+} = Astro.props as Props;
+const pathname = Astro.url.pathname.replace(/\/+$/, "") || "/";
+const pathSegments = pathname.split("/").filter(Boolean);
+const shellVariant =
+  variant ?? (pathSegments.length > 1 ? "article" : "default");
+const foldedNavItems = site.site.nav;
+const githubHref = getSocialLink("github")?.href ?? "";
+const shellStyle = [
+  mainCol2Fr ? `--main-col-2-fr: ${mainCol2Fr}` : "",
+  mainCol3Fr ? `--main-col-3-fr: ${mainCol3Fr}` : "",
+]
+  .filter(Boolean)
+  .join("; ");
+const initialThemeMode = "system";
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonicalUrl={canonicalUrl}
+  imageUrl={imageUrl}
+  ogTitle={ogTitle}
+  ogType={ogType}
+  twitterCard={twitterCard}
+  includeKatexStyles={includeKatexStyles}
+>
+  <slot name="head" slot="head" />
+  <HomeShellBackground
+    slot="background"
+    pathname={pathname}
+    background={background}
+  />
+  <HomeShellFrame
+    foldedNavItems={foldedNavItems}
+    githubHref={githubHref}
+    initialThemeMode={initialThemeMode}
+    shellStyle={shellStyle}
+    shellVariant={shellVariant}
+  >
+    <slot name="signature" slot="signature" />
+    <slot name="side-nav" slot="side-nav" />
+    <slot name="profile" slot="profile" />
+    <slot name="latest" slot="latest" />
+    <slot name="footer-info" slot="footer-info" />
+    <slot name="footer-icons" slot="footer-icons" />
+  </HomeShellFrame>
+  <HomeShellScripts slot="body-end" />
+</BaseLayout>

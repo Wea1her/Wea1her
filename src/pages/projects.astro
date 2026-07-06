@@ -1,0 +1,24 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const targetHref = "/project/";
+---
+
+<BaseLayout
+  title="Projects - Ghaith"
+  description="Project pages have moved to /project/."
+  canonicalUrl={targetHref}
+  ogTitle="Projects"
+>
+  <main
+    class="content-page"
+    style="max-width: 46rem; margin: 20vh auto; padding: 0 1.5rem;"
+  >
+    <h1>Projects</h1>
+    <p>Project pages have moved.</p>
+    <p><a href={targetHref}>Go to Project</a></p>
+  </main>
+  <script is:inline>
+    window.location.replace("/project/");
+  </script>
+</BaseLayout>

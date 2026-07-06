@@ -1,0 +1,142 @@
+---
+import CollectionPageShell from "../layout/CollectionPageShell.astro";
+import ArchiveActivityHeatmap from "./ArchiveActivityHeatmap.astro";
+
+interface ArchiveArticleItem {
+  createdLabel: string;
+  href: string;
+  title: string;
+  year: string;
+}
+
+interface ArchiveActivityEntry {
+  date: string;
+  dateLabel?: string;
+  href?: string;
+  title?: string;
+}
+
+interface ArchiveYearGroup {
+  articles: ArchiveArticleItem[];
+  year: string;
+}
+
+interface Props {
+  actionHref?: string;
+  actionLabel?: string;
+  activityEntries?: ArchiveActivityEntry[];
+  backAriaLabel?: string;
+  backHref?: string;
+  backLabel?: string;
+  pageLabel: string;
+  title?: string;
+  description?: string;
+  ogTitle?: string;
+  yearGroups: ArchiveYearGroup[];
+}
+
+const {
+  actionHref,
+  actionLabel,
+  activityEntries = [],
+  backAriaLabel,
+  backHref,
+  backLabel,
+  pageLabel,
+  title,
+  description,
+  ogTitle,
+  yearGroups,
+} = Astro.props as Props;
+---
+
+<CollectionPageShell
+  backAriaLabel={backAriaLabel}
+  backHref={backHref}
+  backLabel={backLabel}
+  title={title}
+  description={description}
+  ogTitle={ogTitle}
+  contentAriaLabel={`${pageLabel} archive content`}
+  tocAriaLabel={`${pageLabel} archive navigation`}
+  tocEmptyText="No archive yet."
+  tocItems={yearGroups.map((group) => ({
+    href: `#${group.year}`,
+    label: group.year,
+    depth: 2 as const,
+  }))}
+>
+  <header class="listing-header collection-page-header">
+    <div class="listing-header-bar collection-page-header-bar">
+      <h1 class="listing-header-title collection-page-title">{pageLabel}</h1>
+      {
+        actionHref && actionLabel && (
+          <a
+            class="listing-view-all-link collection-page-view-all-link"
+            href={actionHref}
+          >
+            <span class="listing-view-all-link-text collection-page-view-all-link-text">
+              {actionLabel}
+            </span>
+            <span
+              class="listing-view-all-link-arrow collection-page-view-all-link-arrow"
+              aria-hidden="true"
+            />
+          </a>
+        )
+      }
+    </div>
+  </header>
+
+  {
+    activityEntries.length > 0 && (
+      <ArchiveActivityHeatmap entries={activityEntries} label={pageLabel} />
+    )
+  }
+
+  {
+    yearGroups.length > 0 ? (
+      <div class="archive-groups collection-archive-groups">
+        {yearGroups.map((group) => (
+          <section
+            class="archive-group collection-archive-group"
+            aria-label={`${group.year} archive`}
+          >
+            <h2
+              id={group.year}
+              class="archive-year-heading collection-archive-year"
+            >
+              {group.year}
+            </h2>
+            <ol
+              class="archive-list collection-archive-list"
+              aria-label={`${group.year} timeline`}
+            >
+              {group.articles.map((article) => (
+                <li class="archive-list-item collection-archive-item">
+                  <time class="archive-item-date collection-archive-date">
+                    {article.createdLabel}
+                  </time>
+                  <a
+                    class="archive-item-link collection-archive-link"
+                    href={article.href}
+                  >
+                    <span class="archive-item-link-text collection-archive-link-text">
+                      {article.title}
+                    </span>
+                    <span
+                      class="archive-item-link-arrow collection-archive-link-arrow"
+                      aria-hidden="true"
+                    />
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </section>
+        ))}
+      </div>
+    ) : (
+      <p class="content-toc-empty">No content yet.</p>
+    )
+  }
+</CollectionPageShell>

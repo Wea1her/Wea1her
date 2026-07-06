@@ -16,7 +16,6 @@ The current site is an Astro 5 project based on `astro-pure`. The user-owned con
 - `src/pages/terms/*`
 - `src/site.config.ts`
 - `public/avatar.png`
-- `public/favicon/*`
 - `public/images/social-card.png`
 - `public/links.json`
 
@@ -44,8 +43,8 @@ The migration must preserve:
 
 - All files under `src/content/blog/`
 - All files under `src/content/images/`
-- Existing public identity assets: avatar, favicon, and social card
-- Existing site identity: `Weather Cosmos`, author `Weather`, description, site URL, and language context
+- Existing public identity assets: avatar and social card
+- Existing site identity: `Ghaith`, author `Ghaith`, description, site URL, and language context
 - Existing social links: GitHub and Telegram
 - Existing Waline server URL and comment/pageview behavior
 - Existing top-level content pages where useful: about, projects, links, and terms
@@ -87,7 +86,7 @@ Map current configuration into Astro-star:
 - `theme.author` -> `site.profile.name`
 - `theme.description` -> `site.site.description`, `site.profile.bio`, and the first sentence of `site.profile.intro`
 - `theme.logo` and `public/avatar.png` -> `site.profile.avatarSrc`
-- `theme.favicon` -> `site.site.iconSrc`
+- Former site icon source -> `site.site.iconSrc` with the avatar image
 - `theme.footer.social.github` and `theme.footer.social.telegram` -> `socialLinks`
 - `integ.waline.server` -> Waline environment fallback or config utility default
 - `theme.header.menu` -> `site.site.nav`
@@ -114,7 +113,6 @@ It is not acceptable to delete user content directories without first migrating 
 
 - `src/content/blog`
 - `src/content/images`
-- `public/favicon`
 - `public/images/social-card.png`
 - `public/avatar.png`
 

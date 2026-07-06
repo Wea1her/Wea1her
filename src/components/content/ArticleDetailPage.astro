@@ -1,0 +1,279 @@
+---
+import DocumentDetailPage from "./DocumentDetailPage.astro";
+import ArticleActionCard from "./ArticleActionCard.astro";
+import WalineComments from "./WalineComments.astro";
+import Icon from "../ui/Icon.astro";
+import GithubIcon from "../ui/icons/GithubIcon.astro";
+import { ArrowLeft, ArrowRight, BookOpen } from "lucide-static";
+
+interface TocHeading {
+  depth: 1 | 2 | 3 | 4 | 5 | 6;
+  slug: string;
+  text: string;
+}
+
+interface AdjacentArticle {
+  href: string;
+  title: string;
+}
+
+interface Props {
+  section: string;
+  title: string;
+  description?: string;
+  articleType: string;
+  author: string;
+  articleRoutePath: string;
+  walineServerURL?: string;
+  createdLabel: string;
+  updatedLabel: string;
+  createdAtIso?: string;
+  updatedAtIso?: string;
+  articleWordCount: number;
+  nextArticle?: AdjacentArticle | null;
+  previousArticle?: AdjacentArticle | null;
+  tocHeadings: TocHeading[];
+  ArticleContent: any;
+  canonicalUrl?: string;
+  imageUrl?: string;
+  projectUrl?: string;
+  docUrl?: string;
+  siteName?: string;
+  includeKatexStyles?: boolean;
+}
+
+const {
+  section,
+  title,
+  description = "",
+  articleType,
+  author,
+  articleRoutePath,
+  walineServerURL = "",
+  createdLabel,
+  updatedLabel,
+  createdAtIso = "",
+  updatedAtIso = "",
+  articleWordCount,
+  nextArticle = null,
+  previousArticle = null,
+  tocHeadings,
+  ArticleContent,
+  canonicalUrl = "",
+  imageUrl = "",
+  projectUrl = "",
+  docUrl = "",
+  siteName = "",
+  includeKatexStyles = false,
+} = Astro.props as Props;
+
+const pageTitle = siteName ? `${title} - ${siteName}` : title;
+const sectionLabels: Record<string, string> = {
+  blog: "Blog",
+  note: "Note",
+  project: "Project",
+};
+const sectionLabel = sectionLabels[section] ?? section;
+const articleSection =
+  articleType.trim() && articleType !== "Uncategorized"
+    ? articleType
+    : sectionLabel;
+const articleKeywords = Array.from(
+  new Set(
+    [sectionLabel, articleSection]
+      .map((item) => item.trim())
+      .filter((item) => item && item !== "Uncategorized"),
+  ),
+);
+const articleJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: title,
+  description: description || undefined,
+  articleSection,
+  keywords: articleKeywords.length > 0 ? articleKeywords : undefined,
+  wordCount: articleWordCount > 0 ? articleWordCount : undefined,
+  author: {
+    "@type": "Person",
+    name: author,
+  },
+  publisher: {
+    "@type": "Person",
+    name: author,
+  },
+  datePublished: createdAtIso || undefined,
+  dateModified: updatedAtIso || createdAtIso || undefined,
+  mainEntityOfPage: canonicalUrl
+    ? {
+        "@type": "WebPage",
+        "@id": canonicalUrl,
+      }
+    : undefined,
+  url: canonicalUrl || undefined,
+  image: imageUrl ? [imageUrl] : undefined,
+  thumbnailUrl: imageUrl || undefined,
+  isPartOf: siteName
+    ? {
+        "@type": "WebSite",
+        name: siteName,
+      }
+    : undefined,
+};
+const articleJsonLdText = JSON.stringify(articleJsonLd).replace(
+  /</g,
+  "\\u003c",
+);
+const projectLinks = [
+  projectUrl ? { href: projectUrl, label: "Project", kind: "github" } : null,
+  docUrl ? { href: docUrl, label: "Docs", kind: "docs" } : null,
+].filter(
+  (item): item is { href: string; label: string; kind: "github" | "docs" } =>
+    Boolean(item),
+);
+---
+
+<DocumentDetailPage
+  backHref={`/${section}/`}
+  backLabel={`Back to ${sectionLabel}`}
+  backAriaLabel={`Back to ${sectionLabel} list`}
+  variant="article"
+  title={pageTitle}
+  description={description || undefined}
+  canonicalUrl={canonicalUrl || undefined}
+  imageUrl={imageUrl || undefined}
+  ogTitle={title}
+  ogType="article"
+  twitterCard={imageUrl ? "summary_large_image" : "summary"}
+  includeKatexStyles={includeKatexStyles}
+  contentClass="content-page content-page--article"
+  contentAriaLabel={`${section} article content`}
+  tocAriaLabel={`${section} table of contents`}
+  tocHeadings={tocHeadings}
+  DocumentContent={ArticleContent}
+>
+  <Fragment slot="head">
+    <meta name="article:author" content={author} />
+    {
+      createdAtIso && (
+        <meta property="article:published_time" content={createdAtIso} />
+      )
+    }
+    {
+      updatedAtIso && (
+        <meta property="article:modified_time" content={updatedAtIso} />
+      )
+    }
+    <script is:inline type="application/ld+json" set:html={articleJsonLdText} />
+  </Fragment>
+  <header slot="before-content" class="article-content-header">
+    <p class="article-content-title">{title}</p>
+    {description && <p class="article-content-description">{description}</p>}
+    <div class="article-content-meta" aria-label="Article metadata">
+      <p class="article-content-meta-line">
+        <span class="article-content-meta-label">Type</span>{" "}
+        <span class="article-content-meta-value">{articleType}</span>
+      </p>
+      <p class="article-content-meta-line">
+        <span class="article-content-meta-label">Created</span>{" "}
+        <span class="article-content-meta-value">{createdLabel}</span>
+        <span class="article-content-meta-separator">/</span>
+        <span class="article-content-meta-label">Updated</span>{" "}
+        <span class="article-content-meta-value">{updatedLabel}</span>
+      </p>
+      <p class="article-content-meta-line">
+        <span class="article-content-meta-label">Views</span>{" "}
+        <span
+          class="article-content-meta-value waline-pageview-count"
+          data-path={articleRoutePath}
+          data-server-url={walineServerURL}
+        >
+          —
+        </span>
+        <span class="article-content-meta-separator">/</span>
+        <span class="article-content-meta-label">Comments</span>{" "}
+        <span
+          class="article-content-meta-value waline-comment-count"
+          data-path={articleRoutePath}
+          data-server-url={walineServerURL}
+        >
+          —
+        </span>
+        <span class="article-content-meta-separator">/</span>
+        <span class="article-content-meta-label">Words</span>{" "}
+        <span class="article-content-meta-value"
+          >{articleWordCount.toLocaleString("en-US")}</span
+        >
+      </p>
+    </div>
+    {
+      projectLinks.length > 0 && (
+        <nav class="article-project-links" aria-label="Project links">
+          {projectLinks.map((link) => (
+            <a
+              class:list={[
+                "article-project-link",
+                `article-project-link--${link.kind}`,
+              ]}
+              href={link.href}
+              aria-label={link.label}
+              title={link.label}
+            >
+              <span class="article-project-link-icon" aria-hidden="true">
+                {link.kind === "github" ? (
+                  <GithubIcon />
+                ) : (
+                  <Icon svg={BookOpen} />
+                )}
+              </span>
+            </a>
+          ))}
+        </nav>
+      )
+    }
+  </header>
+
+  <Fragment slot="after-content">
+    <ArticleActionCard
+      articleRoutePath={articleRoutePath}
+      walineServerURL={walineServerURL}
+    />
+
+    {
+      (previousArticle || nextArticle) && (
+        <nav class="article-neighbors" aria-label="Adjacent articles">
+          {previousArticle && (
+            <a
+              class="article-neighbor article-neighbor--previous"
+              href={previousArticle.href}
+              aria-label={`Previous article: ${previousArticle.title}`}
+            >
+              <span class="article-neighbor-arrow" aria-hidden="true">
+                <Icon svg={ArrowLeft} />
+              </span>
+              <span class="article-neighbor-title">
+                {previousArticle.title}
+              </span>
+            </a>
+          )}
+          {nextArticle && (
+            <a
+              class="article-neighbor article-neighbor--next"
+              href={nextArticle.href}
+              aria-label={`Next article: ${nextArticle.title}`}
+            >
+              <span class="article-neighbor-title">{nextArticle.title}</span>
+              <span class="article-neighbor-arrow" aria-hidden="true">
+                <Icon svg={ArrowRight} />
+              </span>
+            </a>
+          )}
+        </nav>
+      )
+    }
+
+    <WalineComments
+      articleRoutePath={articleRoutePath}
+      walineServerURL={walineServerURL}
+    />
+  </Fragment>
+</DocumentDetailPage>

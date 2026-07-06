@@ -1,0 +1,49 @@
+---
+interface LostLinkItem {
+  name: string;
+  description: string;
+  href: string;
+}
+
+interface Props {
+  items?: readonly LostLinkItem[];
+  title?: string;
+  emptyText?: string;
+}
+
+const {
+  items = [],
+  title = "Lost Links",
+  emptyText = "No lost links yet.",
+} = Astro.props as Props;
+---
+
+{
+  items.length > 0 || emptyText ? (
+    <details class="content-fold">
+      <summary class="content-fold-summary">{title}</summary>
+
+      <div class="content-fold-body">
+        {items.length > 0 ? (
+          <ul class="lost-links-list" aria-label={title}>
+            {items.map((item) => (
+              <li class="lost-links-item">
+                <span class="lost-links-row">
+                  <span class="lost-links-name">{item.name}</span>
+                  <span class="lost-links-divider" aria-hidden="true">
+                    |
+                  </span>
+                  <span class="lost-links-description">
+                    {item.description}
+                  </span>
+                </span>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p class="lost-links-empty">{emptyText}</p>
+        )}
+      </div>
+    </details>
+  ) : null
+}

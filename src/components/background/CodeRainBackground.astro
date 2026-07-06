@@ -1,0 +1,40 @@
+---
+import "../../style/components/background/code-rain-background.css";
+
+type Props = {
+  keywords: readonly string[];
+  count?: number;
+};
+
+const { keywords, count = 60 } = Astro.props;
+
+const pick = <T,>(arr: readonly T[]) =>
+  arr[Math.floor(Math.random() * arr.length)];
+const rand = (min: number, max: number) => Math.random() * (max - min) + min;
+
+const drops = Array.from({ length: count }, () => {
+  const duration = rand(14, 34);
+  return {
+    text: pick(keywords),
+    left: rand(0, 100),
+    size: rand(12, 22),
+    duration,
+    delay: -rand(0, duration),
+    opacity: rand(0.03, 0.08),
+    bright: Math.random() < 0.08,
+  };
+});
+---
+
+<div class="coderain" aria-hidden="true">
+  {
+    drops.map((d) => (
+      <span
+        class={`coderain__drop ${d.bright ? "is-bright" : ""}`}
+        style={`left:${d.left}%; font-size:${d.size}px; --dur:${d.duration}s; --delay:${d.delay}s; --alpha:${d.opacity};`}
+      >
+        {d.text}
+      </span>
+    ))
+  }
+</div>

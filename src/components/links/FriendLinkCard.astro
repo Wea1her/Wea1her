@@ -1,0 +1,53 @@
+---
+import { ArrowRight } from "lucide-static";
+import Icon from "../ui/Icon.astro";
+import type { FriendLinkItem } from "../../config/links";
+
+interface Props extends FriendLinkItem {}
+
+const { name, description, href, avatarSrc } = Astro.props as Props;
+---
+
+<a
+  class="app-panel-item app-panel-item--link"
+  href={href}
+  target="_blank"
+  rel="noreferrer"
+  aria-label={`Visit ${name}`}
+>
+  <img
+    class="friend-link-card-bg"
+    src={avatarSrc}
+    alt=""
+    aria-hidden="true"
+    loading="lazy"
+    decoding="async"
+    fetchpriority="low"
+  />
+
+  <span
+    class="app-panel-item-icon friend-link-avatar-frame"
+    data-friend-link-avatar-frame="true"
+    aria-hidden="true"
+  >
+    <img
+      class="friend-link-avatar"
+      data-friend-link-avatar="true"
+      src={avatarSrc}
+      alt=""
+      width="56"
+      height="56"
+      loading="lazy"
+      decoding="async"
+      fetchpriority="low"
+    />
+    <span class="friend-link-avatar-mask" aria-hidden="true">
+      <Icon svg={ArrowRight} />
+    </span>
+  </span>
+
+  <span class="app-panel-item-copy">
+    <span class="app-panel-item-name">{name}</span>
+    <span class="app-panel-item-description">{description}</span>
+  </span>
+</a>

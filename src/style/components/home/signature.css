@@ -1,0 +1,94 @@
+.signature-wrap {
+  --signature-svg-max: clamp(5.2rem, 4.2rem + 3.4vw, 8.4rem);
+  width: 100%;
+  color: var(--line, #101010);
+  text-decoration: none;
+  min-height: 0;
+  display: flex;
+  align-items: flex-end;
+}
+
+.signature-mark {
+  display: inline-block;
+  width: min(var(--signature-svg-max), 100%);
+  will-change: clip-path;
+}
+
+.signature-mark[data-signature-src="true"] {
+  aspect-ratio: 394.6 / 80.8;
+  background-color: currentColor;
+  mask-image: var(--signature-mask);
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-image: var(--signature-mask);
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+}
+
+.signature-mark[data-signature-loaded="true"] {
+  aspect-ratio: auto;
+  background-color: transparent;
+  mask-image: none;
+  -webkit-mask-image: none;
+}
+
+.signature-wrap svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.signature-mark svg,
+.signature-mark svg * {
+  fill: currentColor !important;
+  stroke: currentColor !important;
+}
+
+@media (hover: hover) {
+  .signature-wrap:hover .signature-mark {
+    animation: signature-write 1.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .signature-wrap:hover .signature-mark[data-signature-inline="true"] path {
+    stroke-opacity: 0;
+  }
+}
+
+.signature-wrap:focus-visible {
+  outline: none;
+}
+
+.signature-wrap:focus-visible .signature-mark {
+  animation: signature-write 1.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.signature-wrap:focus-visible
+  .signature-mark[data-signature-inline="true"]
+  path {
+  stroke-opacity: 0;
+}
+
+@keyframes signature-write {
+  0% {
+    clip-path: inset(0 100% 0 0);
+  }
+
+  100% {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@media (min-width: 48rem) {
+  .signature-wrap {
+    --signature-svg-max: min(clamp(6.2rem, 5.5rem + 2vw, 9rem), 100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .signature-wrap:hover .signature-mark,
+  .signature-wrap:focus-visible .signature-mark {
+    animation: none;
+  }
+}

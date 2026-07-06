@@ -1,0 +1,142 @@
+---
+import Icon from "../Icon.astro";
+import ArcIcon from "./ArcIcon.astro";
+import BilibiliIcon from "./BilibiliIcon.astro";
+import CloudMusicIcon from "./CloudMusicIcon.astro";
+import FigmaIcon from "./FigmaIcon.astro";
+import GithubIcon from "./GithubIcon.astro";
+import InstagramIcon from "./InstagramIcon.astro";
+import Iterm2Icon from "./Iterm2Icon.astro";
+import MailIcon from "./MailIcon.astro";
+import NotionIcon from "./NotionIcon.astro";
+import RaycastIcon from "./RaycastIcon.astro";
+import RssIcon from "./RssIcon.astro";
+import StarIcon from "./StarIcon.astro";
+import TailscaleIcon from "./TailscaleIcon.astro";
+import TelegramIcon from "./TelegramIcon.astro";
+import ThunderbirdIcon from "./ThunderbirdIcon.astro";
+import VscodeIcon from "./VscodeIcon.astro";
+import ZoteroIcon from "./ZoteroIcon.astro";
+import {
+  Blocks,
+  BookOpen,
+  CodeXml,
+  Hammer,
+  PenTool,
+  Rocket,
+  Send,
+  Sparkles,
+  Wrench,
+} from "lucide-static";
+
+interface Props {
+  name?: string;
+  label?: string;
+}
+
+const { name = "", label } = Astro.props;
+const normalizedName = name.trim().toLowerCase();
+
+const customIconAliases: Record<string, string> = {
+  "@": "mail",
+  arc: "arc",
+  bilibili: "bilibili",
+  "cloud music": "cloud-music",
+  "cloud-music": "cloud-music",
+  cloudmusic: "cloud-music",
+  email: "mail",
+  fg: "figma",
+  figma: "figma",
+  gh: "github",
+  github: "github",
+  instagram: "instagram",
+  ins: "instagram",
+  iterm: "iterm2",
+  iterm2: "iterm2",
+  mail: "mail",
+  netease: "netease-music",
+  "netease music": "netease-music",
+  "netease-music": "netease-music",
+  notion: "notion",
+  raycast: "raycast",
+  rss: "rss",
+  star: "star",
+  tailscale: "tailscale",
+  telegram: "telegram",
+  tg: "telegram",
+  thunderbird: "thunderbird",
+  vs: "vscode",
+  "vs code": "vscode",
+  vscode: "vscode",
+  zotero: "zotero",
+};
+
+const customIconKey = customIconAliases[normalizedName] ?? "";
+
+const lucideIconMap: Record<string, string> = {
+  as: Rocket,
+  astro: Rocket,
+  blocks: Blocks,
+  book: BookOpen,
+  code: CodeXml,
+  note: BookOpen,
+  notebook: BookOpen,
+  ob: Sparkles,
+  obsidian: Sparkles,
+  pen: PenTool,
+  project: Blocks,
+  send: Send,
+  sparkles: Sparkles,
+  tool: Wrench,
+  tools: Wrench,
+  work: Hammer,
+  wrench: Wrench,
+};
+
+const lucideSvg = customIconKey ? "" : (lucideIconMap[normalizedName] ?? "");
+const fallbackText = name.slice(0, 3).toUpperCase();
+---
+
+{
+  customIconKey === "arc" ? (
+    <ArcIcon />
+  ) : customIconKey === "bilibili" ? (
+    <BilibiliIcon />
+  ) : customIconKey === "cloud-music" ? (
+    <CloudMusicIcon />
+  ) : customIconKey === "netease-music" ? (
+    <CloudMusicIcon />
+  ) : customIconKey === "github" ? (
+    <GithubIcon />
+  ) : customIconKey === "instagram" ? (
+    <InstagramIcon />
+  ) : customIconKey === "figma" ? (
+    <FigmaIcon />
+  ) : customIconKey === "iterm2" ? (
+    <Iterm2Icon />
+  ) : customIconKey === "mail" ? (
+    <MailIcon />
+  ) : customIconKey === "notion" ? (
+    <NotionIcon />
+  ) : customIconKey === "raycast" ? (
+    <RaycastIcon />
+  ) : customIconKey === "rss" ? (
+    <RssIcon />
+  ) : customIconKey === "star" ? (
+    <StarIcon />
+  ) : customIconKey === "tailscale" ? (
+    <TailscaleIcon />
+  ) : customIconKey === "telegram" ? (
+    <TelegramIcon />
+  ) : customIconKey === "thunderbird" ? (
+    <ThunderbirdIcon />
+  ) : customIconKey === "vscode" ? (
+    <VscodeIcon />
+  ) : customIconKey === "zotero" ? (
+    <ZoteroIcon />
+  ) : lucideSvg ? (
+    <Icon svg={lucideSvg} label={label} decorative={!label} />
+  ) : (
+    <span>{fallbackText}</span>
+  )
+}
