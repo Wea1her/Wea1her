@@ -15,6 +15,10 @@ export const site = {
     description: "Stay hungry, stay foolish, be water.",
     iconSrc: "/avatar.png",
     startYear: 2025,
+    footer: {
+      name: "Ghaith",
+      repoHref: "https://github.com/Wea1her",
+    },
     beian: {
       icp: {
         text: "",

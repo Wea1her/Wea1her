@@ -2,40 +2,50 @@
   "name": "ghaith",
   "type": "module",
   "version": "1.0.0",
-  "packageManager": "pnpm@10.30.3",
+  "packageManager": "pnpm@11.15.1",
   "scripts": {
     "predev": "pnpm run generate:signature && tsx scripts/generate-git-timestamps.ts",
     "dev": "astro dev",
     "prebuild": "pnpm run generate:signature && tsx scripts/generate-git-timestamps.ts",
     "build": "astro build",
     "preview": "astro preview",
-    "check": "astro check",
-    "verify": "pnpm check && pnpm format:check && pnpm build && pnpm run audit:content && pnpm run audit:assets",
+    "check": "pnpm run check:types && pnpm run format:check && pnpm run build && pnpm run audit:content && pnpm run audit:assets && pnpm run audit:deps",
+    "check:types": "astro check",
+    "verify": "pnpm check && pnpm test:content-tags && pnpm test:performance-policy && pnpm test:deployment-policy && pnpm test:content-tags-output && pnpm test:fixed-page-metadata-output",
     "astro": "astro",
     "algolia:sync": "tsx scripts/sync-algolia-index.ts",
     "generate:signature": "tsx scripts/generate-signature-asset.ts",
     "audit:assets": "tsx scripts/audit-assets.ts",
     "audit:content": "tsx scripts/audit-content.ts",
+    "audit:deps": "pnpm audit --registry=https://registry.npmjs.org --audit-level moderate --ignore-registry-errors",
+    "test:content-tags": "node --import tsx --test scripts/content-tags.test.ts scripts/rss-tags.test.ts scripts/algolia-tags.test.ts scripts/content-category-removal.test.mjs",
+    "test:content-tags-output": "node --test scripts/content-tags-output.test.mjs",
+    "test:fixed-page-metadata-output": "node --test scripts/fixed-page-metadata-output.test.mjs",
+    "test:performance-policy": "node --import tsx --test scripts/font-loading-policy.test.mjs scripts/theme-loading-policy.test.mjs scripts/home-loading-policy.test.mjs scripts/codetime-loading-policy.test.mjs scripts/site-asset-policy.test.mjs scripts/home-prerender-policy.test.mjs scripts/friend-link-loading-policy.test.mjs scripts/content-code-block-policy.test.mjs scripts/content-video-policy.test.mjs scripts/content-video-player.test.mjs scripts/content-video-loading-policy.test.mjs scripts/inline-homepage-styles.test.mjs",
+    "test:deployment-policy": "node --test scripts/vercel-deployment-policy.test.mjs",
     "format": "prettier . --write",
     "format:check": "prettier . --check",
     "config:extract": "tsx scripts/config-extract.mjs",
     "config:apply": "node scripts/config-apply.mjs"
   },
   "devDependencies": {
+    "@types/node": "^24.13.2",
+    "parse5": "7.3.0",
     "prettier": "3.8.4",
     "prettier-plugin-astro": "0.14.1",
-    "tar": "^7.5.16",
-    "tsx": "^4.22.4"
+    "tar": "^7.5.22",
+    "tsx": "^4.22.4",
+    "yaml": "^2.9.0"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.9",
-    "@astrojs/markdown-remark": "^7.2.0",
-    "@astrojs/mdx": "^6.0.3",
-    "@astrojs/rss": "^4.0.18",
+    "@astrojs/markdown-remark": "7.2.4",
+    "@astrojs/mdx": "^7.0.3",
+    "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.3",
     "@rowanmanning/feed-parser": "^2.1.3",
     "@waline/client": "^3.15.2",
-    "astro": "^6.4.8",
+    "astro": "7.2.8",
     "katex": "^0.16.10",
     "lucide-static": "^0.562.0",
     "rehype-katex": "^7.0.0",
@@ -43,13 +53,7 @@
     "remark-math": "^6.0.0",
     "remark-mdx": "^3.1.1",
     "remark-parse": "^11.0.0",
-    "sharp": "^0.34.5",
+    "sharp": "^0.35.4",
     "unified": "^11.0.5"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild",
-      "sharp"
-    ]
   }
 }

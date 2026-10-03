@@ -1,0 +1,7 @@
+{
+  "repository": "https://github.com/hanlife02/Astro-star",
+  "version": "0.24.1",
+  "commit": "c87b3cb54a9069c8f76ee5c8eb5afc39b62580c2",
+  "previousBase": "bd6ff45fd6c8459c15db693a52adc10006fa9350",
+  "integration": "Vercel static output with legacy content and URL compatibility"
+}

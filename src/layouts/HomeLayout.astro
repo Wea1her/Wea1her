@@ -4,7 +4,6 @@ import HomeShellBackground from "../components/layout/HomeShellBackground.astro"
 import HomeShellFrame from "../components/layout/HomeShellFrame.astro";
 import HomeShellScripts from "../components/layout/HomeShellScripts.astro";
 import "../style/base/tokens.css";
-import "../style/pages/content-page.css";
 import "../style/layouts/home-layout.css";
 import { site } from "../config/site";
 import { getSocialLink } from "../utils/social";
@@ -72,6 +71,7 @@ const initialThemeMode = "system";
   <HomeShellFrame
     foldedNavItems={foldedNavItems}
     githubHref={githubHref}
+    initialHomeEntrance={pathname === "/"}
     initialThemeMode={initialThemeMode}
     shellStyle={shellStyle}
     shellVariant={shellVariant}

@@ -2,20 +2,14 @@
 import "../../style/components/background/content-background.css";
 
 type ContentBackgroundBaseSection = "blog" | "note" | "project";
-type ContentBackgroundSection =
-  | ContentBackgroundBaseSection
-  | "blog-archive"
-  | "note-archive";
+type ContentBackgroundSection = ContentBackgroundBaseSection;
 
 interface Props {
   section?: ContentBackgroundSection;
 }
 
 const { section = "blog" } = Astro.props satisfies Props;
-const contentSection = section.replace(
-  "-archive",
-  "",
-) as ContentBackgroundBaseSection;
+const contentSection = section;
 ---
 
 <div
@@ -23,15 +17,15 @@ const contentSection = section.replace(
   data-section={contentSection}
   aria-hidden="true"
 >
-  <span class="content-bg__margin-line" />
-  <span class="content-bg__paper-edge content-bg__paper-edge--top" />
-  <span class="content-bg__paper-edge content-bg__paper-edge--bottom" />
-  <span class="content-bg__corner content-bg__corner--top-left" />
-  <span class="content-bg__corner content-bg__corner--bottom-right" />
+  <span class="content-bg__margin-line"></span>
+  <span class="content-bg__paper-edge content-bg__paper-edge--top"></span>
+  <span class="content-bg__paper-edge content-bg__paper-edge--bottom"></span>
+  <span class="content-bg__corner content-bg__corner--top-left"></span>
+  <span class="content-bg__corner content-bg__corner--bottom-right"></span>
   <div class="content-bg__punches">
-    <span />
-    <span />
-    <span />
-    <span />
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
   </div>
 </div>

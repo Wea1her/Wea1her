@@ -101,11 +101,17 @@ function openLightbox(sourceImage: HTMLImageElement) {
 
   if (!(image instanceof HTMLImageElement)) return;
 
+  window.clearTimeout(closeLightboxTimer);
+  closeLightboxTimer = 0;
+
   lastFocusedElement =
     document.activeElement instanceof HTMLElement
       ? document.activeElement
       : null;
-  image.src = sourceImage.currentSrc || sourceImage.src;
+  // `src` holds the full-size variant while `currentSrc` is whatever narrow
+  // srcset candidate the browser picked for the article column — opening that
+  // one full-screen would show a blown-up thumbnail.
+  image.src = sourceImage.src || sourceImage.currentSrc;
   image.alt = sourceImage.alt;
 
   if (caption instanceof HTMLElement) {

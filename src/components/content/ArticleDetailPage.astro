@@ -1,10 +1,12 @@
 ---
 import DocumentDetailPage from "./DocumentDetailPage.astro";
 import ArticleActionCard from "./ArticleActionCard.astro";
+import ContentMetadata from "./ContentMetadata.astro";
 import WalineComments from "./WalineComments.astro";
 import Icon from "../ui/Icon.astro";
 import GithubIcon from "../ui/icons/GithubIcon.astro";
 import { ArrowLeft, ArrowRight, BookOpen } from "lucide-static";
+import type { ContentTag } from "../../utils/content-tags";
 
 interface TocHeading {
   depth: 1 | 2 | 3 | 4 | 5 | 6;
@@ -38,6 +40,7 @@ interface Props {
   imageUrl?: string;
   projectUrl?: string;
   docUrl?: string;
+  tags?: Array<ContentTag & { href: string }>;
   siteName?: string;
   includeKatexStyles?: boolean;
 }
@@ -63,6 +66,7 @@ const {
   imageUrl = "",
   projectUrl = "",
   docUrl = "",
+  tags = [],
   siteName = "",
   includeKatexStyles = false,
 } = Astro.props as Props;
@@ -80,7 +84,7 @@ const articleSection =
     : sectionLabel;
 const articleKeywords = Array.from(
   new Set(
-    [sectionLabel, articleSection]
+    [...tags.map((tag) => tag.label), sectionLabel, articleSection]
       .map((item) => item.trim())
       .filter((item) => item && item !== "Uncategorized"),
   ),
@@ -133,6 +137,8 @@ const projectLinks = [
 ---
 
 <DocumentDetailPage
+  background="home"
+  contentSurface="paper"
   backHref={`/${section}/`}
   backLabel={`Back to ${sectionLabel}`}
   backAriaLabel={`Back to ${sectionLabel} list`}
@@ -154,6 +160,15 @@ const projectLinks = [
   <Fragment slot="head">
     <meta name="article:author" content={author} />
     {
+      tags.length > 0 && (
+        <meta
+          name="keywords"
+          content={tags.map((tag) => tag.label).join(", ")}
+        />
+      )
+    }
+    {tags.map((tag) => <meta property="article:tag" content={tag.label} />)}
+    {
       createdAtIso && (
         <meta property="article:published_time" content={createdAtIso} />
       )
@@ -166,70 +181,18 @@ const projectLinks = [
     <script is:inline type="application/ld+json" set:html={articleJsonLdText} />
   </Fragment>
   <header slot="before-content" class="article-content-header">
-    <p class="article-content-title">{title}</p>
+    <h1 class="article-content-title">{title}</h1>
     {description && <p class="article-content-description">{description}</p>}
-    <div class="article-content-meta" aria-label="Article metadata">
-      <p class="article-content-meta-line">
-        <span class="article-content-meta-label">Type</span>{" "}
-        <span class="article-content-meta-value">{articleType}</span>
-      </p>
-      <p class="article-content-meta-line">
-        <span class="article-content-meta-label">Created</span>{" "}
-        <span class="article-content-meta-value">{createdLabel}</span>
-        <span class="article-content-meta-separator">/</span>
-        <span class="article-content-meta-label">Updated</span>{" "}
-        <span class="article-content-meta-value">{updatedLabel}</span>
-      </p>
-      <p class="article-content-meta-line">
-        <span class="article-content-meta-label">Views</span>{" "}
-        <span
-          class="article-content-meta-value waline-pageview-count"
-          data-path={articleRoutePath}
-          data-server-url={walineServerURL}
-        >
-          —
-        </span>
-        <span class="article-content-meta-separator">/</span>
-        <span class="article-content-meta-label">Comments</span>{" "}
-        <span
-          class="article-content-meta-value waline-comment-count"
-          data-path={articleRoutePath}
-          data-server-url={walineServerURL}
-        >
-          —
-        </span>
-        <span class="article-content-meta-separator">/</span>
-        <span class="article-content-meta-label">Words</span>{" "}
-        <span class="article-content-meta-value"
-          >{articleWordCount.toLocaleString("en-US")}</span
-        >
-      </p>
-    </div>
-    {
-      projectLinks.length > 0 && (
-        <nav class="article-project-links" aria-label="Project links">
-          {projectLinks.map((link) => (
-            <a
-              class:list={[
-                "article-project-link",
-                `article-project-link--${link.kind}`,
-              ]}
-              href={link.href}
-              aria-label={link.label}
-              title={link.label}
-            >
-              <span class="article-project-link-icon" aria-hidden="true">
-                {link.kind === "github" ? (
-                  <GithubIcon />
-                ) : (
-                  <Icon svg={BookOpen} />
-                )}
-              </span>
-            </a>
-          ))}
-        </nav>
-      )
-    }
+    <ContentMetadata
+      ariaLabel="Article metadata"
+      contentType={articleType}
+      createdLabel={createdLabel}
+      updatedLabel={updatedLabel}
+      routePath={articleRoutePath}
+      walineServerURL={walineServerURL}
+      wordCount={articleWordCount}
+      tags={tags}
+    />
   </header>
 
   <Fragment slot="after-content">
@@ -237,6 +200,34 @@ const projectLinks = [
       articleRoutePath={articleRoutePath}
       walineServerURL={walineServerURL}
     />
+
+    <nav
+      class="article-project-links"
+      aria-label="Project links"
+      hidden={projectLinks.length === 0}
+    >
+      {
+        projectLinks.map((link) => (
+          <a
+            class:list={[
+              "article-project-link",
+              `article-project-link--${link.kind}`,
+            ]}
+            href={link.href}
+            aria-label={link.label}
+            title={link.label}
+          >
+            <span class="article-project-link-icon" aria-hidden="true">
+              {link.kind === "github" ? (
+                <GithubIcon />
+              ) : (
+                <Icon svg={BookOpen} />
+              )}
+            </span>
+          </a>
+        ))
+      }
+    </nav>
 
     {
       (previousArticle || nextArticle) && (
@@ -246,6 +237,7 @@ const projectLinks = [
               class="article-neighbor article-neighbor--previous"
               href={previousArticle.href}
               aria-label={`Previous article: ${previousArticle.title}`}
+              data-astro-prefetch
             >
               <span class="article-neighbor-arrow" aria-hidden="true">
                 <Icon svg={ArrowLeft} />
@@ -260,6 +252,7 @@ const projectLinks = [
               class="article-neighbor article-neighbor--next"
               href={nextArticle.href}
               aria-label={`Next article: ${nextArticle.title}`}
+              data-astro-prefetch
             >
               <span class="article-neighbor-title">{nextArticle.title}</span>
               <span class="article-neighbor-arrow" aria-hidden="true">

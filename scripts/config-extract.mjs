@@ -1,10 +1,4 @@
-import {
-  readFileSync,
-  writeFileSync,
-  mkdirSync,
-  copyFileSync,
-  existsSync,
-} from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { create as createTarball } from "tar";
@@ -69,6 +63,12 @@ function normalizeSplitSiteConfig(input) {
         description: input.site.description ?? "",
         iconSrc: input.site.iconSrc ?? "",
         startYear: input.site.startYear ?? new Date().getFullYear(),
+        footer: input.site.footer ?? {
+          name: input.site.name ?? "",
+          repoHref: input.profile.githubUsername
+            ? `https://github.com/${input.profile.githubUsername}`
+            : (input.site.url ?? ""),
+        },
         beian: input.site.beian ?? {
           icp: { text: "", href: "" },
           moe: { text: "", href: "" },
@@ -104,6 +104,12 @@ function normalizeSplitSiteConfig(input) {
       description: input?.description ?? "",
       iconSrc: input?.iconSrc ?? "",
       startYear: legacyOwner.startYear ?? new Date().getFullYear(),
+      footer: input?.footer ?? {
+        name: input?.name ?? "",
+        repoHref: legacyProfile.githubUsername
+          ? `https://github.com/${legacyProfile.githubUsername}`
+          : (input?.url ?? ""),
+      },
       beian: input?.beian ?? {
         icp: { text: "", href: "" },
         moe: { text: "", href: "" },
@@ -151,11 +157,30 @@ const jsonStr = JSON.stringify(config, null, 2) + "\n";
 writeFileSync(resolve(dataDir, "user-config.json"), jsonStr, "utf-8");
 console.log("Written: src/data/user-config.json");
 
-copyFileSync(
-  resolve(dataDir, "user-config.json"),
+// The example file must stay a structural skeleton: blank every string so
+// real personal data (email, beian, ids, links) never lands in it.
+function sanitizeConfigValue(value) {
+  if (Array.isArray(value)) {
+    return value.length > 0 ? [sanitizeConfigValue(value[0])] : [];
+  }
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value).map(([key, item]) => [
+        key,
+        sanitizeConfigValue(item),
+      ]),
+    );
+  }
+  return typeof value === "string" ? "" : value;
+}
+
+const exampleStr = JSON.stringify(sanitizeConfigValue(config), null, 2) + "\n";
+writeFileSync(
   resolve(dataDir, "user-config.example.json"),
+  exampleStr,
+  "utf-8",
 );
-console.log("Written: src/data/user-config.example.json");
+console.log("Written: src/data/user-config.example.json (sanitized)");
 
 // --- 5. Pack content & public assets into tar.gz ---
 const packPaths = [
@@ -165,6 +190,9 @@ const packPaths = [
   "src/content/project",
   "public/avatar.png",
   "public/avatar.svg",
+  "public/avatar.webp",
+  "public/friend-avatars",
+  "public/site-icon.svg",
   "public/figures",
   "public/reward",
 ].filter((p) => existsSync(resolve(ROOT, p)));

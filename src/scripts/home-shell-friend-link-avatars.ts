@@ -3,6 +3,8 @@ type FriendLinkAvatarWindow = Window & {
 };
 
 const GRID_SELECTOR = "[data-friend-links-grid='true']";
+const CARD_SELECTOR = "[data-friend-link-card='true']";
+const IMAGE_SELECTOR = "[data-friend-link-image='true']";
 const AVATAR_SELECTOR = "[data-friend-link-avatar='true']";
 const AVATAR_FRAME_SELECTOR = "[data-friend-link-avatar-frame='true']";
 
@@ -35,17 +37,74 @@ function trackAvatarImage(image: HTMLImageElement, signal: AbortSignal) {
   signal.addEventListener("abort", cleanup, { once: true });
 }
 
-function initGridAvatars(grid: HTMLElement, controller: AbortController) {
+function loadCardImages(card: HTMLElement, signal: AbortSignal) {
   const images = Array.from(
-    grid.querySelectorAll<HTMLImageElement>(AVATAR_SELECTOR),
+    card.querySelectorAll<HTMLImageElement>(IMAGE_SELECTOR),
   );
+
+  images.forEach((image) => {
+    const source = image.dataset.friendLinkSrc;
+    if (source && !image.hasAttribute("src")) {
+      image.src = source;
+    }
+
+    if (image.matches(AVATAR_SELECTOR)) {
+      trackAvatarImage(image, signal);
+    }
+  });
+}
+
+function observeGridCards(grid: HTMLElement, signal: AbortSignal) {
+  const cards = Array.from(grid.querySelectorAll<HTMLElement>(CARD_SELECTOR));
+
+  if (!("IntersectionObserver" in window)) {
+    cards.forEach((card) => loadCardImages(card, signal));
+    return;
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting || !(entry.target instanceof HTMLElement)) {
+          return;
+        }
+
+        const card = entry.target;
+        loadCardImages(card, signal);
+        observer.unobserve(card);
+      });
+    },
+    { rootMargin: "160px 0px" },
+  );
+
+  cards.forEach((card) => observer.observe(card));
+  signal.addEventListener("abort", () => observer.disconnect(), { once: true });
+}
+
+function shuffleGridItems(grid: HTMLElement) {
+  if (grid.dataset.friendLinksShuffled === "true") return;
+  grid.dataset.friendLinksShuffled = "true";
+
+  const items = Array.from(grid.children);
+
+  // Fisher-Yates, run while the grid is still in its hidden loading state
+  // so every visitor gets an unbiased per-view order.
+  for (let i = items.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [items[i], items[j]] = [items[j], items[i]];
+  }
+
+  items.forEach((item) => {
+    grid.append(item);
+  });
+}
+
+function initGridAvatars(grid: HTMLElement, controller: AbortController) {
+  shuffleGridItems(grid);
 
   grid.dataset.friendLinksState = "ready";
   grid.setAttribute("aria-busy", "false");
-
-  images.forEach((image) => {
-    trackAvatarImage(image, controller.signal);
-  });
+  observeGridCards(grid, controller.signal);
 }
 
 export function initHomeShellFriendLinkAvatars() {

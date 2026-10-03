@@ -1,5 +1,9 @@
 ---
 import { ClientRouter } from "astro:transitions";
+import biotifBoldUrl from "../assets/fonts/Biotif-Bold.woff2?url";
+import biotifMediumUrl from "../assets/fonts/Biotif-Medium.woff2?url";
+import biotifRegularUrl from "../assets/fonts/Biotif-Regular.woff2?url";
+import biotifSemiBoldUrl from "../assets/fonts/Biotif-SemiBold.woff2?url";
 import { site } from "../config/site";
 import { getEnabledSocialLinks, getSocialLink } from "../utils/social";
 import katexStylesheetUrl from "katex/dist/katex.min.css?url";
@@ -37,21 +41,13 @@ const PAGE_NAME_BY_ROUTE_ROOT = {
   "": "Home",
   about: "About",
   blog: "Blog",
-  "blog-archive": "Blog",
   note: "Note",
-  "note-archive": "Note",
   project: "Project",
   projects: "Project",
   links: "Links",
   terms: "Terms",
 } as const;
-const documentLang = [
-  "blog",
-  "note",
-  "project",
-  "blog-archive",
-  "note-archive",
-].includes(routeRoot)
+const documentLang = ["blog", "note", "project"].includes(routeRoot)
   ? "zh-CN"
   : "en";
 const pageName =
@@ -67,16 +63,24 @@ const socialImageUrl = new URL(
   imageUrl?.trim() || site.profile.avatarSrc,
   site.site.url,
 ).toString();
-const pageIconSrc = site.site.iconSrc.trim() || site.profile.avatarSrc;
-const pageIconPath = pageIconSrc.split("?")[0]?.toLowerCase() ?? "";
-const pageIconType = pageIconPath.endsWith(".ico")
-  ? "image/x-icon"
-  : pageIconPath.endsWith(".png")
+const faviconSrc = site.site.iconSrc.trim() || "/site-icon.svg";
+const faviconHref = faviconSrc.includes("?")
+  ? faviconSrc
+  : `${faviconSrc}?v=20260521`;
+const faviconPathname = new URL(
+  faviconSrc,
+  site.site.url,
+).pathname.toLowerCase();
+const faviconType = faviconPathname.endsWith(".webp")
+  ? "image/webp"
+  : faviconPathname.endsWith(".png")
     ? "image/png"
-    : "image/svg+xml";
-const pageIconHref = pageIconSrc.includes("?")
-  ? pageIconSrc
-  : `${pageIconSrc}?v=20260521`;
+    : faviconPathname.endsWith(".ico")
+      ? "image/x-icon"
+      : faviconPathname.endsWith(".svg")
+        ? "image/svg+xml"
+        : undefined;
+const faviconSizes = faviconPathname.endsWith(".svg") ? "any" : undefined;
 const openGraphType = ogType ?? "website";
 const openGraphLocale = "zh_CN";
 const twitterCardType = twitterCard ?? "summary_large_image";
@@ -115,6 +119,39 @@ const siteJsonLd = {
   ],
 };
 const siteJsonLdText = JSON.stringify(siteJsonLd).replace(/</g, "\\u003c");
+const biotifFontStyles = `
+  @font-face {
+    font-family: "Biotif";
+    src: url("${biotifRegularUrl}") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "Biotif";
+    src: url("${biotifMediumUrl}") format("woff2");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "Biotif";
+    src: url("${biotifSemiBoldUrl}") format("woff2");
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "Biotif";
+    src: url("${biotifBoldUrl}") format("woff2");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+  html {
+    font-family: "Biotif", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  }
+`;
 ---
 
 <html
@@ -125,51 +162,7 @@ const siteJsonLdText = JSON.stringify(siteJsonLd).replace(/</g, "\\u003c");
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <script is:inline>
-      document.documentElement.dataset.js = "true";
-    </script>
-    <meta name="color-scheme" content="light dark" />
     <meta name="theme-color" content="#ffffff" />
-    <meta name="description" content={pageDescription} />
-    <meta name="generator" content={Astro.generator} />
-    <link rel="canonical" href={canonicalHref} />
-    <meta property="og:locale" content={openGraphLocale} />
-    <meta property="og:site_name" content={site.site.name} />
-    <meta property="og:title" content={socialTitle} />
-    <meta property="og:description" content={pageDescription} />
-    <meta property="og:type" content={openGraphType} />
-    <meta property="og:url" content={canonicalHref} />
-    <meta property="og:image" content={socialImageUrl} />
-    <meta name="twitter:card" content={twitterCardType} />
-    <meta name="twitter:title" content={socialTitle} />
-    <meta name="twitter:description" content={pageDescription} />
-    <meta name="twitter:image" content={socialImageUrl} />
-    <ClientRouter fallback="animate" />
-    {includeKatexStyles && <link rel="stylesheet" href={katexStylesheetUrl} />}
-    <link
-      rel="preload"
-      href="/fonts/Biotif-Regular.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
-    <link
-      rel="preload"
-      href="/fonts/Biotif-SemiBold.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
-    <link rel="sitemap" href="/sitemap-index.xml" />
-    <link rel="icon" type={pageIconType} sizes="any" href={pageIconHref} />
-    <link
-      rel="alternate"
-      type="application/rss+xml"
-      title={`${site.site.name} RSS Feed`}
-      href={new URL("/rss.xml", site.site.url).toString()}
-    />
-    <title>{pageTitle}</title>
-    <script is:inline type="application/ld+json" set:html={siteJsonLdText} />
     <script is:inline>
       (function () {
         var root = document.documentElement;
@@ -224,11 +217,89 @@ const siteJsonLdText = JSON.stringify(siteJsonLd).replace(/</g, "\\u003c");
         root.style.colorScheme = resolved;
         root.style.backgroundColor =
           resolved === "dark" ? "#000000" : "#ffffff";
+        var themeColorMeta = document.querySelector('meta[name="theme-color"]');
+        if (themeColorMeta) {
+          themeColorMeta.setAttribute(
+            "content",
+            resolved === "dark" ? "#000000" : "#ffffff",
+          );
+        }
         writeStorage(mode);
         writeCookie(storageKey, mode);
         writeCookie(resolvedCookieKey, resolved);
+        document.addEventListener("astro:before-swap", function (event) {
+          if (!event.newDocument) return;
+          var liveRoot = document.documentElement;
+          var newRoot = event.newDocument.documentElement;
+          newRoot.dataset.themeMode = liveRoot.dataset.themeMode;
+          newRoot.dataset.theme = liveRoot.dataset.theme;
+          newRoot.style.colorScheme = liveRoot.style.colorScheme;
+          newRoot.style.backgroundColor = liveRoot.style.backgroundColor;
+          var liveThemeColor = document.querySelector(
+            'meta[name="theme-color"]',
+          );
+          var newThemeColor = event.newDocument.querySelector(
+            'meta[name="theme-color"]',
+          );
+          if (liveThemeColor && newThemeColor) {
+            newThemeColor.setAttribute(
+              "content",
+              liveThemeColor.getAttribute("content"),
+            );
+          }
+        });
       })();
     </script>
+    <meta name="color-scheme" content="light dark" />
+    <!-- The body face is enough to start loading Biotif without blocking text. -->
+    <link
+      rel="preload"
+      href={biotifRegularUrl}
+      as="font"
+      type="font/woff2"
+      crossorigin
+      fetchpriority="high"
+    />
+    <style is:inline set:html={biotifFontStyles}></style>
+    <script is:inline>
+      document.documentElement.dataset.js = "true";
+      document.addEventListener("astro:before-swap", function (event) {
+        if (event.newDocument) {
+          event.newDocument.documentElement.dataset.js = "true";
+        }
+      });
+    </script>
+    <meta name="description" content={pageDescription} />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="canonical" href={canonicalHref} />
+    <meta property="og:locale" content={openGraphLocale} />
+    <meta property="og:site_name" content={site.site.name} />
+    <meta property="og:title" content={socialTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:type" content={openGraphType} />
+    <meta property="og:url" content={canonicalHref} />
+    <meta property="og:image" content={socialImageUrl} />
+    <meta name="twitter:card" content={twitterCardType} />
+    <meta name="twitter:title" content={socialTitle} />
+    <meta name="twitter:description" content={pageDescription} />
+    <meta name="twitter:image" content={socialImageUrl} />
+    <ClientRouter fallback="animate" />
+    {includeKatexStyles && <link rel="stylesheet" href={katexStylesheetUrl} />}
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link
+      rel="icon"
+      type={faviconType}
+      sizes={faviconSizes}
+      href={faviconHref}
+    />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={`${site.site.name} RSS Feed`}
+      href={new URL("/rss.xml", site.site.url).toString()}
+    />
+    <title>{pageTitle}</title>
+    <script is:inline type="application/ld+json" set:html={siteJsonLdText} />
     <slot name="head" />
   </head>
   <body>

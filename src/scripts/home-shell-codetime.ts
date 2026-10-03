@@ -105,6 +105,7 @@ function settleCodeTimeImage(
   image: HTMLImageElement,
   closestSelector: string,
   onAvailable?: () => void,
+  onUnavailable?: () => void,
   signal?: AbortSignal,
 ) {
   const settle = () => {
@@ -112,6 +113,7 @@ function settleCodeTimeImage(
 
     if (image.naturalWidth <= 0) {
       hideCodeTimeElement(image, closestSelector);
+      onUnavailable?.();
       return;
     }
 
@@ -128,30 +130,81 @@ function settleCodeTimeImage(
 }
 
 function syncCodeTimeStatusTheme(image: HTMLImageElement) {
+  if (!image.hasAttribute("src")) return;
+
   const theme =
     document.documentElement.dataset.theme === "dark" ? "dark" : "light";
-  const url = new URL(
-    image.getAttribute("src") ?? image.src,
-    window.location.href,
-  );
+  const source = image.dataset.codetimeStatusSrc;
+
+  if (!source) return;
+
+  const url = new URL(source, window.location.href);
 
   if (url.searchParams.get("theme") === theme) return;
 
   url.searchParams.set("theme", theme);
-  image.src = `${url.pathname}${url.search}`;
+  const nextSource = `${url.pathname}${url.search}`;
+
+  if (image.getAttribute("src") !== nextSource) {
+    image.src = nextSource;
+  }
 }
 
-function refreshCodeTimeStatusImage(image: HTMLImageElement) {
+function requestCodeTimeStatusImage(
+  image: HTMLImageElement,
+  popover: HTMLElement,
+  onUnavailable: () => void,
+  signal: AbortSignal,
+) {
+  if (image.dataset.codetimeStatusRequested === "true") return;
+
+  const source = image.dataset.codetimeStatusSrc;
+  if (!source) return;
+
   const theme =
     document.documentElement.dataset.theme === "dark" ? "dark" : "light";
-  const url = new URL(
-    image.getAttribute("src") ?? image.src,
-    window.location.href,
-  );
-
+  const url = new URL(source, window.location.href);
   url.searchParams.set("theme", theme);
-  url.searchParams.set("refresh", String(Date.now()));
+  image.dataset.codetimeStatusRequested = "true";
   image.src = `${url.pathname}${url.search}`;
+  settleCodeTimeImage(
+    image,
+    "[data-codetime-status-popover]",
+    () => {
+      popover.hidden = false;
+    },
+    onUnavailable,
+    signal,
+  );
+}
+
+function requestCodeTimeBadgeImage(
+  image: HTMLImageElement,
+  signal: AbortSignal,
+) {
+  if (image.dataset.codetimeBadgeRequested === "true") return;
+
+  const source = image.dataset.codetimeBadgeSrc;
+  if (!source) {
+    hideCodeTimeElement(image, "[data-codetime-metric]");
+    return;
+  }
+
+  const metric = image.closest<HTMLElement>("[data-codetime-metric]");
+  image.dataset.codetimeBadgeRequested = "true";
+  image.hidden = false;
+  image.src = source;
+  settleCodeTimeImage(
+    image,
+    "[data-codetime-metric]",
+    () => {
+      if (metric) {
+        metric.dataset.codetimeState = "ready";
+      }
+    },
+    undefined,
+    signal,
+  );
 }
 
 export function initHomeShellCodeTime() {
@@ -170,45 +223,51 @@ export function initHomeShellCodeTime() {
   const statusPopover = document.querySelector<HTMLElement>(
     "[data-codetime-status-popover]",
   );
+  const badgeController = new AbortController();
   const statusController = new AbortController();
   let themeObserver: MutationObserver | undefined;
 
   if (badgeImage) {
-    settleCodeTimeImage(badgeImage, "[data-codetime-metric]");
+    requestCodeTimeBadgeImage(badgeImage, badgeController.signal);
   }
 
-  if (statusImage) {
-    syncCodeTimeStatusTheme(statusImage);
-    settleCodeTimeImage(
-      statusImage,
-      "[data-codetime-status-popover]",
-      statusRoot && statusPopover
-        ? () => {
-            initCodeTimeStatusPopover(
-              statusRoot,
-              statusPopover,
-              statusController.signal,
-              () => {
-                refreshCodeTimeStatusImage(statusImage);
-              },
-            );
-          }
-        : undefined,
+  if (statusImage && statusRoot && statusPopover) {
+    const disableStatus = () => {
+      statusController.abort();
+      themeObserver?.disconnect();
+    };
+
+    const requestStatus = () => {
+      requestCodeTimeStatusImage(
+        statusImage,
+        statusPopover,
+        disableStatus,
+        statusController.signal,
+      );
+    };
+
+    initCodeTimeStatusPopover(
+      statusRoot,
+      statusPopover,
       statusController.signal,
+      requestStatus,
     );
 
-    statusRoot?.addEventListener(
+    statusRoot.addEventListener(
       "pointerenter",
       (event) => {
         if (event.pointerType === "touch") return;
 
-        refreshCodeTimeStatusImage(statusImage);
+        requestStatus();
       },
       { signal: statusController.signal },
     );
 
     themeObserver = new MutationObserver(() => {
-      if (statusImage.isConnected) {
+      if (
+        statusImage.isConnected &&
+        statusImage.dataset.codetimeStatusRequested === "true"
+      ) {
         syncCodeTimeStatusTheme(statusImage);
       }
     });
@@ -219,8 +278,9 @@ export function initHomeShellCodeTime() {
     });
   }
 
-  if (statusImage || statusRoot) {
+  if (badgeImage || statusImage || statusRoot) {
     browserWindow.__homeShellCodeTimeCleanup = () => {
+      badgeController.abort();
       statusController.abort();
       themeObserver?.disconnect();
     };

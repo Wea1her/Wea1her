@@ -3,5 +3,37 @@
   "framework": "astro",
   "installCommand": "pnpm install",
   "buildCommand": "pnpm build",
-  "outputDirectory": "dist"
+  "outputDirectory": "dist",
+  "redirects": [
+    {
+      "source": "/blog-archive",
+      "destination": "/blog/",
+      "permanent": true
+    },
+    {
+      "source": "/note-archive",
+      "destination": "/note/",
+      "permanent": true
+    },
+    {
+      "source": "/blog-archive/web3",
+      "destination": "/blog/tag/web3/",
+      "permanent": true
+    },
+    {
+      "source": "/blog-archive/bb88",
+      "destination": "/blog/tag/bb88/",
+      "permanent": true
+    },
+    {
+      "source": "/note-archive/defi-berkeley",
+      "destination": "/note/tag/defi/",
+      "permanent": true
+    },
+    {
+      "source": "/note-archive/thoughts",
+      "destination": "/note/tag/thoughts/",
+      "permanent": true
+    }
+  ]
 }

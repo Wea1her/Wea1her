@@ -19,7 +19,6 @@ let walineCommentModule:
   | Promise<typeof import("@waline/client/comment")>
   | undefined;
 
-const WALINE_COMMENTS_ROOT_MARGIN = "360px 0px";
 const WALINE_COMMENTS_LANG = "zh-CN";
 const TIKZJAX_FONT_STYLESHEET_URL = "https://tikzjax.com/v1/fonts.css";
 const TIKZJAX_SCRIPT_URL = "https://tikzjax.com/v1/tikzjax.js";
@@ -77,65 +76,74 @@ function loadTikzJaxProcessor() {
 
   const previousOnload = window.onload;
 
-  browserWindow.__homeShellTikzJaxLoadPromise = new Promise(
-    (resolve, reject) => {
-      const resolveProcessor = () => {
-        const tikzJaxOnload = window.onload;
+  const loadPromise = new Promise<TikzJaxProcessor>((resolve, reject) => {
+    const resolveProcessor = () => {
+      const tikzJaxOnload = window.onload;
 
-        if (typeof tikzJaxOnload !== "function") {
-          reject(new Error("TikZJax did not expose a renderer."));
-          return;
-        }
-
-        const processor: TikzJaxProcessor = () =>
-          tikzJaxOnload.call(window, new Event("load"));
-
-        browserWindow.__homeShellTikzJaxProcessor = processor;
-        window.onload = previousOnload;
-        resolve(processor);
-      };
-
-      const existingScript = document.getElementById(TIKZJAX_SCRIPT_ID);
-      if (existingScript instanceof HTMLScriptElement) {
-        if (existingScript.dataset.loaded === "true") {
-          resolveProcessor();
-          return;
-        }
-
-        existingScript.addEventListener("load", resolveProcessor, {
-          once: true,
-        });
-        existingScript.addEventListener("error", () => {
-          reject(new Error("Failed to load TikZJax."));
-        });
+      if (typeof tikzJaxOnload !== "function") {
+        reject(new Error("TikZJax did not expose a renderer."));
         return;
       }
 
-      const script = document.createElement("script");
-      script.id = TIKZJAX_SCRIPT_ID;
-      script.src = TIKZJAX_SCRIPT_URL;
-      script.async = true;
-      script.addEventListener(
-        "load",
-        () => {
-          script.dataset.loaded = "true";
-          resolveProcessor();
-        },
-        { once: true },
-      );
-      script.addEventListener(
+      const processor: TikzJaxProcessor = () =>
+        tikzJaxOnload.call(window, new Event("load"));
+
+      browserWindow.__homeShellTikzJaxProcessor = processor;
+      window.onload = previousOnload;
+      resolve(processor);
+    };
+
+    const rejectAndDropScript = (script: HTMLScriptElement) => {
+      // Drop the dead tag so the next render attempt can retry loading.
+      script.remove();
+      reject(new Error("Failed to load TikZJax."));
+    };
+
+    const existingScript = document.getElementById(TIKZJAX_SCRIPT_ID);
+    if (existingScript instanceof HTMLScriptElement) {
+      if (existingScript.dataset.loaded === "true") {
+        resolveProcessor();
+        return;
+      }
+
+      existingScript.addEventListener("load", resolveProcessor, {
+        once: true,
+      });
+      existingScript.addEventListener(
         "error",
-        () => {
-          reject(new Error("Failed to load TikZJax."));
-        },
+        () => rejectAndDropScript(existingScript),
         { once: true },
       );
+      return;
+    }
 
-      document.head.append(script);
-    },
-  );
+    const script = document.createElement("script");
+    script.id = TIKZJAX_SCRIPT_ID;
+    script.src = TIKZJAX_SCRIPT_URL;
+    script.async = true;
+    script.addEventListener(
+      "load",
+      () => {
+        script.dataset.loaded = "true";
+        resolveProcessor();
+      },
+      { once: true },
+    );
+    script.addEventListener("error", () => rejectAndDropScript(script), {
+      once: true,
+    });
 
-  return browserWindow.__homeShellTikzJaxLoadPromise;
+    document.head.append(script);
+  });
+
+  browserWindow.__homeShellTikzJaxLoadPromise = loadPromise;
+  loadPromise.catch(() => {
+    if (browserWindow.__homeShellTikzJaxLoadPromise === loadPromise) {
+      browserWindow.__homeShellTikzJaxLoadPromise = undefined;
+    }
+  });
+
+  return loadPromise;
 }
 
 function queueTikzJaxRender() {
@@ -464,37 +472,6 @@ export async function initHomeShellWalineComments() {
   cleanupHomeShellWalineComments();
   const runId = (browserWindow.__homeShellWalineCommentsRunId ?? 0) + 1;
   browserWindow.__homeShellWalineCommentsRunId = runId;
-
-  const walineRoots = Array.from(
-    document.querySelectorAll("[data-article-waline]"),
-  );
-  if (walineRoots.length === 0) {
-    browserWindow.__homeShellWalineCommentsCleanup = undefined;
-    return;
-  }
-
-  if ("IntersectionObserver" in window) {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (!entries.some((entry) => entry.isIntersecting)) return;
-
-        observer.disconnect();
-        void hydrateWalineComments(runId);
-      },
-      {
-        rootMargin: WALINE_COMMENTS_ROOT_MARGIN,
-      },
-    );
-
-    walineRoots.forEach((walineRoot) => {
-      observer.observe(walineRoot);
-    });
-
-    browserWindow.__homeShellWalineCommentsCleanup = () => {
-      observer.disconnect();
-    };
-    return;
-  }
 
   await hydrateWalineComments(runId);
 }

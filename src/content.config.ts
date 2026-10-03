@@ -79,6 +79,7 @@ function withPureFrontmatterCompat(schema: z.ZodTypeAny) {
       updatedAt: data.updatedAt ?? data.updatedDate,
       published: data.published ?? data.draft !== true,
       type: data.type ?? tags[0] ?? data.language,
+      tags: tags.length > 0 ? tags : data.type ? [data.type] : [],
     } satisfies CompatContentData;
   });
 }
@@ -99,6 +100,8 @@ const pageSchema = z.object({
   title: z.string().min(1),
   heading: z.string().optional(),
   description: z.string().optional(),
+  createdAt: z.union([z.string(), z.date()]).optional(),
+  updatedAt: z.union([z.string(), z.date()]).optional(),
   background: z
     .enum(["home", "code-rain", "constellation", "content"])
     .optional(),

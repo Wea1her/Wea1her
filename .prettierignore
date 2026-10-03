@@ -11,3 +11,10 @@ src/icons/**
 src/content/blog/**
 src/gitlog/**
 public/scripts/*
+
+# User-authored content is preserved during theme formatting.
+src/content/**
+README.md
+.agents/**
+.codex/**
+.claude/**

@@ -54,12 +54,18 @@ function getCaptionSource(node) {
   return "";
 }
 
+// Mirrors --content-image-max-width in content-prose.css. Astro's constrained
+// layout defaults to `100vw`, which makes a desktop browser fetch a variant
+// several times wider than the column the image actually occupies.
+const CONTENT_IMAGE_SIZES = "(min-width: 56.25rem) 36rem, 24rem";
+
 function enhanceImageNode(node, { keyboardOpen = false } = {}) {
   if (!isElement(node, "img")) return;
 
   node.properties ??= {};
   node.properties.loading ??= "lazy";
   node.properties.decoding ??= "async";
+  node.properties.sizes = CONTENT_IMAGE_SIZES;
 
   if (!keyboardOpen) return;
 
@@ -67,7 +73,9 @@ function enhanceImageNode(node, { keyboardOpen = false } = {}) {
     typeof node.properties.alt === "string" ? node.properties.alt.trim() : "";
   node.properties.role ??= "button";
   node.properties.tabIndex ??= 0;
-  node.properties.ariaLabel ??= alt
+  // The serializer emits property keys verbatim, so a camelCase `ariaLabel`
+  // ships as an unknown `arialabel` attribute that screen readers ignore.
+  node.properties["aria-label"] ??= alt
     ? `Open image preview: ${alt}`
     : "Open image preview";
 }
@@ -84,6 +92,51 @@ function enhanceImageMediaNode(node) {
     enhanceImageNode(child);
   });
 }
+
+// Two-segment github.com paths whose first segment is a reserved product
+// route, not a repository owner (e.g. /sponsors/alice, /topics/astro).
+const GITHUB_RESERVED_OWNER_SEGMENTS = new Set([
+  "about",
+  "account",
+  "apps",
+  "blog",
+  "codespaces",
+  "collections",
+  "contact",
+  "customer-stories",
+  "dashboard",
+  "enterprise",
+  "enterprises",
+  "events",
+  "explore",
+  "features",
+  "gist",
+  "issues",
+  "join",
+  "login",
+  "logout",
+  "marketplace",
+  "new",
+  "notifications",
+  "organizations",
+  "orgs",
+  "pricing",
+  "pulls",
+  "readme",
+  "search",
+  "security",
+  "sessions",
+  "settings",
+  "signup",
+  "site",
+  "sponsors",
+  "stars",
+  "team",
+  "topics",
+  "trending",
+  "users",
+  "watching",
+]);
 
 function getGitHubRepository(href) {
   if (typeof href !== "string") {
@@ -105,6 +158,10 @@ function getGitHubRepository(href) {
   const [owner, repo, ...rest] = url.pathname.split("/").filter(Boolean);
 
   if (!owner || !repo || rest.length > 0) {
+    return null;
+  }
+
+  if (GITHUB_RESERVED_OWNER_SEGMENTS.has(owner.toLowerCase())) {
     return null;
   }
 

@@ -7,6 +7,7 @@ import { isAlgoliaSiteSearchConfigured } from "../../config/search";
 import {
   AlignLeft,
   ArrowUp,
+  FolderKanban,
   Monitor,
   Moon,
   Search,
@@ -22,6 +23,7 @@ interface NavItem {
 interface Props {
   foldedNavItems: readonly NavItem[];
   githubHref?: string;
+  initialHomeEntrance?: boolean;
   initialThemeMode?: "light" | "dark" | "system";
   shellStyle?: string;
   shellVariant?: "default" | "article";
@@ -30,6 +32,7 @@ interface Props {
 const {
   foldedNavItems,
   githubHref = "",
+  initialHomeEntrance = false,
   initialThemeMode = "system",
   shellStyle = "",
   shellVariant = "default",
@@ -42,6 +45,7 @@ const {
     shellVariant !== "default" && `home-shell--${shellVariant}`,
   ]}
   style={shellStyle || undefined}
+  data-home-initial-entrance={initialHomeEntrance ? "true" : undefined}
   data-home-shell-root
 >
   <header class="home-header">
@@ -94,7 +98,11 @@ const {
             {
               foldedNavItems.map((item) => (
                 <li>
-                  <a href={item.href} aria-label={item.label}>
+                  <a
+                    href={item.href}
+                    aria-label={item.label}
+                    data-astro-prefetch
+                  >
                     {item.label}
                   </a>
                 </li>
@@ -106,7 +114,7 @@ const {
     </div>
   </header>
 
-  <main class="home-main">
+  <main class="home-main" data-home-shell-main>
     <aside class="wire-box side-nav-area" aria-label="Side navigation area">
       <div class="side-nav-stack">
         <details
@@ -128,7 +136,11 @@ const {
               {
                 foldedNavItems.map((item) => (
                   <li>
-                    <a href={item.href} aria-label={item.label}>
+                    <a
+                      href={item.href}
+                      aria-label={item.label}
+                      data-astro-prefetch
+                    >
                       {item.label}
                     </a>
                   </li>
@@ -141,7 +153,11 @@ const {
       </div>
     </aside>
 
-    <section class="wire-box profile-area" aria-label="Profile area">
+    <section
+      class="wire-box profile-area"
+      aria-label="Profile area"
+      data-home-entrance-content="profile"
+    >
       <slot name="profile" />
     </section>
 
@@ -149,6 +165,7 @@ const {
       class="wire-box latest-area"
       aria-label="Latest area"
       data-home-shell-latest
+      data-home-entrance-content="latest"
     >
       <slot name="latest" />
     </section>
@@ -203,6 +220,15 @@ const {
     </div>
 
     <nav class="wire-box footer-icons" aria-label="Footer icon navigation">
+      <a
+        class="footer-rss-btn"
+        href="/project/"
+        aria-label="View projects"
+        title="Projects"
+        data-astro-prefetch
+      >
+        <Icon svg={FolderKanban} />
+      </a>
       <a
         class="footer-rss-btn"
         href="/rss.xml"
