@@ -1,0 +1,293 @@
+---
+title: "第二课：区块链技术入门"
+description: 本节课程深入解析区块链的四层结构，详细介绍哈希函数、默克尔树、数字签名等核心密码学工具，并探讨支付通道、Rollup 等扩容方案及跨链互操作性。
+routeSlug: "defi-berkeley-02"
+archiveSlug: "defi-berkeley"
+type: "DeFi 伯克利公开课"
+tags: ["DeFi", "Web3", "学习笔记"]
+createdAt: "2026-01-11T19:56:57+08:00"
+updatedAt: "2026-02-05T22:46:40+08:00"
+---
+
+> 系列：[DeFi 伯克利公开课](/note-archive/defi-berkeley/)
+
+> **提示｜鸣谢**
+>
+> 本文由 [Dapp Learning](https://x.com/Dapp_Learning) 团队精心整理，诚挚感谢其对优质内容的分享与贡献。
+
+在上一节建立对 DeFi 基本概念的认识之后，第二节课将视角进一步下沉，**系统性地解释区块链为何能够在“缺乏信任”的环境中稳定运行**，以及支撑这一切的技术逻辑从何而来。
+
+本节课程从适用场景出发，逐层拆解区块链的整体结构：共识如何确定唯一状态，链上计算如何实现可验证的状态转换，智能合约与应用如何在此之上安全运行，以及用户最终如何与链上系统交互。在此基础上，课程重点引入区块链中最核心的密码学工具——**哈希函数、默克尔树与数字签名**，帮助你理解它们是如何成为去中心化系统的技术基石。
+
+进一步，课程将视线延伸至现实约束之下的工程问题，深入讲解支付通道、Rollup 等扩容方案，以及不同区块链之间实现资产与状态流通的互操作机制。
+
+## 一、区块链的适用场景
+
+在认识区块链的技术细节之前，我们必须先知道：区块链究竟适用什么场景，它适合解决什么样的问题？
+
+请设想这样一个场景：有多方参与，任何参与者之间都不互相信任，同时也不存在一个所有人都愿意信任的中心化第三方，但是大家仍然希望能够 **维护一个共同的系统状态**，这个系统可以完成记录数据、转移资产、执行一套公开的规则等一些基本事情。
+
+> 这便是最适用区块链的场景，它能够解决的问题是：**没有单一可信方时，多方如何协作。**
+
+如果一个多方场景中，存在可信中介，那么通常不需要用到区块链。值得一提的是：金融系统通常没有可信第三方，大家互为交易对手。
+
+![区块链适用场景](/images/note/defi-berkeley/lecture_02/01.png)
+
+## 二、理解区块链的四个层级
+
+区块链是一个复杂的技术系统，为了更清楚地理解它，课程将其分为一个四层结构，分别理解每一部分的功能，以及它们如何协同工作。
+
+![区块链四层结构](/images/note/defi-berkeley/lecture_02/02.png)
+
+### 1. 共识层 (Consensus Layer)
+
+本质上讲，“共识”保证了一个非常关键的数据结构，这个结构：**任何人可公开参与，数据仅可追加、不可删除或篡改，具有持久性。**（已假设不存在 51% 攻击、参与者是诚实的）
+
+通过理解达成共识的过程，我们就可以理解区块 (blocks) 如何被添加到链 (chain) 上。
+
+1. **创建交易**：一组参与者（A、B、C）创建交易并用密钥签名。
+2. **广播交易**：将交易发送到区块链网络上（矿工群体）。
+3. **竞争记账**：矿工复制交易，竞争成为 Leader。
+4. **打包区块**：获胜的矿工打包交易，生成区块并上链。
+5. **验证区块**：其他矿工验证区块是否有效（若无效则回滚）。
+6. **获得奖励**：完成打包的矿工获得奖励（例：2 ETH）。
+7. **循环往复**：新的参与者继续提出交易，形成通过共识维护的区块链。
+
+共识决定：**链上“现在的状态是什么”**。
+
+### 2. 计算层 (Compute Layer)
+
+基于共识机制，我们可以放心地写一些程序以实现区块链的“状态转换”了，任何人都可以验证这个状态转换是否有效。
+这些运行在区块链上的程序，即 DApp 的编写逻辑，它的规则是源码公开、信任透明的，具备 **公共可验证性**。我们也可以把这一层称为 **区块链计算机**。
+
+> 区块链程序是一个状态机，每次状态变化都写入链上。它的核心优势是不用信任任何人，只需验证链上数据。
+
+### 3. 应用层 (DApps / Smart Contracts)
+
+第三层是 APP 层，主要指在区块链计算机上运行的去中心化应用和智能合约，比如 DeFi 程序——Uniswap（去中心化交易所）、Compound（借贷协议）、MakerDAO（稳定币系统）等等。
+区块链程序的代码和执行过程 **完全公开**，管理着数十亿美金资产，因此代码安全极为重要。
+
+### 4. 用户交互层 (User Interaction Layer)
+
+最后一层是终端用户与云服务器的交互层 / UI 层，它实际实现了：从用户获取命令，向链上读、写数据。即，用户通过使用 UI 工具，实现和链上程序的交互。
+
+## 三、区块链中的密码学：哈希函数
+
+### 核心用途：承诺 (Commitment)
+
+在区块链技术系统中，密码学的应用无处不在。哈希函数是区块链最基础的密码学工具，主要用于解决“**如何在区块链上承诺 (commit) 大量数据**”的问题。
+
+**哈希函数** 是一种将任意长度输入数据映射为固定长度输出值的密码学函数，即：输入任意长度的数据 $x$，可以得到固定长度的 32 字节（=256 bits）的输出 $H(x)$。
+
+> **说明｜哈希函数的关键性质**
+>
+> 1. **抗碰撞性 (Collision Resistance)**：很难找到 $x \neq y$，但 $H(x) = H(y)$。
+> 2. **确定性**：相同输入一定得到相同输出。
+> 3. **抗篡改性 (敏感性)**：输入哪怕发生极小变化，输出也会完全不同。
+> 4. **不可逆性**：从哈希值无法有效反推出原始输入。
+
+![Hash Function](/images/note/defi-berkeley/lecture_02/03.png)
+
+Dan Boneh 老师举了个例子：Alice 有一个大文件 $m$，她发布了一个哈希值 $h=H(m)$。随后她发送消息 $m'$，如果 $H(m') = h$，Bob 就可以确定 $m' = m$。因此，**我们可以把 $H(m)$ 称作一个对于 $m$ 来说具有约束力的承诺。**
+
+> **注意｜哈希不是隐私保护**
+>
+> $h$ 可能会泄漏关于原始数据 $m$ 的信息。哈希函数只能承诺某个结果，但不能隐藏数据本身的结构或含义，也不提供零知识保证。
+> 此外，**哈希 $\neq$ 证明计算正确**。哈希不能证明过程正确，而 SNARK 可以。
+
+### 清单承诺与验证
+
+现在的目标是要对包含多条消息的清单 $S = (m_1, m_2, ..., m_n)$ 进行承诺（例如一个区块里的多条交易）。
+
+![List Commitment](/images/note/defi-berkeley/lecture_02/04.png)
+
+1. Alice 发布承诺 $h = \text{commit}(S)$。
+2. Alice 想要证明 $S[i] = m_i$。
+3. Alice 发送消息 $m_i$ 和证明 Proof $\pi_i$ 给 Bob。
+4. Bob 运行验证算法 $\text{verify}(h, i, m_i, \pi_i)$。
+
+实现这个承诺的关键方法，就是使用 **默克尔树 (Merkle Tree)**。
+
+### 默克尔树 (Merkle Tree)
+
+默克尔树是一种基于哈希函数构建的树状数据结构，用于实现 **大量数据的局部可验证性**。
+
+![Merkle Tree](/images/note/defi-berkeley/lecture_02/05.png)
+
+**结构与验证过程：**
+一个默克尔树可以有 $n$ 个叶子节点（原始数据），两两哈希向上组合，最终形成一个 **Merkle Root**。
+
+例如，要证明 $m_4$ 在树中：
+
+1. Alice 发送 $m_4$ 和路径证明 $\pi = (m_3, y_1, y_6)$。
+2. Bob 进行哈希计算：
+   - $y_2 = H(m_3, m_4)$
+   - $y_5 = H(y_1, y_2)$
+   - $h' = H(y_5, y_6)$
+3. Bob 比较计算出的 $h'$ 与已知的 Merkle Root $h$ 是否一致。
+
+![Merkle Verify](/images/note/defi-berkeley/lecture_02/06.png)
+
+> **提示｜Merkle Tree 的优势**
+>
+> - **承诺大小**：始终只有 32 bytes (Root)。
+> - **证明大小**：$\log_2(n)$。
+> - **验证成本**：$\log_2(n)$ 次 Hash。
+
+区块链本质上就是一串 Merkle Root 承诺。**区块链 = Merkle Root + Hash Chain**。
+
+## 四、区块链中的密码学：数字签名
+
+数字签名在区块链中承担的是 **授权 (authorization)** 的功能。它解决的问题是：谁有权发起一笔交易，以及如何防止他人伪造或篡改交易内容。
+
+> 一笔区块链交易的本质，并不是“转账”这个动作本身，而是：**某个账户的私钥持有者，对一次状态变更的明确授权**。
+
+![Digital Signature](/images/note/defi-berkeley/lecture_02/07.png)
+
+**数字签名系统由三个算法组成：**
+
+1. **KeyGen**：生成密钥对 (sk, pk)。
+2. **Sign**：使用私钥 sk 对消息 msg 签名，生成签名 $\sigma$。
+3. **Verify**：使用公钥 pk 验证签名 $\sigma$ 是否有效。
+
+### 常见签名方案
+
+![Signature Schemes](/images/note/defi-berkeley/lecture_02/08.png)
+
+- **RSA**：区块链基本不用（签名和公钥太长），Web 数字证书常用。
+- **ECDSA / Schnorr**：区块链最常用。比特币正在迁移到 Schnorr（更高效）。
+- **BLS**：
+  - **可聚合性 (Aggregation)**：可以将多个签名压缩成一个 48 字节的短签名（以太坊 2.0 使用此特性）。
+  - **阈值机制**：允许多个参与者共同生成一个有效签名。
+- **后量子签名**：抗量子计算，但长度太长（>768 bytes），上链成本高。
+
+**签名在区块链的三大用途：**
+
+1. **交易授权**：Alice 转账给 Bob。
+2. **治理投票**：DAO 提案投票。
+3. **共识投票**：矿工对区块达成共识。
+
+## 五、区块链的技术扩展与实现
+
+为什么需要扩容 (Scaling)？
+因为当前区块链处理交易的速度太慢了，且手续费高昂。
+
+![Scaling Context](/images/note/defi-berkeley/lecture_02/09.png)
+
+主要的扩容方案包括：更快的共识机制、支付通道、L2 方案、侧链。
+
+![Scaling Solutions](/images/note/defi-berkeley/lecture_02/10.png)
+
+### 1. 支付通道 (Payment Channels)
+
+支付通道的基本思想是：**只在必要的时候使用区块链，大部分交易都在链下完成。**
+
+**案例：Alice 每天去 Bob 咖啡店买咖啡**
+
+![Payment Channel](/images/note/defi-berkeley/lecture_02/11.png)
+
+1. **开启通道**：Alice 存入 100 元，通过区块链发给 Bob 一笔交易建立通道。
+2. **链下支付**：Alice 买咖啡（5元）、买面包（10元）... 每次只需私下给 Bob 一个签名，更新余额分配，**无需上链**。
+3. **关闭通道**：
+   - 30天后，Alice 可单方面签名关闭并取回余额。
+   - 或双方随时协商一致签名关闭，根据最终余额结算（如 Alice 剩 70，Bob 得 30）。
+
+**闪电网络 (Lightning Network)** 就是由无数个支付通道组成的网络，支持比特币的日常支付需求。
+
+### 2. 使用 Rollup 实现以太坊扩容
+
+**Rollup 的核心思想**：把大量交易的执行过程放到链下完成，只把一个“可验证的状态承诺”放到链上。引入了新角色：**协调者 (Coordinator)**。
+
+#### 预备知识：SNARK (零知识证明)
+
+SNARK 证明做的事情是：证明者向验证者证明 **“我知道一个私密输入 $w$，使得公开程序 $C(x, w)$ 为真”**，而验证者不需要知道 $w$。
+
+![SNARK](/images/note/defi-berkeley/lecture_02/12.png)
+
+- **公开输入 $x$**：旧 Root、新 Root、交易摘要。
+- **私密输入 $w$**：账户余额、路径、签名等（Witness）。
+- **优势**：验证 $proof$ 的时间远短于重新运行程序的时间。
+
+#### zkRollup 工作流程
+
+![zkRollup](/images/note/defi-berkeley/lecture_02/13.png)
+
+1. **用户** 将大量交易提交给 **协调者**。
+2. **协调者** 链下执行交易，更新状态树，计算新 Root。
+3. **协调者** 生成 SNARK 证明 $\pi$。
+4. **协调者** 将新 Root、交易摘要和 $\pi$ 提交到 **L1 区块链**。
+5. **矿工** 验证 $\pi$，确认无误后更新状态。
+
+这个过程将成千上万笔交易压缩成了一个可验证的承诺。
+
+![Rollup Details](/images/note/defi-berkeley/lecture_02/14.png)
+
+#### Optimistic Rollup vs zkRollup
+
+![Comparison](/images/note/defi-berkeley/lecture_02/15.png)
+
+> **说明｜两种 Rollup 的核心区别**
+>
+> - **zkRollup**：用 SNARK 密码学证明正确性。协调者提交新状态时必须附带数学证明。
+> - **Optimistic Rollup**：**假设正确，允许质疑**。协调者只需提交数据，不提交证明。依靠 **欺诈证明 (Fraud Proof)** 机制——如果有人发现造假，可在挑战期内举报并获得奖励。
+
+#### 数据可用性：zkSync vs zkPorter
+
+Rollup 的数据存储在哪？
+
+![Data Availability](/images/note/defi-berkeley/lecture_02/16.png)
+
+- **zkSync**：数据存 L1。安全但贵。
+- **zkPorter**：数据存链下（由验证者维护）。便宜但牺牲了一定安全性。
+
+## 六、区块链之间的互操作性 (Interoperability)
+
+如何让 Bitcoin、Ethereum、Solana 等独立区块链互相通信？
+重点介绍 **跨链桥 (Bridge)**。
+
+### 联邦桥 (Federated Bridge)
+
+以“将 Bitcoin 引入 Ethereum”为例（Wrapped Bitcoin）：
+
+1. **锁定**：用户将 1 BTC 发送到比特币链上的桥地址。
+2. **铸造**：验证者确认后，在以太坊上铸造 1 Wrapped BTC 给用户。
+3. **销毁与解锁**：用户想取回时，在以太坊销毁 Wrapped BTC，验证者在比特币链上解锁等额 BTC 给用户。
+
+![Wrap BTC](/images/note/defi-berkeley/lecture_02/17.png)
+
+### 无需信任的桥 (Trustless Bridge)
+
+如果两条链都支持智能合约，可以使用 SNARK 证明来构建无需信任的桥，而不依赖特定的验证者联盟。
+
+![Trustless Bridge](/images/note/defi-berkeley/lecture_02/18.png)
+
+## 结语
+
+在这节课中，我们从基础密码学工具出发，逐步构建了区块链系统的整体技术图景：
+
+1. **哈希函数**：对大量数据的承诺，以及 Merkle 树与局部可验证性。
+2. **数字签名**：去中心化环境下的身份与授权。
+3. **区块链扩容**：支付通道与 Rollup (ZK vs Optimistic)。
+4. **互操作性**：利用桥接实现跨链协作。
+
+**整节课的核心思想是：用密码学与系统设计，在不依赖可信第三方的前提下，实现可验证的协作。**
+
+---
+
+## 相关链接
+
+- **拓展阅读**
+  - [Lightning Network Paper](https://berkeley-defi.github.io/assets/material/lightning-network-paper.pdf)
+  - [Rollup Scaling](https://berkeley-defi.github.io/assets/material/1910.01834.pdf)
+  - [Optimistic vs ZK Rollups](https://medium.com/interdax/ethereum-l2-optimistic-and-zk-rollups-dffa58870c93)
+  - [Bitcoin Whitepaper](https://berkeley-defi.github.io/assets/material/bitcoin.pdf)
+
+- **课程链接**
+  - [Berkeley DeFi Course](https://rdi.berkeley.edu/berkeley-defi/f25?sessionid=)
+
+- **YouTube**
+  - [Video Link](https://www.youtube.com/watch?v=FmKbGHu7oAM)
+
+---
+
+[课程目录](/note-archive/defi-berkeley/) · [上一课：第一课：当金融大厦的地基被 DeFi 重写](/note/defi-berkeley-01/) · [下一课：第三课：传统金融入门](/note/defi-berkeley-03/)

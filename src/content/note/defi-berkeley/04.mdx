@@ -1,0 +1,243 @@
+---
+title: "第四课：智能合约与 Solidity 编程入门"
+description: "从程序员视角系统理解智能合约的概念、以太坊与 Solidity 基础、合约间交互与事件机制、Gas 机制原理，以及 ERC-20 与 ERC-721 两类代币标准。"
+routeSlug: "defi-berkeley-04"
+archiveSlug: "defi-berkeley"
+type: "DeFi 伯克利公开课"
+tags: ["DeFi", "Web3", "学习笔记"]
+createdAt: "2026-02-02T20:11:03+08:00"
+updatedAt: "2026-02-05T22:46:40+08:00"
+---
+
+> 系列：[DeFi 伯克利公开课](/note-archive/defi-berkeley/)
+
+> **提示｜鸣谢**
+>
+> 本文由 [Dapp Learning](https://x.com/Dapp_Learning) 团队精心整理，诚挚感谢其对优质内容的分享与贡献。
+
+本节课 Andrew Miller 教授将会从程序员的视角系统理解智能合约的概念、以太坊与 Solidity 的基础、合约间交互与事件机制、实际开发与部署流程、Gas 机制的原理、以及两类重要的代币标准（同质化与非同质化）。
+
+通过若干示例合约（域名注册、Bell Tower、Dutch Auction）贯穿理论与实操，旨在让我们能理解 DeFi 中常见设计模式及其安全要点。教授也强调了，不要将"智能合约"字面化理解为"智能的合同"。因为它们既不"智能"，也不是"合同"。实际上它们是运行在区块链上的程序，像是运行在 windows 上的软件。
+
+## 一、从程序员视角看智能合约
+
+### 智能合约的概念
+
+首先我们需要从程序员的角度理解智能合约的设计理念。在经过了前几节课的学习后，我们应该已经明白任何人都可以在区块链上构建数字资产或加密货币应用。智能合约是对这种应用的推广：区块链不再只是记录账户余额，它还可以保存用户定义的程序。
+
+每个合约由两部分构成：
+
+- **code（代码）**：定义函数，描述如何响应来自用户或其他合约的调用，并更新自身存储
+- **storage/state（存储/状态）**：合约保存的持久化数据，比如映射、数组、结构体等
+
+我们可以把区块链看作是一个操作系统，其中操作系统里的程序就是智能合约。用户可以向合约传入参数、调用其方法，合约之间也能相互调用方法，从而构成可组合的去中心化系统。合约里的代码描述了它们如何处理输入和更新存储。
+
+### 实例：简易域名注册合约
+
+![简易域名注册合约](/images/note/defi-berkeley/lecture_04/01.png)
+
+下面我们来学习一个智能合约代码片段，这段代码使用 Solidity 定义了一个名为 MyRegistry 的合约。这个合约在第 5 行定义了一个叫做 registry 的存储，存储每个域名对应的域名拥有者的钱包地址，可以通过区块链浏览器直接读取。同时在第 7 行定义了一个 registerDomain 方法，在这个方法中，首先检查该域名是否被占用如果没有被占用，就向 registry 中增加一条记录：把该域名的拥有者设为调用者地址（也就是域名的拥有者）。
+
+Andrew Miller 教授在 Kovan 测试网上部署了该合约并通过 Etherscan 查看事件和状态变化，演示了如何通过事件日志和合约读取方法检索信息。
+
+与合约的交互过程可以概括为以下步骤：用户调用 `registerDomain("defi.io")` → 合约检查并更新映射 → 任何人都可查询 `register("defi.io")` 获取所有者地址。
+
+![合约交互流程](/images/note/defi-berkeley/lecture_04/02.png)
+
+### 合约之间的交互与组合性
+
+智能合约的强大之处在于合约间可以相互调用。一个常见模式是多签账户（multisig）：合约代表一个由多方共同控制的账户，需要若干个所有者签名确认某个请求后，合约才能调用其它合约的方法，类似表决决议，当有一半的人同意的时候，决议才能通过。通过这种方式，可以把多个合约组合起来，构建复杂的 DeFi 系统。
+
+## 二、以太坊编程语言基础
+
+接下来我们将讨论 Ethereum 中的智能合约编程以及 Solidity 语言的知识点。这里仅以 Ethereum 为例讲解一些 Solidity 的要点，很多概念和开发经验也适用于其他智能合约区块链系统。本节目标是获得足够的 Solidity 知识，以便后面能理解 DeFi 的示例和机制。
+
+### Solidity 与以太坊虚拟机（EVM）
+
+Solidity 是以太坊常用的智能合约高级语言，可以把以太坊虚拟机理解为能够运行我们代码的软件，每一个 Ethereum 节点都运行了该软件。Solidity 需要通过编译器生成 EVM 字节码，才可以部署在区块链上并由节点执行。
+
+可以将 Solidity 与 Java 的关系类比为：Solidity 像 Java 源码，EVM 字节码像编译后的 JVM 字节码。我们主要看的是 Solidity 代码，但也会学习一些只有在字节码层面才有意义的概念。
+
+### Solidity 的重要语言特性
+
+智能合约的代码由函数组成，类似其它编程语言。函数定义包含若干组件：函数名、参数列表、可见性修饰符（public、internal 等）、可变性修饰符（view、pure 等）以及返回类型。
+
+![函数签名示例](/images/note/defi-berkeley/lecture_04/03.png)
+
+在这个函数签名示例中，`getCurrentPrice` 为函数名，`(int slidingWindowSize)` 为传入的参数，`public` 表示公开可调用，`view` 表示只读，返回两个值 `price` 和 `confidence`。
+
+> **说明｜关键数据类型**
+>
+> - **静态类型**：每个变量和表达式都有明确定义的类型（如 uint、int）
+> - **mapping**：键值映射；所有键默认指向零值，无法直接枚举，若需统计非零项需另行维护计数器
+
+**函数修饰符**分为两类：可见性（public、internal）和可变性（view、pure 等），例如：
+
+- `public` 表示函数可以被任何人，任何函数调用
+- `internal` 表示只能在合约内部或继承合约中调用
+- `view` 表示只读、不允许修改任何存储变量
+- `pure` 更加严格，它表示该函数既不读也不写合约状态，只依赖输入参数进行计算
+
+**构造函数（constructor）**：仅在合约部署时执行一次的初始化函数，常用于传入参数或初始化合约变量。
+
+**事件（events）**：链上日志系统，使用 `emit` 发出，外部节点可以订阅，主要用于链上交互与调试（相当于打印）。使用事件需要先声明 event，随后在代码中用 emit 来触发它；触发事件后会记录在交易的日志区域（logs），区块浏览器可在事件标签中显示这些记录。
+
+**与以太（Ether）交互**：需要把函数或地址标记为 `payable` 才可以接收以太；`msg.value` 表示调用时随交易发送的以太数量；以太的单位包括 ether、wei（1 ether = 10^18 wei）等。
+
+**区块/交易元数据**：`block.timestamp` 获取当前区块时间戳，用于截止时间检查。注意矿工可短期调整时间戳，不应用在高精度或安全关键逻辑上。
+
+### 案例分析（Bell Tower）与合约部署流程
+
+![Bell Tower 合约](/images/note/defi-berkeley/lecture_04/04.png)
+
+上图为 Bell Tower 合约，这是一个 "Hello World" 式的合约，它的功能是每次调用 `ring()` 方法，`bellRung` 计数 +1 并触发事件 `BellRung`。
+
+Andrew Miller 教授演示了合约的部署流程：
+
+1. 在 Remix 创建合约文件并使用 `pragma solidity` 声明使用的 solidity 的版本号
+2. 编写 Bell Tower 合约示例在 Remix Compiler 编译
+3. 在 Deploy & Run Transactions 里选择 JavaScript VM 测试本地部署、调用方法、查看交易与事件日志
+4. 把环境切换为 Injected Web3（连接 MetaMask）并部署到测试网（例如 Kovan），通过 MetaMask 签名部署交易
+5. 在 Etherscan 上验证与发布源码（Verify & Publish），这样 Etherscan 就可以显示源码、ABI、read/write 界面与事件参数解析，使得外部用户能更直观地与合约交互
+
+### 案例分析（Dutch Auction）
+
+![Dutch Auction 合约](/images/note/defi-berkeley/lecture_04/05.png)
+
+合约代码中展示了荷兰式拍卖的逻辑：起始时价格较高，随着时间逐渐下降，任何时刻都可以按当前价格购买；这使得最优策略是当价格降到买方能接受的最高值时立刻购买，否则别人可能先买走。
+
+**Dutch Auction 的实现要点如下：**
+
+合约参数包含：
+
+- `initialPrice`（起始价格）
+- `biddingPeriod`（拍卖期）
+- `offerPriceDecrement`（价格递减率）
+- `startTime`（拍卖开始时间）
+- `kittyToken`（拍卖物 NFT 代币合约地址）
+- `seller`（卖家地址）
+- `winnerAddress`（获胜者地址）
+
+当用户调用 `buyNow()` 时：
+
+1. 系统首先计算从拍卖开始到当前时刻的时间间隔 `timeElapsed`
+2. 接着，根据 `timeElapsed` 和价格递减率计算当前价格 `currPrice`，这意味着价格随时间推移逐渐降低
+
+在接受用户出价前，系统会进行三项验证以确保拍卖有效性：
+
+1. 检查是否尚未有获胜者，即 `winnerAddress` 为零地址，防止拍卖重复成交
+2. 确保拍卖仍在进行中，即 `timeElapsed` 小于 `biddingPeriod`，避免拍卖结束后仍接受出价
+3. 验证用户出价 `userBid` 是否大于或等于当前价格 `currPrice`，保证出价足够覆盖当前售价
+
+若所有验证通过，该用户即赢得拍卖。系统将执行以下操作：
+
+- 将 `winnerAddress` 设置为出价用户的地址 `msg.sender`，标记其为赢家
+- 由于用户出价可能高于当前价格，系统将多余部分 `userBid - currPrice` 退款给出价者，确保只需支付当前价格
+- 将当前价格 `currPrice` 转移给拍卖的卖出者（即 NFT 原所有者），完成支付
+- 调用 NFT 合约的 `transferOwnership(winnerAddress)` 函数，将 NFT 的所有权正式转移给赢家
+
+### 以太坊的 Gas 机制
+
+![Gas 机制](/images/note/defi-berkeley/lecture_04/06.png)
+
+手续费 Gas 是以太坊最重要的概念之一，可以理解为 EVM 替用户执行代码，用户所需支付的手续费。每笔交易在链上执行都要付费，执行的智能合约代码越复杂消耗的 gas 越多，而交易需要以以太作为 gas 费用。
+
+我们可以通过一些网站查看当前网络的 gas 状况。通常如果愿意付更高的 gas 价格，交易被矿工打包的速度就会越快。
+
+每个 EVM 操作码（opcode）都对应一个 gas 成本表（类似 EVM 里面的操作列表比如加法、模运算、存储写入等）。
+
+发起交易要设置 `gasLimit`（最多愿意消耗的 gas）和 `gasPrice`（愿意为每单位 gas 支付的价格），并预付 `gasLimit × gasPrice` 的以太。执行中若实际用 gas 少于限制，剩余部分会退回；若用尽 gas（out-of-gas），交易还未完成，那么这笔交易会失败，所有的状态变动都会 revert（回滚），但已消耗的 gas 不会退还。
+
+每个区块都有 gas 上限，限制了每个区块中可以执行的计算量，因此合约设计需要尽量节省 gas（减少存储写、避免大循环、优先用 view/pure 作本地读取等）。
+
+下图为以太坊浏览器上的一笔 out-of-gas 交易示例：
+
+![out-of-gas 交易示例](/images/note/defi-berkeley/lecture_04/07.png)
+
+## 三、智能合约与法律合同的比较
+
+现在我们回到更高层次的讨论，把智能合约与现实世界中可以使用法律强制执行的合同进行比较。
+
+法律合同通常包含以下基本要素：
+
+- 要约与承诺（offer & acceptance）
+- 对价（consideration）
+- 相互合意（meeting of the minds）
+- 合法性与缔约能力（Legality and Capacity）
+
+合同通常以书面形式出现并签名作为证据，但实际上即便是在口头协议下也可能成立。
+
+![法律合同要素](/images/note/defi-berkeley/lecture_04/08.png)
+
+那么我们如何把智能合约对应到这些要素上呢？可以用下面的示例来说明：假设有一个合约表示 Alice 提供某个 CAT token（在示例中是一个 NFT）换取 Bob 的 1 ETH。对应的 Solidity 合约包含 Alice 和 Bob 的地址、一个记录 CAT token 地址的变量、以及一个 `bobAcceptOffer` 方法只能由 Bob 调用，要求 `msg.value >= 1 ether`，并且需要在截止时间前调用。
+
+若以上条件满足则把以太转给 Alice 并把 CAT token 从 Alice 的地址转给 Bob。
+
+![智能合约示例](/images/note/defi-berkeley/lecture_04/09.png)
+
+接下来我们从法律合同的要素来分析这个示例智能合约：
+
+- **要约与承诺**：Bob 调用 `bobAcceptOffer` 并签名提交交易表示接受要约；Alice 通过把 CAT token 转给合约或在构造时把 token 交给合约，表明她已经把资产置于合约控制下（即接受约束）
+- **对价**：Bob 提供的以太就是对价，合约自动转给 Alice；合约也自动把 token 转给 Bob
+- **相互合意**：双方应该能检查合约源码（通常应把合约代码在 Etherscan 上验证）来确认合约行为与期待一致
+- **合法性与缔约能力**：智能合约本身并不检查当事人的法律能力，因此智能合约与法律合同在法律救济、身份与能力审查方面存在差异。智能合约一旦部署并被调用执行，人工干预非常困难，这既是优点也是限制
+
+![Nick Szabo 的智能合约概念](/images/note/defi-berkeley/lecture_04/10.png)
+
+Nick Szabo 在 1994 年提出智能合约的概念，认为智能合约可以执行合同条款、减少异常情况和对仲裁或中介的需求、并降低欺诈与交易成本。智能合约自动化的性质能带来这些潜在好处，但也带来法律与治理方面的挑战。
+
+## 四、同质化代币（ERC-20）与非同质化代币（NFT）
+
+代币本质上是一个合约，合约代码中设计了数据结构和调用方法来模拟数字资产：提供转账、查询余额等功能。
+
+在 DeFi 领域有两种非常重要的合约类型：同质化（fungible）代币与非同质化（nonfungible）代币。
+
+### 1. 同质化代币（ERC-20）
+
+同质化代币（常见标准为 ERC-20）类似于货币，不同用户持有的代币是完全一样的，可以任意互换，合约管理的是每个地址的余额总量，而不是每个单独单位的身份。
+
+接口包括：
+
+- `balanceOf`（账户余额）
+- `totalSupply`（货币总发行量）
+- `transfer`（转账）
+- `approve`（授权某个实体可以从用户账户中代扣）
+- `transferFrom`（实际的代扣行为）
+
+`approve`、`transferFrom` 机制是 DEX 与合约间交互的重要基础。区块浏览器可以对同质化代币绘制持仓分布图（pie chart），展示哪些账户持有多少代币。
+
+![ERC-20 代币](/images/note/defi-berkeley/lecture_04/11.png)
+
+### 2. 非同质化代币（ERC-721）
+
+非同质化代币（NFT，常见标准为 ERC-721）的合约内部维护一系列独特的记录（每个 token 有 id、元数据、owner），主要操作有 `ownerOf(id)`、`transfer(id, to)`。
+
+例如 CryptoKitties，合约内部维护一个记录数组，每个记录对应一个独立的数字资产，每个 token 都有独一无二的身份与属性，并且有明确的所有者。用户与 NFT 合约交互时是按单个资产进行转移或出售；用户不能把两个 NFT 相加或分割一个 NFT。
+
+![ERC-721 代币](/images/note/defi-berkeley/lecture_04/12.png)
+
+总的来说，代币只是特殊的一类合约，设计为表现某种数字资产。ERC-20（同质化）与 ERC-721（非同质化）是以太坊生态中常见的两种标准，遵循标准可以提升生态的互操作性，使得钱包、市场、区块浏览器能自动识别并与之交互。
+
+## 结语
+
+在本节课中 Andrew Miller 教授为我们提供了从高层概念到实操流程的智能合约入门路线，重点让我们形成了"把智能合约视为区块链上的程序对象"的思维，并掌握了 Solidity 的基本构造、合约间交互模式、事件与 Gas 的工作方式、以及代币的两类基本形式。
+
+如果想要进一步学习，建议阅读官方 Solidity 文档、ERC 标准（ERC-20/721/1155）、研究开源合约实现（如 CryptoKitties、Uniswap）并在测试网中多做部署与审计练习。同时，安全与 gas 优化在实际项目中至关重要，理解并规避常见漏洞是成为一名合格合约开发者的关键。
+
+## 相关链接
+
+- **拓展阅读**
+  - [The Idea of Smart Contracts - Nick Szabo](https://firstmonday.org/ojs/index.php/fm/article/download/548/469)
+  - [Ethereum Whitepaper](https://ethereum.org/whitepaper/)
+  - [Introduction to Smart Contracts - Solidity Docs](https://docs.soliditylang.org/en/develop/introduction-to-smart-contracts.html)
+  - [Solidity by Example](https://solidity-by-example.org/)
+
+- **课程链接**
+  - [Berkeley DeFi Course](https://rdi.berkeley.edu/berkeley-defi/f25?sessionid=)
+
+- **YouTube**
+  - [Video Link](https://www.youtube.com/watch?v=iK93guovsXQ&feature=youtu.be)
+
+---
+
+[课程目录](/note-archive/defi-berkeley/) · [上一课：第三课：传统金融入门](/note/defi-berkeley-03/) · [下一课：第五课（上）：DEX 入门](/note/defi-berkeley-05-1/)
