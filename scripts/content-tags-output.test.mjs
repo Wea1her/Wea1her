@@ -43,7 +43,7 @@ test("section lists expose time and tags with working tag links", () => {
   }
 });
 
-test("DeFi tag contains all eleven lessons and no deleted directory note", () => {
+test("DeFi tag contains all twelve lesson notes and no deleted directory note", () => {
   const page = readPage("note/tag/defi");
   const hrefs = links(page);
   assert.ok(
@@ -58,7 +58,7 @@ test("DeFi tag contains all eleven lessons and no deleted directory note", () =>
   const lessons = readdirSync("src/content/note/defi-berkeley").filter((f) =>
     f.endsWith(".mdx"),
   );
-  assert.equal(lessons.length, 11);
+  assert.equal(lessons.length, 12);
   for (const lesson of lessons) {
     const slug = `defi-berkeley-${lesson.replace(/\.mdx$/, "")}`;
     assert.ok(hrefs.includes(`/note/${slug}/`), slug);
