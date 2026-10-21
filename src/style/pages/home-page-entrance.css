@@ -7,12 +7,12 @@
 
   .home-shell[data-home-initial-entrance="true"]
     [data-home-entrance-content="profile"] {
-    animation-delay: 50ms;
+    animation-delay: calc(var(--home-entrance-offset, 0ms) + 50ms);
   }
 
   .home-shell[data-home-initial-entrance="true"]
     [data-home-entrance-content="latest"] {
-    animation-delay: 100ms;
+    animation-delay: calc(var(--home-entrance-offset, 0ms) + 100ms);
   }
 }
 

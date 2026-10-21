@@ -1,0 +1,31 @@
+---
+import "../../style/components/home/signature-splash.css";
+
+interface Props {
+  text: string;
+}
+
+const { text } = Astro.props as Props;
+---
+
+<div class="signature-splash" aria-hidden="true" data-signature-splash>
+  <svg class="signature-splash-mark" viewBox="0 0 520 180">
+    <text x="50%" y="52%" text-anchor="middle" dominant-baseline="middle">
+      {text}
+    </text>
+  </svg>
+</div>
+<script is:inline>
+  // Play once per browser session; in-site navigation back home skips it.
+  (function () {
+    var splash = document.currentScript.previousElementSibling;
+    var storageKey = "home-signature-splash-seen";
+    try {
+      if (sessionStorage.getItem(storageKey)) {
+        splash.remove();
+        return;
+      }
+      sessionStorage.setItem(storageKey, "1");
+    } catch (error) {}
+  })();
+</script>

@@ -110,11 +110,11 @@ test("CSS restarts the profile and latest entrance for every document", () => {
   assert.match(entranceStylesSource, /animation-fill-mode:\s*forwards/);
   assert.match(
     entranceStylesSource,
-    /data-home-entrance-content="profile"[\s\S]*?animation-delay:\s*50ms/,
+    /data-home-entrance-content="profile"[\s\S]*?animation-delay:\s*calc\(var\(--home-entrance-offset, 0ms\) \+ 50ms\)/,
   );
   assert.match(
     entranceStylesSource,
-    /data-home-entrance-content="latest"[\s\S]*?animation-delay:\s*100ms/,
+    /data-home-entrance-content="latest"[\s\S]*?animation-delay:\s*calc\(var\(--home-entrance-offset, 0ms\) \+ 100ms\)/,
   );
   assert.match(entranceStylesSource, /translateY\(2rem\)/);
   assert.match(

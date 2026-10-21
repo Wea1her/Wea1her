@@ -3,6 +3,7 @@ import { CODETIME_TOKEN } from "astro:env/server";
 import HomeLayout from "../../layouts/HomeLayout.astro";
 import GitHeatmap from "./githeatmap.astro";
 import Signature from "./signature.astro";
+import SignatureSplash from "./SignatureSplash.astro";
 import FooterMeta from "../common/FooterMeta.astro";
 import AppPanelIcon from "../ui/icons/AppPanelIcon.astro";
 import type { SocialLinkItem } from "../../types/social";
@@ -79,6 +80,7 @@ function isExternalLink(href: string) {
     fetchpriority="high"
     data-home-avatar-preload
   />
+  <SignatureSplash slot="splash" text={ownerName} />
   <Signature slot="signature" />
   <section
     slot="profile"
