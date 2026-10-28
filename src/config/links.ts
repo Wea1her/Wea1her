@@ -21,8 +21,8 @@ export interface LinkApplyOwner {
 export const linkApplyOwner = {
   name: "Ghaith",
   description: "Stay hungry, stay foolish, be water.",
-  href: "https://www.0xweather.com/",
-  avatarSrc: "https://www.0xweather.com/avatar.png",
+  href: "https://ghaith.blog/",
+  avatarSrc: "https://ghaith.blog/avatar.png",
 } satisfies LinkApplyOwner;
 
 export const friendLinks = [

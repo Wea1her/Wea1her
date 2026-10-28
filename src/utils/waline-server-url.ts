@@ -2,7 +2,7 @@ import { PUBLIC_WALINE_SERVER_URL, WALINE_SERVER_URL } from "astro:env/server";
 
 export const WALINE_SERVER_URL_ENV_LABEL =
   "WALINE_SERVER_URL or PUBLIC_WALINE_SERVER_URL";
-const DEFAULT_WALINE_SERVER_URL = "https://waline.0xweather.com/";
+const DEFAULT_WALINE_SERVER_URL = "https://waline.ghaith.blog/";
 
 export function getWalineServerURL() {
   return (

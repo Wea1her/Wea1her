@@ -95,7 +95,7 @@ test("legacy post dates, draft visibility, and comment identities survive the up
 test("the sitemap includes real tag pages on the personal domain", () => {
   const sitemap = readFileSync("dist/sitemap-0.xml", "utf8");
   for (const path of ["blog/tag/web3", "note/tag/defi", "note/tag/thoughts"]) {
-    assert.ok(sitemap.includes(`https://www.0xweather.com/${path}/`), path);
+    assert.ok(sitemap.includes(`https://ghaith.blog/${path}/`), path);
   }
   assert.ok(!sitemap.includes("https://example.com"));
 });

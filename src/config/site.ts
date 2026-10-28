@@ -11,7 +11,7 @@ export const site = {
   },
   site: {
     name: "Ghaith",
-    url: "https://www.0xweather.com",
+    url: "https://ghaith.blog",
     description: "Stay hungry, stay foolish, be water.",
     iconSrc: "/avatar.png",
     startYear: 2025,
