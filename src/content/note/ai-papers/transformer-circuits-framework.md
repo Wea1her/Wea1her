@@ -1,10 +1,10 @@
 ---
 title: "精读笔记：A Mathematical Framework for Transformer Circuits"
 description: "逐节精读 Anthropic 2021 年的 Transformer 电路数学框架：残差流、张量积记号、QK/OV 电路、路径展开、skip-trigram、注意力头组合与 induction head，附推导、动手代码与思考题。"
+routeSlug: "transformer-circuits-framework"
+type: "AI 论文精读"
 tags: ["AI", "可解释性", "Transformer"]
-language: "Chinese"
-draft: false
-publishDate: "2026-11-02T00:00:00+08:00"
+createdAt: "2026-11-02"
 ---
 
 > 原文：[A Mathematical Framework for Transformer Circuits](https://transformer-circuits.pub/2021/framework/index.html)（Elhage, Nanda, Olsson 等，Anthropic，2021）

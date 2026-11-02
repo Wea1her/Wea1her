@@ -24,6 +24,8 @@ export default defineConfig({
     "/blog-archive/bb88/": "/blog/tag/bb88/",
     "/note-archive/defi-berkeley/": "/note/tag/defi/",
     "/note-archive/thoughts/": "/note/tag/thoughts/",
+    "/blog/transformer-circuits-framework/":
+      "/note/transformer-circuits-framework/",
   },
   // Astro 7 changed the default to 'jsx', which strips whitespace between inline
   // elements and collapses e.g. nav links into "AboutBlogNote". Pinned to the

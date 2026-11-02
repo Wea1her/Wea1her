@@ -34,6 +34,11 @@
       "source": "/note-archive/thoughts",
       "destination": "/note/tag/thoughts/",
       "permanent": true
+    },
+    {
+      "source": "/blog/transformer-circuits-framework",
+      "destination": "/note/transformer-circuits-framework/",
+      "permanent": true
     }
   ]
 }
