@@ -19,7 +19,7 @@ test("published archive links redirect to existing tag or listing pages", () => 
   for (const redirect of config.redirects) {
     assert.equal(redirect.permanent, true);
     assert.ok(
-      existsSync(`dist${redirect.destination}index.html`),
+      existsSync(`dist${decodeURIComponent(redirect.destination)}index.html`),
       redirect.destination,
     );
   }

@@ -1,10 +1,10 @@
 ---
 title: "DApp 基础设施技术架构"
 description: "深度解析 DApp 的混合架构设计，平衡区块链的透明性与用户体验的极致性能。"
+routeSlug: 'dapp架构'
+type: 'Web3'
 tags: ['web3', 'Dapp开发']
-language: 'Chinese'
-draft: false
-publishDate: '2026-03-02T22:22:00Z'
+createdAt: '2026-03-02T22:22:00Z'
 ---
 
 在去中心化应用（DApp）的构建过程中，开发者面临的核心挑战在于如何在区块链的透明可信与用户体验的极致性能之间取得平衡。作为架构师，我们必须意识到：DApp 的成败不仅取决于智能合约的安全性，更取决于其基础设施架构的响应能力。
@@ -138,5 +138,5 @@ RPC 是 DApp 与“真相之源”对话的唯一通道，其稳定性决定了�
 | 后端/前端 - RPC | JSON-RPC | 2,000ms+ | 单次读取“真相”的代价 |
 | 批量 RPC 请求 (5次) | JSON-RPC | 10,000ms | 系统性能瓶颈点 |
 
-![Dapp架构图](../images/dapp架构.png)
+![Dapp架构图](../../images/dapp架构.png)
 

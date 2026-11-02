@@ -20,7 +20,11 @@ export default defineConfig({
   redirects: {
     "/blog-archive/": "/blog/",
     "/note-archive/": "/note/",
-    "/blog-archive/web3/": "/blog/tag/web3/",
+    "/blog-archive/web3/": "/note/tag/web3/",
+    "/blog/tag/web3/": "/note/tag/web3/",
+    "/blog/erc7962/": "/note/erc7962/",
+    "/blog/dapp架构/": "/note/dapp架构/",
+    "/blog/moss项目分析/": "/note/moss项目分析/",
     "/blog-archive/bb88/": "/blog/tag/bb88/",
     "/note-archive/defi-berkeley/": "/note/tag/defi/",
     "/note-archive/thoughts/": "/note/tag/thoughts/",

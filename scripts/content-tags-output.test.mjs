@@ -75,7 +75,7 @@ test("DeFi tag contains all twelve lesson notes and no deleted directory note", 
 });
 
 test("legacy post dates, draft visibility, and comment identities survive the upgrade", () => {
-  const page = readPage("blog/erc7962");
+  const page = readPage("note/erc7962");
   const posting = findAll(
     page,
     (n) => n.tagName === "script" && attr(n, "type") === "application/ld+json",
@@ -87,14 +87,14 @@ test("legacy post dates, draft visibility, and comment identities survive the up
   for (const counter of findAll(page, (n) =>
     hasClass(n, "waline-comment-count"),
   )) {
-    assert.equal(attr(counter, "data-path"), "/blog/erc7962");
+    assert.equal(attr(counter, "data-path"), "/note/erc7962");
   }
   assert.ok(!existsSync("dist/blog/encrypted-test/index.html"));
 });
 
 test("the sitemap includes real tag pages on the personal domain", () => {
   const sitemap = readFileSync("dist/sitemap-0.xml", "utf8");
-  for (const path of ["blog/tag/web3", "note/tag/defi", "note/tag/thoughts"]) {
+  for (const path of ["note/tag/web3", "note/tag/defi", "note/tag/thoughts"]) {
     assert.ok(sitemap.includes(`https://ghaith.blog/${path}/`), path);
   }
   assert.ok(!sitemap.includes("https://example.com"));

@@ -1,10 +1,10 @@
 ---
 title: "Moss 项目分析：为什么存在、解决什么问题，以及 AI Agent 为什么需要它"
 description: "深入分析 Moss 如何通过协议适配器、结构化 Plan 与交易模拟，为 AI Agent 提供安全、可验证的 Monad 链上交互能力。"
+routeSlug: 'moss项目分析'
+type: 'Web3'
 tags: ['web3', 'AI Agent', 'MCP', 'Monad']
-language: 'Chinese'
-draft: false
-publishDate: '2026-07-14T00:00:00+08:00'
+createdAt: '2026-07-14T00:00:00+08:00'
 ---
 
 > 项目仓库：<https://github.com/nishuzumi/moss>  
